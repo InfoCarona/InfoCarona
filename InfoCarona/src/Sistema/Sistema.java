@@ -32,11 +32,11 @@ public class Sistema {
 	public String criarUsuario(String login, String nome, String endereco, String email){
 		
 		try{
-			if(nome.equals(null)){
+			if(login == null){
 				throw new Exceptions.LoginInvalidoException();
 			}
-		}catch(Exception e){
-			return e.getMessage();
+		}catch(LoginInvalidoException e){
+//			return e.getMessage();
 		}
 		return "";
 		
