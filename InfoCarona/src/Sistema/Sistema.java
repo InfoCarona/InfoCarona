@@ -1,17 +1,18 @@
 package Sistema;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import Exceptions.*;
 
 public class Sistema {
 	List <String> usuariosLogados;
-	List <Usuario> BD;
+	LinkedList <Usuario> BD;
 	String idSessao;
 	
 	public Sistema(){
 		usuariosLogados = new ArrayList<String>();
-		BD = new ArrayList<Usuario>();
+		BD = new LinkedList<Usuario>();
 		idSessao = "";
 	}
 	public void zerarSistema(){
