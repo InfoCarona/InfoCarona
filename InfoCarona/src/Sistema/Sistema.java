@@ -3,6 +3,9 @@ package Sistema;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 import Exceptions.*;
 
 public class Sistema {
@@ -30,18 +33,50 @@ public class Sistema {
 		
 	}
 	
-	public String criarUsuario(String login, String nome, String endereco, String email){
+	public String criarUsuario(String login, String nome, String endereco, String email) throws LoginInvalidoException, NomeInvalidoException, EmailInvalidoException, EmailExistenteException, LoginExistenteException{
 		
-		try{
-			if(login == null){
+		
+			if(login == null || login.equals("")){
 				throw new Exceptions.LoginInvalidoException();
 			}
-		}catch(LoginInvalidoException e){
-//			return e.getMessage();
-		}
-		return "";
-		
+			if(nome == null || nome.equals("")){
+				throw new NomeInvalidoException();
+			}
+			if(email == null || email.equals("")){
+				throw new EmailInvalidoException();
+			}
+			java.util.Iterator<Usuario> iterador = BD.iterator();
+			while(iterador.hasNext()){
+				Usuario userTemp = iterador.next();
+				if(userTemp.email.equals(email)){
+					throw new EmailExistenteException();
+				}
+				if(userTemp.login.equals(login)){
+					throw new LoginExistenteException();
+				}
+			}
+				return "";
 	}
+	
+	public String criarUsuario(String login, String nome, String endereco) throws LoginInvalidoException, NomeInvalidoException, EmailInvalidoException, EmailExistenteException, LoginExistenteException{
+		
+		
+		if(login == null || login.equals("")){
+			throw new Exceptions.LoginInvalidoException();
+		}
+		if(nome == null || nome.equals("")){
+			throw new NomeInvalidoException();
+		}
+		
+		java.util.Iterator<Usuario> iterador = BD.iterator();
+		while(iterador.hasNext()){
+			Usuario userTemp = iterador.next();
+			if(userTemp.login.equals(login)){
+				throw new LoginExistenteException();
+			}
+		}
+			return "";
+}
 	
 	public String abrirSessao(String login, String senha){
 		for (Usuario usuarioTemp : BD) {
