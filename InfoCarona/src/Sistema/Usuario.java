@@ -2,6 +2,9 @@ package Sistema;
 
 import Exceptions.LoginInvalidoException;
 
+/*
+ * 
+ */
 public class Usuario {
 	String nome, email, endereco, senha, id, login;
 	
