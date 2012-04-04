@@ -121,16 +121,21 @@ public class Perfil {
 		if(stringData == null || stringData.equals("")){
 			return true;
 		}
-		
+		Calendar data = Calendar.getInstance();
 		try {
-			Calendar data = Calendar.getInstance();
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 			formato.setLenient(false);
 			data.setTime(formato.parse(stringData));
 		} catch (ParseException e) {
 			return true;
 		}
+		
+		Calendar dataAtual = Calendar.getInstance();
+		if (dataAtual.getTime().compareTo(data.getTime()) == 1){ //-1 data válida/ 1 data inválida
+			return true;
+		}
 			return false;
+			
 	} 
 	
 	private  boolean checaVaga(String idSessao){
