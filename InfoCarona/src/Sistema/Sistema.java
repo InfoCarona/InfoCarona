@@ -14,6 +14,7 @@ import Exception.ExceptionUsuario.NomeInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
 import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
+import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
@@ -160,7 +161,7 @@ public class Sistema {
 		return (atributo == null || atributo.equals(""));
 	}
 
-	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException{
+	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException, HoraInvalidaException{
 		return perfil.cadastrarCarona(idSessao, origem, destino, data, hora, vagas);
 	}
 	

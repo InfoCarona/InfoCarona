@@ -11,6 +11,7 @@ import java.util.Set;
 
 import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
+import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
@@ -29,7 +30,7 @@ public class Perfil {
 		return this.usuario;
 	}
 	
-	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException{
+	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException, HoraInvalidaException{
 		
 		if(checaIdSessao(idSessao)){
 			throw new SessaoInvalidaException();
@@ -49,6 +50,9 @@ public class Perfil {
 		
 		if(checaData(data)){
 			throw new DataInvalidaException();
+		}
+		if(checaHoraInvalida(hora)){
+			throw new HoraInvalidaException();
 		}
 		
 		String idCarona = ("carona" + (listaDeCaronas.size()+1) + "ID");
@@ -73,6 +77,18 @@ public class Perfil {
 		return  (!idSessao.equals(usuario.getIdSessao()));
 	} 
 	
+	private  boolean checaHoraInvalida(String hora){
+		if(hora == null || hora.equals("")){
+			return true;
+		}
+		try {
+			Integer.parseInt(hora.substring(0,2));
+			Integer.parseInt(hora.substring(3,5));
+		} catch (Exception e) {
+			return true;
+		}
+		return false;
+	}
 	private  boolean checaData(String stringData){
 		if(stringData == null || stringData.equals("")){
 			return true;

@@ -1,10 +1,17 @@
 package Sistema;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
-import easyaccept.EasyAcceptFacade; 
+import easyaccept.EasyAcceptFacade;
 
 public class InfoCaronaTest {
+
+
 	public static void main(String[] args) {
 		Sistema sistema = new Sistema();
 		List<String> files = new ArrayList<String>();
@@ -22,6 +29,7 @@ public class InfoCaronaTest {
         eaFacade.executeTests();
 //Print the tests execution results
         System.out.println(eaFacade.getCompleteResults());
+      
   }
-}
 
+}
