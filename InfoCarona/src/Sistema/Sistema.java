@@ -12,15 +12,19 @@ import Exception.ExceptionUsuario.LoginExistenteException;
 import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
+import Exception.ExceptionsCarona.DataInvalidaException;
+import Exception.ExceptionsCarona.DestinoInvalidoException;
+import Exception.ExceptionsCarona.OrigemInvalidaException;
+import Exception.ExceptionsCarona.SessaoInexistenteException;
+import Exception.ExceptionsCarona.SessaoInvalidaException;
 
 public class Sistema {
-	List <String> usuariosLogados;
-	LinkedList <Usuario> BD;
+	LinkedList <Perfil> BD;
 	String idSessao;
+	Perfil perfil;
 	
 	public Sistema(){
-		usuariosLogados = new ArrayList<String>();
-		BD = new LinkedList<Usuario>();
+		BD = new LinkedList<Perfil>();
 		idSessao = "";
 	}
 	public void zerarSistema(){
@@ -30,7 +34,8 @@ public class Sistema {
 	public String criarUsuario(String login, String senha, String nome, String endereco, String email){
 		try{
 			Usuario novoUsuario = new Usuario(nome, email, endereco, senha, login);
-			BD.add(novoUsuario);
+			Perfil novoPerfil = new Perfil(novoUsuario);
+			BD.add(novoPerfil);
 		}catch (Exception e) {
 			return e.getMessage();
 		}
@@ -49,9 +54,10 @@ public class Sistema {
 			if(checaEmail(email)){
 				throw new EmailInvalidoException();
 			}
-			java.util.Iterator<Usuario> iterador = BD.iterator();
+			java.util.Iterator<Perfil> iterador = BD.iterator();
 			while(iterador.hasNext()){
-				Usuario userTemp = iterador.next();
+				Perfil perfilTemp = iterador.next();
+				Usuario userTemp = perfilTemp.getUsuario();
 				if(userTemp.email.equals(email)){
 					throw new EmailExistenteException();
 				}
@@ -71,9 +77,10 @@ public class Sistema {
 			throw new NomeInvalidoException();
 		}
 		
-		java.util.Iterator<Usuario> iterador = BD.iterator();
+		java.util.Iterator<Perfil> iterador = BD.iterator();
 		while(iterador.hasNext()){
-			Usuario userTemp = iterador.next();
+			Perfil perfilTemp = iterador.next();
+			Usuario userTemp = perfilTemp.getUsuario();
 			if(userTemp.login.equals(login)){
 				throw new LoginExistenteException();
 			}
@@ -86,11 +93,13 @@ public class Sistema {
 		if(checaLogin(login)){
 			throw new LoginInvalidoException();
 		}
-		for (Usuario usuarioTemp : BD) {
+		for (Perfil perfilTemp : BD) {
+			Usuario usuarioTemp = perfilTemp.getUsuario();
 			if(usuarioTemp.getLogin().equals(login)) { 
 				userExist = true;
 				if(usuarioTemp.getSenha().equals(senha)){
 					idSessao = usuarioTemp.getIdSessao();
+					perfil = perfilTemp;
 				}else{
 					throw new LoginInvalidoException();
 				}
@@ -115,7 +124,8 @@ public class Sistema {
 		}
 		String retorno = "";
 		boolean userExist = false;
-		for (Usuario usuarioTemp : BD) {
+		for (Perfil perfilTemp : BD) {
+			Usuario usuarioTemp = perfilTemp.getUsuario();
 			if(usuarioTemp.getLogin().equals(login)){
 				userExist = true;
 				retorno = usuarioTemp.getAtributoUsuario(login, atributo);
@@ -150,9 +160,8 @@ public class Sistema {
 		return (atributo == null || atributo.equals(""));
 	}
 
-	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas){
-		return "";
-		//return new Perfil().cadastrarCarona(idSessao, origem, destino, data, hora, vagas);
+	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException{
+		return perfil.cadastrarCarona(idSessao, origem, destino, data, hora, vagas);
 	}
 	
 }

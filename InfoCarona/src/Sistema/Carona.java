@@ -1,5 +1,10 @@
 package Sistema;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
 public class Carona {
 	
 	private String idSessao, origem, destino, data, hora, idCarona;
@@ -63,4 +68,5 @@ public class Carona {
 	public String getIdCarona(){
 		return this.idCarona;
 	}
+	
 }

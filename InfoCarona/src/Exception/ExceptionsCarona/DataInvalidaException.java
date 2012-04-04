@@ -1,10 +1,10 @@
 package Exception.ExceptionsCarona;
 
 
-public class OrigemInvalidaException extends Exception {
+public class DataInvalidaException extends Exception {
 	
      @Override
     public String getMessage() {
-        return "Origem inválida";
+        return "Data inválida";
     }
 }
