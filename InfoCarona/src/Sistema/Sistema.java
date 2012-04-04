@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import Exceptions.AtributoInexistenteException;
-import Exceptions.AtributoInvalidoException;
-import Exceptions.EmailExistenteException;
-import Exceptions.EmailInvalidoException;
-import Exceptions.LoginExistenteException;
-import Exceptions.LoginInvalidoException;
-import Exceptions.NomeInvalidoException;
-import Exceptions.UsuarioInexistenteException;
+import Exception.ExceptionUsuario.AtributoInexistenteException;
+import Exception.ExceptionUsuario.AtributoInvalidoException;
+import Exception.ExceptionUsuario.EmailExistenteException;
+import Exception.ExceptionUsuario.EmailInvalidoException;
+import Exception.ExceptionUsuario.LoginExistenteException;
+import Exception.ExceptionUsuario.LoginInvalidoException;
+import Exception.ExceptionUsuario.NomeInvalidoException;
+import Exception.ExceptionUsuario.UsuarioInexistenteException;
 
 public class Sistema {
 	List <String> usuariosLogados;
@@ -41,7 +41,7 @@ public class Sistema {
 	public String criarUsuario(String login, String nome, String endereco, String email) throws LoginInvalidoException, NomeInvalidoException, EmailInvalidoException, EmailExistenteException, LoginExistenteException{
 				
 			if(checaLogin(login)){
-				throw new Exceptions.LoginInvalidoException();
+				throw new LoginInvalidoException();
 			}
 			if(checaNome(nome)){
 				throw new NomeInvalidoException();
@@ -65,7 +65,7 @@ public class Sistema {
 	public String criarUsuario(String login, String nome, String endereco) throws LoginInvalidoException, NomeInvalidoException, EmailInvalidoException, EmailExistenteException, LoginExistenteException{
 				
 		if(checaLogin(login)){
-			throw new Exceptions.LoginInvalidoException();
+			throw new LoginInvalidoException();
 		}
 		if(checaNome(nome)){
 			throw new NomeInvalidoException();
@@ -148,6 +148,11 @@ public class Sistema {
 	
 	private boolean checaAtributo(String atributo) {		
 		return (atributo == null || atributo.equals(""));
+	}
+
+	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas){
+		return "";
+		//return new Perfil().cadastrarCarona(idSessao, origem, destino, data, hora, vagas);
 	}
 	
 }

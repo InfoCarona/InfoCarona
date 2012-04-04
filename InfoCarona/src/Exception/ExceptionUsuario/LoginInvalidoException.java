@@ -1,4 +1,4 @@
-package Exceptions;
+package Exception.ExceptionUsuario;
 
 
 public class LoginInvalidoException extends Exception {

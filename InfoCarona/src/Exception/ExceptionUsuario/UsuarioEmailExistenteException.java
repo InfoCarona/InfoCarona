@@ -1,7 +1,7 @@
-package Exceptions;
+package Exception.ExceptionUsuario;
 
 
-public class EmailExistenteException extends Exception {
+public class UsuarioEmailExistenteException extends Exception {
 	
      @Override
     public String getMessage() {

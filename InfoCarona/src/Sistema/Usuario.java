@@ -1,6 +1,6 @@
 package Sistema;
 
-import Exceptions.LoginInvalidoException;
+import Exception.ExceptionUsuario.LoginInvalidoException;
 
 /*
  * 
@@ -11,7 +11,7 @@ public class Usuario {
 	
 	public Usuario(String nome, String email, String endereco, String senha, String login) throws Exception{
 		if(login == null || login.equals("")){
-			throw new Exceptions.LoginInvalidoException();
+			throw new LoginInvalidoException();
 		}
 		this.nome = nome;
 		this.email = email;
