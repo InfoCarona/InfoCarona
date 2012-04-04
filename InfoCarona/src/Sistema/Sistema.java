@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-
-import Exceptions.*;
+import Exceptions.AtributoInexistenteException;
+import Exceptions.AtributoInvalidoException;
+import Exceptions.EmailExistenteException;
+import Exceptions.EmailInvalidoException;
+import Exceptions.LoginExistenteException;
+import Exceptions.LoginInvalidoException;
+import Exceptions.NomeInvalidoException;
+import Exceptions.UsuarioInexistenteException;
 
 public class Sistema {
 	List <String> usuariosLogados;
@@ -34,15 +39,14 @@ public class Sistema {
 	}
 	
 	public String criarUsuario(String login, String nome, String endereco, String email) throws LoginInvalidoException, NomeInvalidoException, EmailInvalidoException, EmailExistenteException, LoginExistenteException{
-		
-		
-			if(login == null || login.equals("")){
+				
+			if(checaLogin(login)){
 				throw new Exceptions.LoginInvalidoException();
 			}
-			if(nome == null || nome.equals("")){
+			if(checaNome(nome)){
 				throw new NomeInvalidoException();
 			}
-			if(email == null || email.equals("")){
+			if(checaEmail(email)){
 				throw new EmailInvalidoException();
 			}
 			java.util.Iterator<Usuario> iterador = BD.iterator();
@@ -59,12 +63,11 @@ public class Sistema {
 	}
 	
 	public String criarUsuario(String login, String nome, String endereco) throws LoginInvalidoException, NomeInvalidoException, EmailInvalidoException, EmailExistenteException, LoginExistenteException{
-		
-		
-		if(login == null || login.equals("")){
+				
+		if(checaLogin(login)){
 			throw new Exceptions.LoginInvalidoException();
 		}
-		if(nome == null || nome.equals("")){
+		if(checaNome(nome)){
 			throw new NomeInvalidoException();
 		}
 		
@@ -78,24 +81,71 @@ public class Sistema {
 			return "";
 }
 	
-	public String abrirSessao(String login, String senha){
+	public String abrirSessao(String login, String senha) throws LoginInvalidoException, UsuarioInexistenteException{
+		boolean userExist = false;
+		if(checaLogin(login)){
+			throw new LoginInvalidoException();
+		}
 		for (Usuario usuarioTemp : BD) {
-			if(usuarioTemp.getLogin().equals(login) && usuarioTemp.getSenha().equals(senha)){
+			if(usuarioTemp.getLogin().equals(login)) { 
+				userExist = true;
+				if(usuarioTemp.getSenha().equals(senha)){
 					idSessao = usuarioTemp.getIdSessao();
+				}else{
+					throw new LoginInvalidoException();
+				}
 			}
+		}
+		if(!userExist){
+			throw new UsuarioInexistenteException();
 		}
 		return idSessao;
 	}
 	
-	public String getAtributoUsuario(String login, String atributo){
+	public String getAtributoUsuario(String login, String atributo) throws LoginInvalidoException, AtributoInvalidoException, UsuarioInexistenteException, AtributoInexistenteException{
+		
+		if(checaLogin(login)){
+			throw new LoginInvalidoException();
+		}
+		if(checaAtributo(atributo)){
+			throw new AtributoInvalidoException();
+		}
+		if(!checaAtributoValido(atributo)){
+			throw new AtributoInexistenteException();
+		}
 		String retorno = "";
+		boolean userExist = false;
 		for (Usuario usuarioTemp : BD) {
 			if(usuarioTemp.getLogin().equals(login)){
+				userExist = true;
 				retorno = usuarioTemp.getAtributoUsuario(login, atributo);
-			}
-		
+			}		
+		}
+		if(!userExist){
+			throw new UsuarioInexistenteException();
 		}
 		return retorno;
+	}
+	
+	// metodo pra ver se o atributo passado existe
+	private boolean checaAtributoValido(String atributo) {		
+		return (atributo.equals("nome") || atributo.equals("endereco") || atributo.equals("email"));
+	}
+	// Metodos abaixo servem para checar se os atributos para criar são passados como null ou vazio
+	private boolean checaLogin(String login){
+		return (login == null || login.equals(""));
+	}
+	
+	private boolean checaNome(String nome){
+		return (nome == null || nome.equals(""));
+	}
+	
+	private boolean checaEmail(String email){
+		return (email == null || email.equals(""));
+	}
+	
+	private boolean checaAtributo(String atributo) {		
+		return (atributo == null || atributo.equals(""));
 	}
 	
 }
