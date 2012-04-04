@@ -126,7 +126,9 @@ public class Sistema {
 		}
 		return retorno;
 	}
-	
+	public void encerrarSistema(){
+		
+	}
 	// metodo pra ver se o atributo passado existe
 	private boolean checaAtributoValido(String atributo) {		
 		return (atributo.equals("nome") || atributo.equals("endereco") || atributo.equals("email"));
