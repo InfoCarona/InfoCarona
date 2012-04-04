@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import Exception.ExceptionUsuario.AtributoInexistenteException;
+import Exception.ExceptionUsuario.AtributoInvalidoException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
 import Exception.ExceptionsCarona.DataInvalidaException;
@@ -125,19 +127,34 @@ public class Perfil {
 		return listaAux.toString().replace("[", "{").replace("]", "}");
 	}
 	
-	public String getAtributoCarona(String idCarona,String atributo) throws ItemInexistenteException, IDCaronaInexistenteException{
+	public String getAtributoCarona(String idCarona,String atributo) throws ItemInexistenteException, IDCaronaInexistenteException, AtributoInvalidoException, AtributoInexistenteException{
+		
 		if(checaIdCarona(idCarona) || idCarona.equals("")){
 			throw new IDCaronaInexistenteException();
 		}
+		if(checaAtributo(atributo)){
+			throw new AtributoInvalidoException();
+		}
+		boolean existeCarona = false;
+		String retorno = "";
 		for (Carona  carona : listaDeCaronas){
 			if (carona.getIdCarona().equals(idCarona)){
-				return carona.getAtributo(atributo);
+				existeCarona = true;
+				retorno =  carona.getAtributo(atributo);
+				break;
 			}
 		}
-		
-		throw new ItemInexistenteException();
+		if(retorno == null ){
+			throw new AtributoInexistenteException();
+		}
+		if(!existeCarona){
+			throw new ItemInexistenteException();
+		}
+		return retorno;
 	}
 	
+	
+
 	public String getTrajeto(String idCarona) throws TrajetoInexistenteException, TrajetoInvalidoException{
 		if(checaIdCarona(idCarona)){
 			throw new TrajetoInvalidoException();
@@ -165,7 +182,7 @@ public class Perfil {
 			}
 		}
 		if(retorno.equals("")){
-			throw new CaronaInvalidaException();
+			throw new CaronaInexistenteException();
 		}
 		return retorno;
 	}
@@ -252,4 +269,7 @@ public class Perfil {
 		return (idCarona == null);
 	}
 
+	private boolean checaAtributo(String atributo) {
+		return (atributo == null || atributo.equals(""));
+	}
 }

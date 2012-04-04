@@ -175,7 +175,7 @@ public class Sistema {
 		return perfil.localizarCarona(idSessao, origem, destino);
 	}
 	
-	public String getAtributoCarona(String idCarona,String atributo) throws ItemInexistenteException, IDCaronaInexistenteException{
+	public String getAtributoCarona(String idCarona,String atributo) throws ItemInexistenteException, IDCaronaInexistenteException, AtributoInvalidoException, AtributoInexistenteException{
 		return perfil.getAtributoCarona(idCarona, atributo);
 	}
 	public String getTrajeto(String idCarona) throws TrajetoInexistenteException, TrajetoInvalidoException{
