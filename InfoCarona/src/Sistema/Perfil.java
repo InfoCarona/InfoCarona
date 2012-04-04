@@ -2,12 +2,9 @@ package Sistema;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
@@ -46,11 +43,11 @@ public class Perfil {
 			throw new SessaoInexistenteException();
 		}
 	
-		if(checaOrigem(origem)){
+		if(checaOrigem(origem) || origem.equals("")){
 			throw new OrigemInvalidaException();
 		}
 		
-		if(checaDestino(destino)){
+		if(checaDestino(destino) || destino.equals("")){
 			throw new DestinoInvalidoException();
 		}
 		
@@ -66,10 +63,58 @@ public class Perfil {
 		listaDeCaronas.add(carona);
 		return idCarona;
 	}
-	public String localizarCarona(String idSessao, String origem, String destino){
-		return auxiliaLocalizaCarona(idSessao, origem, destino);
+	
+	public String localizarCarona(String idSessao, String origem, String destino) throws OrigemInvalidaException, DestinoInvalidoException{
+		if (checaOrigem(origem)){
+			throw new OrigemInvalidaException();
+		}
+		
+		if (checaDestino(destino)){
+			throw new DestinoInvalidoException();
+		}
+		
+		String retorno;
+		if ((!origem.equals("")) && ((!destino.equals("")))){
+			retorno = auxiliaLocalizaCarona(idSessao, origem, destino);
+		}else if ((origem.equals("")) && ((!destino.equals("")))){
+			retorno = auxiliaLocalizaCaronaDestino(idSessao, destino);
+			
+		}else if ((!origem.equals("")) && ((destino.equals("")))){
+			retorno = auxiliaLocalizaCaronaOrigem(idSessao, origem);
+		}else{
+			retorno = auxiliaLocalizaCarona(idSessao);
+		}
+		return retorno;
 	}
 	
+	private String auxiliaLocalizaCarona(String idSessao) {
+		List<String> listaAux = new LinkedList<String>();
+		for (Carona  carona : listaDeCaronas){
+			listaAux.add(carona.getIdCarona());
+		}
+		return listaAux.toString().replace("[", "{").replace("]", "}");
+	}
+
+	private String auxiliaLocalizaCaronaOrigem(String idSessao, String origem) {
+		List<String> listaAux = new LinkedList<String>();
+		for (Carona  carona : listaDeCaronas){
+			if (carona.getOrigem().equals(origem)){
+				listaAux.add(carona.getIdCarona());
+			}	
+		}
+		return listaAux.toString().replace("[", "{").replace("]", "}");
+	}
+
+	private String auxiliaLocalizaCaronaDestino(String idSessao, String destino) {
+		List<String> listaAux = new LinkedList<String>();
+		for (Carona  carona : listaDeCaronas){
+			if (carona.getDestino().equals(destino)){
+				listaAux.add(carona.getIdCarona());
+			}	
+		}
+		return listaAux.toString().replace("[", "{").replace("]", "}");
+	}
+
 	private String auxiliaLocalizaCarona(String idSessao, String origem, String destino){
 		List<String> listaAux = new LinkedList<String>();
 		for (Carona  carona : listaDeCaronas){
@@ -126,11 +171,35 @@ public class Perfil {
 	}
 
 	private boolean checaDestino(String destino) {
-		return (destino == null || destino.equals(""));
+		String charInvalidos = "()!-?.";
+		boolean retorno = false;
+		
+		if (destino == null){
+			retorno = true;
+		}else{
+			for (int i = 0; i < charInvalidos.length(); i++) {
+				if (destino.contains(charInvalidos.charAt(i)+"")){
+					retorno = true;
+				}
+			}
+		}
+		return retorno;
 	}
 
 	private boolean checaOrigem(String origem) {
-		return (origem == null || origem.equals(""));
+		String charInvalidos = "()!-?.";
+		boolean retorno = false;
+		
+		if (origem == null){
+			retorno = true;
+		}else{
+			for (int i = 0; i < charInvalidos.length(); i++) {
+				if (origem.contains(charInvalidos.charAt(i)+"")){
+					retorno = true;
+				}
+			}
+		}
+		return retorno;
 	}
 	
 	private  boolean checaIdSessao(String idSessao){
@@ -153,6 +222,7 @@ public class Perfil {
 		}
 		return false;
 	}
+	
 	private  boolean checaData(String stringData){
 		if(stringData == null || stringData.equals("")){
 			return true;
@@ -177,6 +247,7 @@ public class Perfil {
 	private  boolean checaVaga(String idSessao){
 		return  false;
 	} 
+	
 	private boolean checaIdCarona(String idCarona) {
 		return (idCarona == null);
 	}

@@ -171,7 +171,7 @@ public class Sistema {
 		return perfil.cadastrarCarona(idSessao, origem, destino, data, hora, vagas);
 	}
 	
-	public String localizarCarona(String idSessao, String origem, String destino){
+	public String localizarCarona(String idSessao, String origem, String destino) throws OrigemInvalidaException, DestinoInvalidoException{
 		return perfil.localizarCarona(idSessao, origem, destino);
 	}
 	
