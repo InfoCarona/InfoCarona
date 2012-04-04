@@ -18,6 +18,8 @@ import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.TrajetoInexistenteException;
+import Exception.ExceptionsCarona.TrajetoInvalidoException;
 
 public class Sistema {
 	LinkedList <Perfil> BD;
@@ -171,6 +173,9 @@ public class Sistema {
 	
 	public String getAtributoCarona(String idCarona,String atributo){
 		return perfil.getAtributoCarona(idCarona, atributo);
+	}
+	public String getTrajeto(String idCarona) throws TrajetoInexistenteException, TrajetoInvalidoException{
+		return perfil.getTrajeto(idCarona);
 	}
 	
 }

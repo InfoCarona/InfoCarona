@@ -15,6 +15,8 @@ import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.TrajetoInexistenteException;
+import Exception.ExceptionsCarona.TrajetoInvalidoException;
 
 public class Perfil {
 	
@@ -60,7 +62,49 @@ public class Perfil {
 		listaDeCaronas.add(carona);
 		return idCarona;
 	}
+	public String localizarCarona(String idSessao, String origem, String destino){
+		return auxiliaLocalizaCarona(idSessao, origem, destino);
+	}
 	
+	private String auxiliaLocalizaCarona(String idSessao, String origem, String destino){
+		List<String> listaAux = new LinkedList<String>();
+		for (Carona  carona : listaDeCaronas){
+			if ((carona.getOrigem().equals(origem)) && (carona.getDestino().equals(destino))){
+				listaAux.add(carona.getIdCarona());
+			}
+		}
+		return listaAux.toString().replace("[", "{").replace("]", "}");
+	}
+	
+	public String getAtributoCarona(String idCarona,String atributo){
+		
+		for (Carona  carona : listaDeCaronas){
+			if (carona.getIdCarona().equals(idCarona)){
+				return carona.getAtributo(atributo);
+			}
+		}
+		
+		return null;
+	}
+	
+	public String getTrajeto(String idCarona) throws TrajetoInexistenteException, TrajetoInvalidoException{
+		if(checaIdCarona(idCarona)){
+			throw new TrajetoInvalidoException();
+		}
+		String retorno = "";
+		for(Carona carona : listaDeCaronas){
+			if(carona.getIdCarona().equals(idCarona)){
+				retorno = carona.getOrigem() + " - " + carona.getDestino();
+			}
+		}
+		if(retorno.equals("")){
+			throw new TrajetoInexistenteException();
+		}
+		return retorno;
+	}
+	
+	
+
 	private boolean checaDestino(String destino) {
 		return (destino == null || destino.equals(""));
 	}
@@ -113,29 +157,8 @@ public class Perfil {
 	private  boolean checaVaga(String idSessao){
 		return  false;
 	} 
-	
-	public String localizarCarona(String idSessao, String origem, String destino){
-		return auxiliaLocalizaCarona(idSessao, origem, destino);
+	private boolean checaIdCarona(String idCarona) {
+		return (idCarona == null);
 	}
-	
-	private String auxiliaLocalizaCarona(String idSessao, String origem, String destino){
-		List<String> listaAux = new LinkedList<String>();
-		for (Carona  carona : listaDeCaronas){
-			if ((carona.getOrigem().equals(origem)) && (carona.getDestino().equals(destino))){
-				listaAux.add(carona.getIdCarona());
-			}
-		}
-		return listaAux.toString().replace("[", "{").replace("]", "}");
-	}
-	
-	public String getAtributoCarona(String idCarona,String atributo){
-		
-		for (Carona  carona : listaDeCaronas){
-			if (carona.getIdCarona().equals(idCarona)){
-				return carona.getAtributo(atributo);
-			}
-		}
-		
-		return null;
-	}
+
 }
