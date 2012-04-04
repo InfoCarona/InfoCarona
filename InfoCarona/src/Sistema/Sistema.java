@@ -164,4 +164,12 @@ public class Sistema {
 		return perfil.cadastrarCarona(idSessao, origem, destino, data, hora, vagas);
 	}
 	
+	public String localizarCarona(String idSessao, String origem, String destino){
+		return perfil.localizarCarona(idSessao, origem, destino);
+	}
+	
+	public String getAtributoCarona(String idCarona,String atributo){
+		return perfil.getAtributoCarona(idCarona, atributo);
+	}
+	
 }

@@ -2,9 +2,12 @@ package Sistema;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
@@ -61,10 +64,6 @@ public class Perfil {
 	private boolean checaOrigem(String origem) {
 		return (origem == null || origem.equals(""));
 	}
-
-	public List<String> localizarCarona(String idSessao, String origem, String destino){
-		return new LinkedList<String>();
-	}
 	
 	private  boolean checaIdSessao(String idSessao){
 		return  (idSessao == null || idSessao.equals(""));
@@ -93,4 +92,29 @@ public class Perfil {
 	private  boolean checaVaga(String idSessao){
 		return  false;
 	} 
+	
+	public String localizarCarona(String idSessao, String origem, String destino){
+		return auxiliaLocalizaCarona(idSessao, origem, destino);
+	}
+	
+	private String auxiliaLocalizaCarona(String idSessao, String origem, String destino){
+		List<String> listaAux = new LinkedList<String>();
+		for (Carona  carona : listaDeCaronas){
+			if ((carona.getOrigem().equals(origem)) && (carona.getDestino().equals(destino))){
+				listaAux.add(carona.getIdCarona());
+			}
+		}
+		return listaAux.toString().replace("[", "{").replace("]", "}");
+	}
+	
+	public String getAtributoCarona(String idCarona,String atributo){
+		
+		for (Carona  carona : listaDeCaronas){
+			if (carona.getIdCarona().equals(idCarona)){
+				return carona.getAtributo(atributo);
+			}
+		}
+		
+		return null;
+	}
 }

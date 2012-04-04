@@ -69,4 +69,20 @@ public class Carona {
 		return this.idCarona;
 	}
 	
+	public String getAtributo(String atributo){
+		String retorno = null;
+		
+		if(atributo.equals("origem")){
+			retorno = this.origem;
+		}else if(atributo.equals("vagas")){
+			retorno = (this.vagas+"");
+		}else if(atributo.equals("destino")){
+			retorno = this.destino;
+		}else if(atributo.equals("data")){
+			retorno = this.data;
+		}
+		
+		return retorno;
+	}
+	
 }
