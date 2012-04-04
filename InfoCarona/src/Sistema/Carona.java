@@ -85,4 +85,8 @@ public class Carona {
 		return retorno;
 	}
 	
+	public String toString(){
+		return (this.origem + " para " + this.destino + ", no dia " + this.data + ", as " + this.hora);
+	}
+	
 }

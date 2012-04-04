@@ -12,6 +12,8 @@ import Exception.ExceptionUsuario.LoginExistenteException;
 import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
+import Exception.ExceptionsCarona.CaronaInexistenteException;
+import Exception.ExceptionsCarona.CaronaInvalidaException;
 import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
@@ -179,5 +181,7 @@ public class Sistema {
 	public String getTrajeto(String idCarona) throws TrajetoInexistenteException, TrajetoInvalidoException{
 		return perfil.getTrajeto(idCarona);
 	}
-	
+	public String getCarona(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return perfil.getCarona(idCarona);
+	}
 }

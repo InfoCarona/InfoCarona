@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import Exception.ExceptionsCarona.CaronaInexistenteException;
+import Exception.ExceptionsCarona.CaronaInvalidaException;
 import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
@@ -107,7 +109,21 @@ public class Perfil {
 		return retorno;
 	}
 	
-	
+	public String getCarona(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		if(checaIdCarona(idCarona)){
+			throw new CaronaInvalidaException();
+		}
+		String retorno = "";
+		for(Carona carona : listaDeCaronas){
+			if(carona.getIdCarona().equals(idCarona)){
+				retorno = carona.toString();
+			}
+		}
+		if(retorno.equals("")){
+			throw new CaronaInvalidaException();
+		}
+		return retorno;
+	}
 
 	private boolean checaDestino(String destino) {
 		return (destino == null || destino.equals(""));
