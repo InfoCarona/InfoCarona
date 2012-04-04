@@ -15,6 +15,8 @@ import Exception.ExceptionUsuario.UsuarioInexistenteException;
 import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
+import Exception.ExceptionsCarona.IDCaronaInexistenteException;
+import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
@@ -171,7 +173,7 @@ public class Sistema {
 		return perfil.localizarCarona(idSessao, origem, destino);
 	}
 	
-	public String getAtributoCarona(String idCarona,String atributo){
+	public String getAtributoCarona(String idCarona,String atributo) throws ItemInexistenteException, IDCaronaInexistenteException{
 		return perfil.getAtributoCarona(idCarona, atributo);
 	}
 	public String getTrajeto(String idCarona) throws TrajetoInexistenteException, TrajetoInvalidoException{

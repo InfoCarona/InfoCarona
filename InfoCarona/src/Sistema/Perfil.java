@@ -12,6 +12,8 @@ import java.util.Set;
 import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
+import Exception.ExceptionsCarona.IDCaronaInexistenteException;
+import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
@@ -76,15 +78,17 @@ public class Perfil {
 		return listaAux.toString().replace("[", "{").replace("]", "}");
 	}
 	
-	public String getAtributoCarona(String idCarona,String atributo){
-		
+	public String getAtributoCarona(String idCarona,String atributo) throws ItemInexistenteException, IDCaronaInexistenteException{
+		if(checaIdCarona(idCarona) || idCarona.equals("")){
+			throw new IDCaronaInexistenteException();
+		}
 		for (Carona  carona : listaDeCaronas){
 			if (carona.getIdCarona().equals(idCarona)){
 				return carona.getAtributo(atributo);
 			}
 		}
 		
-		return null;
+		throw new ItemInexistenteException();
 	}
 	
 	public String getTrajeto(String idCarona) throws TrajetoInexistenteException, TrajetoInvalidoException{
