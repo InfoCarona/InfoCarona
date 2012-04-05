@@ -4,11 +4,13 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 
 public class Carona {
 	
 	private String idSessao, origem, destino, data, hora, idCarona;
 	private int vagas;
+	private LinkedList<String> sugestaoDeEncontro;
 	
 	public Carona(String idSessao, String origem, String destino, String data,
 			String hora, int vagas, String idCarona) {
@@ -19,10 +21,15 @@ public class Carona {
 		this.hora = hora;
 		this.vagas = vagas;
 		this.idCarona = idCarona;
+		sugestaoDeEncontro = new LinkedList<String>();
 	}
 
 	public String getOrigem() {
 		return origem;
+	}
+	
+	public void adicionarSugestaoDeEncontro(String local){
+		sugestaoDeEncontro.add(local);
 	}
 
 	public void setOrigem(String origem) {

@@ -67,5 +67,9 @@ public class Usuario {
 		return retorno;
 	}
 	
+	public String toString(){
+		return "Nome: "+nome + "    Login: " + login;
+	}
+	
 	
 }

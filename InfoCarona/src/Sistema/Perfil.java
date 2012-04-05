@@ -20,6 +20,7 @@ import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
 import Exception.ExceptionsCarona.TrajetoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInvalidoException;
+import Exception.ExceptionsCarona.VagaInvalidaException;
 
 public class Perfil {
 	
@@ -35,7 +36,7 @@ public class Perfil {
 		return this.usuario;
 	}
 	
-	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException, HoraInvalidaException{
+	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException, HoraInvalidaException, VagaInvalidaException{
 		
 		if(checaIdSessao(idSessao)){
 			throw new SessaoInvalidaException();
@@ -66,6 +67,10 @@ public class Perfil {
 		return idCarona;
 	}
 	
+	public String toString(){
+		return usuario.toString();
+	}
+	
 	public String localizarCarona(String idSessao, String origem, String destino) throws OrigemInvalidaException, DestinoInvalidoException{
 		if (checaOrigem(origem)){
 			throw new OrigemInvalidaException();
@@ -89,6 +94,7 @@ public class Perfil {
 		return retorno;
 	}
 	
+	
 	private String auxiliaLocalizaCarona(String idSessao) {
 		List<String> listaAux = new LinkedList<String>();
 		for (Carona  carona : listaDeCaronas){
@@ -96,6 +102,7 @@ public class Perfil {
 		}
 		return listaAux.toString().replace("[", "{").replace("]", "}");
 	}
+	
 
 	private String auxiliaLocalizaCaronaOrigem(String idSessao, String origem) {
 		List<String> listaAux = new LinkedList<String>();
@@ -171,7 +178,7 @@ public class Perfil {
 		return retorno;
 	}
 	
-	public String getCarona(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+	public String getInfoCarona(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
 		if(checaIdCarona(idCarona)){
 			throw new CaronaInvalidaException();
 		}
@@ -186,7 +193,38 @@ public class Perfil {
 		}
 		return retorno;
 	}
+	
+	public Carona getCarona(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		if(checaIdCarona(idCarona)){
+			throw new CaronaInvalidaException();
+		}
+		Carona retorno = null;
+		for(Carona carona : listaDeCaronas){
+			if(carona.getIdCarona().equals(idCarona)){
+				retorno = carona;
+			}
+		}
+		return retorno;
+	}
+	
+	
+	public boolean isCaronaDoPerfil(String idCarona){
+		for (Carona carona : listaDeCaronas){
+			if(carona.getIdCarona().equals(idCarona)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void sugerirPontoEncontro(String idSessao, String idCarona, String pontos, Perfil perfilDaCarona) throws CaronaInexistenteException, CaronaInvalidaException {
+		String[] locais = pontos.split(";");
+		for (String local : locais) {
+			perfilDaCarona.getCarona(idCarona).adicionarSugestaoDeEncontro(local);
+		}
 
+	}
+	
 	private boolean checaDestino(String destino) {
 		String charInvalidos = "()!-?.";
 		boolean retorno = false;
