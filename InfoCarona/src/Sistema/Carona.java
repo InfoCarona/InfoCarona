@@ -12,6 +12,7 @@ public class Carona {
 	private String idSessao, origem, destino, data, hora, idCarona;
 	private int vagas;
 	private List<SolicitacaoDeVaga> listaDeSolicitacoes;
+	private List<SugestaoDePontoDeEncontro> listaDeSugestoes;
 	
 	public Carona(String idSessao, String origem, String destino, String data,
 			String hora, int vagas, String idCarona) {
@@ -22,7 +23,8 @@ public class Carona {
 		this.hora = hora;
 		this.vagas = vagas;
 		this.idCarona = idCarona;
-		listaDeSolicitacoes = new LinkedList<SolicitacaoDeVaga>();
+		this.listaDeSolicitacoes = new LinkedList<SolicitacaoDeVaga>();
+		this.listaDeSugestoes = new LinkedList<SugestaoDePontoDeEncontro>();
 	}
 
 	public String getOrigem() {
@@ -34,11 +36,15 @@ public class Carona {
 	}
 
 	public String getDestino() {
-		return destino;
+		return this.destino;
 	}
 	
-	public void addSolicitacaoDeVaga(SolicitacaoDeVaga solicitacao){
-		listaDeSolicitacoes.add(solicitacao);
+	public List<SolicitacaoDeVaga> getSolicitacoesDeVagas(){
+		return this.listaDeSolicitacoes;
+	}
+	
+	public List<SugestaoDePontoDeEncontro> getSugestoesDePontosDeEncontro(){
+		return this.listaDeSugestoes;
 	}
 
 	public void setDestino(String destino) {

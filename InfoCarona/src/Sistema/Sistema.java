@@ -59,16 +59,17 @@ public class Sistema {
 
 	}
 
-	public void sugerirPontoEncontro(String idSessao, String idCarona,
+	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
 			CaronaInvalidaException {
-		Perfil perfilDaCarona = getPerfilComCarona(idCarona);
-		perfil.sugerirPontoEncontro(idSessao, idCarona, pontos);
+		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		return perfil.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
 
 	}
 	
 	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException{
-		perfil.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao, pontos);
+		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao, pontos, carona);
 	}
 
 	public String criarUsuario(String login, String nome, String endereco,

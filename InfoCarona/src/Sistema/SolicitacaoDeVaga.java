@@ -5,20 +5,29 @@ import java.util.List;
 
 public class SolicitacaoDeVaga {
 	
-	private List<String> pontosDeEncontro;
-	private List<String> respostasDePontosDeEncontro;
+	private String idSessao, idCarona, idSolicitacao, ponto;
 	
-	public SolicitacaoDeVaga(String idSessao, String idCarona){
-		this.pontosDeEncontro = new LinkedList<String>();
-		this.respostasDePontosDeEncontro = new LinkedList<String>();
+	public SolicitacaoDeVaga(String idSessao, String idCarona, String idSolicitacao, String ponto){
+		this.idCarona = idCarona;
+		this.idSessao = idSessao;
+		this.idSolicitacao = idSolicitacao;
+		this.ponto = ponto;
 	}
 	
-	public void adicionaPontoDeEncontro(String ponto){
-		
+	public String getIdCarona(){
+		return this.idCarona;
 	}
 	
-	public void adicionaRespostaDePontoDeEncontro(String resposta){
-		
+	public String getIdSessao(){
+		return this.idSessao;
+	}
+
+	public String getIdSolicitacao(){
+		return this.idSolicitacao;
+	}
+
+	public String getPonto(){
+		return this.ponto;
 	}
 	
 }

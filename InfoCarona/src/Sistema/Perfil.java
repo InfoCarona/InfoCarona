@@ -201,23 +201,6 @@ public class Perfil {
 		return false;
 	}
 	
-	public void sugerirPontoEncontro(String idSessao, String idCarona, String pontos) throws CaronaInexistenteException, CaronaInvalidaException {
-		SolicitacaoDeVaga solicita = new SolicitacaoDeVaga(idSessao, idCarona);
-		String[] locais = pontos.split(";");
-		for (String local : locais) {
-			solicita.adicionaPontoDeEncontro(local);
-		}
-
-	}
-	
-	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException{
-		SolicitacaoDeVaga solicita = null; //aki um metodo p achar a solicitaçao nas lista de solitaçao
-		String[] locais = pontos.split(";");
-		for (String local : locais) {
-			solicita.adicionaRespostaDePontoDeEncontro(local);
-		}
-	}
-	
 	private boolean checaDestino(String destino) {
 		String charInvalidos = "()!-?.";
 		boolean retorno = false;
@@ -304,8 +287,39 @@ public class Perfil {
 		return (atributo == null || atributo.equals(""));
 	}
 	
+	public String sugerirPontoEncontro(String idSessao, String idCarona, String pontos, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException {
+		String idSugestao = "sugestaoID";
+		SugestaoDePontoDeEncontro sugestao = new SugestaoDePontoDeEncontro(idSessao, idCarona, idSugestao);
+		String[] locais = pontos.split(";");
+		
+		for (String local : locais) {
+			sugestao.getListaDeSugestaoDePontosDeEncontro().add(local);
+		}
+		
+		return idSugestao;
+	}
+	
+	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
+		SugestaoDePontoDeEncontro sugestao = procuraSugestao(idSugestao, carona);
+		String[] locais = pontos.split(";");
+		for (String local : locais) {
+			sugestao.getlistaDeRespostasDePontosDeEncontro().add(local);
+		}
+	}
+	
 	public void solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
-		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(idSessao, idCarona);
-		carona.addSolicitacaoDeVaga(novaSolicitacao);
+		String idSolicitacao = ("solicitacao" + carona.getSolicitacoesDeVagas().size() + "ID");
+		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(idSessao, idCarona, idSolicitacao, ponto);
+		carona.setVagas(carona.getVagas()-1);
+		carona.getSolicitacoesDeVagas().add(novaSolicitacao);
+	}
+	
+	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao, Carona carona){  //metodo depois criar excecao, caso nao exista
+		for (SugestaoDePontoDeEncontro sugestao: carona.getSugestoesDePontosDeEncontro()){
+			if (sugestao.getIdSugestao().equals(sugestao)){
+				return sugestao;
+			}
+		}
+		return null;
 	}
 }
