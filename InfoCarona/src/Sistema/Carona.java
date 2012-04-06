@@ -25,7 +25,11 @@ public class Carona {
 		this.donoDaCarona = donoDaCarona;
 		this.listaDeSugestoes = new LinkedList<SugestaoDePontoDeEncontro>();
 	}
-
+	
+	public List<SugestaoDePontoDeEncontro> getListaDeSugestoes(){
+		return this.listaDeSugestoes;
+	}
+	
 	public String getOrigem() {
 		return this.origem;
 	}
@@ -40,10 +44,6 @@ public class Carona {
 
 	public String getDestino() {
 		return this.destino;
-	}
-	
-	public List<SugestaoDePontoDeEncontro> getSugestoesDePontosDeEncontro(){
-		return this.listaDeSugestoes;
 	}
 
 	public void setDestino(String destino) {

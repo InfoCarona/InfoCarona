@@ -290,7 +290,7 @@ public class Perfil {
 	}
 	
 	public String sugerirPontoEncontro(String idSessao, String idCarona, String pontos, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException {
-		String idSugestao = "sugestaoID";
+		String idSugestao = ("sugestao" + (carona.getListaDeSugestoes().size()+1) + "ID");
 		SugestaoDePontoDeEncontro sugestao = new SugestaoDePontoDeEncontro(idSessao, idCarona, idSugestao);
 		String[] locais = pontos.split(";");
 		
@@ -298,6 +298,7 @@ public class Perfil {
 			sugestao.getListaDeSugestaoDePontosDeEncontro().add(local);
 		}
 		
+		carona.getListaDeSugestoes().add(sugestao);
 		return idSugestao;
 	}
 	
@@ -311,14 +312,13 @@ public class Perfil {
 	
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
 		String idSolicitacao = ("solicitacao" + (listaDeSolicitacaoDeVagas.size()+1) + "ID");
-		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona.getOrigem(), carona.getDestino(), carona.getDonoDaCarona(), usuario.getNome() ,ponto, idSolicitacao);
-		carona.setVagas(carona.getVagas()-1);
+		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona, usuario.getNome() ,ponto, idSolicitacao);
 		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
 		return idSolicitacao;
 	}
 	
 	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao, Carona carona){  //metodo depois criar excecao, caso nao exista
-		for (SugestaoDePontoDeEncontro sugestao: carona.getSugestoesDePontosDeEncontro()){
+		for (SugestaoDePontoDeEncontro sugestao: carona.getListaDeSugestoes()){
 			if (sugestao.getIdSugestao().equals(sugestao)){
 				return sugestao;
 			}
@@ -340,5 +340,9 @@ public class Perfil {
 		return null;
 	}
 	
+	public void aceitarSolicitacaoPontoEncontro(String idSessao, String idSolicitacao){
+		SolicitacaoDeVaga solicitacao = procuraSolicitacao(idSolicitacao);
+		solicitacao.solicitacaoAceita();
+	}
 	
 }

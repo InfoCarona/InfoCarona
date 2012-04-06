@@ -5,27 +5,27 @@ import java.util.List;
 
 public class SolicitacaoDeVaga {
 	
-	private String origem, destino, donoDaCarona, donoDaSolicitacao, ponto, idSolicitacao;
+	private Carona carona;
+	private String donoDaSolicitacao, ponto, idSolicitacao;
+	private boolean solicitacao = false;
 	
-	public SolicitacaoDeVaga(String origem, String destino, String donoDaCarona, String donoDaSolicitacao, String ponto, String idSolicitacao){
-		this.origem = origem;
-		this.destino = destino;
-		this.donoDaCarona = donoDaCarona;
+	public SolicitacaoDeVaga(Carona carona, String donoDaSolicitacao, String ponto, String idSolicitacao){
+		this.carona = carona;
 		this.donoDaSolicitacao = donoDaSolicitacao;
 		this.ponto = ponto;
 		this.idSolicitacao = idSolicitacao;
 	}
 	
 	public String getOrigem(){
-		return this.origem;
+		return this.carona.getOrigem();
 	}
 	
 	public String getDestino(){
-		return this.destino;
+		return this.carona.getDestino();
 	}
 
 	public String getDonoDaCarona(){
-		return this.donoDaCarona;
+		return this.carona.getDonoDaCarona();
 	}
 	
 	public String getDonoDaSolicitacao(){
@@ -43,11 +43,11 @@ public class SolicitacaoDeVaga {
 	public String getAtributoSolicitacao(String atributo){
 		String retorno = "";
 		if(atributo.equals("origem")){
-			retorno = this.origem;
+			retorno = this.getOrigem();
 		}else if(atributo.equals("destino")){
-			retorno = this.destino;
+			retorno = this.getDestino();
 		}else if(atributo.equals("Dono da carona")){
-			retorno = this.donoDaCarona;
+			retorno = this.getDonoDaCarona();
 		}else if(atributo.equals("Dono da solicitacao")){
 			retorno = this.donoDaSolicitacao;
 		}else if(atributo.equals("Ponto de Encontro")){
@@ -55,5 +55,14 @@ public class SolicitacaoDeVaga {
 		}
 		
 		return retorno;
+	}
+	
+	public void solicitacaoAceita(){
+		this.solicitacao = true;
+		carona.setVagas(carona.getVagas()-1);
+	}
+	
+	public boolean isSolicitacaoAceita(){
+		return this.solicitacao;
 	}
 }
