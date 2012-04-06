@@ -63,7 +63,7 @@ public class Sistema {
 			String pontos) throws CaronaInexistenteException,
 			CaronaInvalidaException {
 		Perfil perfilDaCarona = getPerfilComCarona(idCarona);
-		perfil.sugerirPontoEncontro(idSessao, idCarona, pontos, perfilDaCarona);
+		perfil.sugerirPontoEncontro(idSessao, idCarona, pontos);
 
 	}
 	

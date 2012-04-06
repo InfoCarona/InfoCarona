@@ -26,6 +26,7 @@ public class Perfil {
 	
 	private Usuario usuario;
 	private List<Carona> listaDeCaronas;
+	private List<SolicitacaoDeVaga> listaDeSolicitacoes;
 	
 	public Perfil(Usuario usuario){
 		this.usuario = usuario;
@@ -201,18 +202,20 @@ public class Perfil {
 		return false;
 	}
 	
-	public void sugerirPontoEncontro(String idSessao, String idCarona, String pontos, Perfil perfilDaCarona) throws CaronaInexistenteException, CaronaInvalidaException {
+	public void sugerirPontoEncontro(String idSessao, String idCarona, String pontos) throws CaronaInexistenteException, CaronaInvalidaException {
+		SolicitacaoDeVaga solicita = new SolicitacaoDeVaga(idSessao, idCarona);
 		String[] locais = pontos.split(";");
 		for (String local : locais) {
-			perfilDaCarona.getCarona(idCarona).adicionarSugestaoDeEncontro(local);
+			solicita.adicionaPontoDeEncontro(local);
 		}
 
 	}
 	
 	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException{
+		SolicitacaoDeVaga solicita = null; //aki um metodo p achar a solicitaçao nas lista de solitaçao
 		String[] locais = pontos.split(";");
 		for (String local : locais) {
-			this.getCarona(idCarona).adicionarSugestaoDeEncontro(local);
+			solicita.adicionaRespostaDePontoDeEncontro(local);
 		}
 	}
 	
