@@ -26,6 +26,7 @@ public class Perfil {
 	
 	private Usuario usuario;
 	private List<Carona> listaDeCaronas;
+	private List<SolicitacaoDeVaga> listaDeSolicitacaoDeVagas;
 	
 	public Perfil(Usuario usuario){
 		this.usuario = usuario;
@@ -62,7 +63,7 @@ public class Perfil {
 		}
 		
 		String idCarona = ("carona" + (listaDeCaronas.size()+1) + "ID");
-		Carona carona = new Carona(idSessao, origem, destino, data, hora, vagas, idCarona);
+		Carona carona = new Carona(idSessao, origem, destino, data, hora, vagas, idCarona, usuario.getNome());
 		listaDeCaronas.add(carona);
 		return idCarona;
 	}
@@ -308,10 +309,10 @@ public class Perfil {
 	}
 	
 	public void solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
-		String idSolicitacao = ("solicitacao" + carona.getSolicitacoesDeVagas().size() + "ID");
-		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(idSessao, idCarona, idSolicitacao, ponto);
+		String idSolicitacao = ("solicitacao" + listaDeSolicitacaoDeVagas.size() + "ID");
+		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona.getOrigem(), carona.getDestino(), carona.getDonoDaCarona(), usuario.getNome() ,ponto, idSolicitacao);
 		carona.setVagas(carona.getVagas()-1);
-		carona.getSolicitacoesDeVagas().add(novaSolicitacao);
+		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
 	}
 	
 	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao, Carona carona){  //metodo depois criar excecao, caso nao exista
@@ -322,4 +323,20 @@ public class Perfil {
 		}
 		return null;
 	}
+	
+	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
+		SolicitacaoDeVaga solicitacao = procuraSolicitacao(idSolicitacao);
+		return solicitacao.getAtributoSolicitacao(atributo);
+	}
+
+	private SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) {
+		for(SolicitacaoDeVaga solicitacao: listaDeSolicitacaoDeVagas){
+			if(solicitacao.getIdSolicitacao().equals(idSolicitacao)){
+				return solicitacao;
+			}
+		}
+		return null;
+	}
+	
+	
 }

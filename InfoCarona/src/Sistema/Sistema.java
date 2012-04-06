@@ -253,4 +253,8 @@ public class Sistema {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
 		perfil.solicitarVagaPontoEncontro(idSessao, idCarona, ponto, carona);
 	}
+	
+	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
+		return perfil.getAtributoSolicitacao(idSolicitacao, atributo);
+	}
 }

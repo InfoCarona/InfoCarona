@@ -9,13 +9,12 @@ import java.util.List;
 
 public class Carona {
 	
-	private String idSessao, origem, destino, data, hora, idCarona;
+	private String idSessao, origem, destino, data, hora, idCarona, donoDaCarona;
 	private int vagas;
-	private List<SolicitacaoDeVaga> listaDeSolicitacoes;
 	private List<SugestaoDePontoDeEncontro> listaDeSugestoes;
 	
 	public Carona(String idSessao, String origem, String destino, String data,
-			String hora, int vagas, String idCarona) {
+			String hora, int vagas, String idCarona, String donoDaCarona) {
 		this.idSessao = idSessao;
 		this.origem = origem;
 		this.destino = destino;
@@ -23,24 +22,24 @@ public class Carona {
 		this.hora = hora;
 		this.vagas = vagas;
 		this.idCarona = idCarona;
-		this.listaDeSolicitacoes = new LinkedList<SolicitacaoDeVaga>();
+		this.donoDaCarona = donoDaCarona;
 		this.listaDeSugestoes = new LinkedList<SugestaoDePontoDeEncontro>();
 	}
 
 	public String getOrigem() {
-		return origem;
+		return this.origem;
 	}
-
+	
+	public String getDonoDaCarona(){
+		return this.donoDaCarona;
+	}
+	
 	public void setOrigem(String origem) {
 		this.origem = origem;
 	}
 
 	public String getDestino() {
 		return this.destino;
-	}
-	
-	public List<SolicitacaoDeVaga> getSolicitacoesDeVagas(){
-		return this.listaDeSolicitacoes;
 	}
 	
 	public List<SugestaoDePontoDeEncontro> getSugestoesDePontosDeEncontro(){
