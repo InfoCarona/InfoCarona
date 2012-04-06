@@ -11,6 +11,7 @@ public class Carona {
 	private String idSessao, origem, destino, data, hora, idCarona;
 	private int vagas;
 	private LinkedList<String> sugestaoDeEncontro;
+	private LinkedList<String> respostasDeEncontro;
 	
 	public Carona(String idSessao, String origem, String destino, String data,
 			String hora, int vagas, String idCarona) {
@@ -21,7 +22,8 @@ public class Carona {
 		this.hora = hora;
 		this.vagas = vagas;
 		this.idCarona = idCarona;
-		sugestaoDeEncontro = new LinkedList<String>();
+		this.sugestaoDeEncontro = new LinkedList<String>();
+		this.respostasDeEncontro = new LinkedList<String>();
 	}
 
 	public String getOrigem() {
@@ -29,7 +31,11 @@ public class Carona {
 	}
 	
 	public void adicionarSugestaoDeEncontro(String local){
-		sugestaoDeEncontro.add(local);
+		this.sugestaoDeEncontro.add(local);
+	}
+	
+	public void adicionarRespostaDeEncontro(String local){
+		this.respostasDeEncontro.add(local);
 	}
 
 	public void setOrigem(String origem) {

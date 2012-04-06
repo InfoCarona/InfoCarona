@@ -66,6 +66,10 @@ public class Sistema {
 		perfil.sugerirPontoEncontro(idSessao, idCarona, pontos, perfilDaCarona);
 
 	}
+	
+	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException{
+		perfil.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao, pontos);
+	}
 
 	public String criarUsuario(String login, String nome, String endereco,
 			String email) throws LoginInvalidoException, NomeInvalidoException,
@@ -85,10 +89,10 @@ public class Sistema {
 		while (iterador.hasNext()) {
 			Perfil perfilTemp = iterador.next();
 			Usuario userTemp = perfilTemp.getUsuario();
-			if (userTemp.email.equals(email)) {
+			if (userTemp.getEmail().equals(email)) {
 				throw new EmailExistenteException();
 			}
-			if (userTemp.login.equals(login)) {
+			if (userTemp.getLogin().equals(login)) {
 				throw new LoginExistenteException();
 			}
 		}
@@ -111,7 +115,7 @@ public class Sistema {
 		while (iterador.hasNext()) {
 			Perfil perfilTemp = iterador.next();
 			Usuario userTemp = perfilTemp.getUsuario();
-			if (userTemp.login.equals(login)) {
+			if (userTemp.getLogin().equals(login)) {
 				throw new LoginExistenteException();
 			}
 		}
@@ -228,9 +232,9 @@ public class Sistema {
 		return perfil.getTrajeto(idCarona);
 	}
 
-	public String getInfoCarona(String idCarona)
+	public Carona getCarona(String idCarona)
 			throws CaronaInexistenteException, CaronaInvalidaException {
-		return perfil.getInfoCarona(idCarona);
+		return perfil.getCarona(idCarona);
 	}
 
 	public Perfil getPerfilComCarona(String idCarona) throws CaronaInexistenteException,

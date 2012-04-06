@@ -6,7 +6,7 @@ import Exception.ExceptionUsuario.LoginInvalidoException;
  * 
  */
 public class Usuario {
-	String nome, email, endereco, senha, id, login;
+	private String nome, email, endereco, senha, id, login;
 	
 	
 	public Usuario(String nome, String email, String endereco, String senha, String login) throws Exception{

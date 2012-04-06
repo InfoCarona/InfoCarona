@@ -178,22 +178,6 @@ public class Perfil {
 		return retorno;
 	}
 	
-	public String getInfoCarona(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
-		if(checaIdCarona(idCarona)){
-			throw new CaronaInvalidaException();
-		}
-		String retorno = "";
-		for(Carona carona : listaDeCaronas){
-			if(carona.getIdCarona().equals(idCarona)){
-				retorno = carona.toString();
-			}
-		}
-		if(retorno.equals("")){
-			throw new CaronaInexistenteException();
-		}
-		return retorno;
-	}
-	
 	public Carona getCarona(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
 		if(checaIdCarona(idCarona)){
 			throw new CaronaInvalidaException();
@@ -223,6 +207,13 @@ public class Perfil {
 			perfilDaCarona.getCarona(idCarona).adicionarSugestaoDeEncontro(local);
 		}
 
+	}
+	
+	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException{
+		String[] locais = pontos.split(";");
+		for (String local : locais) {
+			this.getCarona(idCarona).adicionarSugestaoDeEncontro(local);
+		}
 	}
 	
 	private boolean checaDestino(String destino) {
