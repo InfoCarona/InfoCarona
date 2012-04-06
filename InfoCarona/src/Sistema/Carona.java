@@ -5,11 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Carona {
 	
 	private String idSessao, origem, destino, data, hora, idCarona;
 	private int vagas;
+	private List<SolicitacaoDeVaga> listaDeSolicitacoes;
 	
 	public Carona(String idSessao, String origem, String destino, String data,
 			String hora, int vagas, String idCarona) {
@@ -20,6 +22,7 @@ public class Carona {
 		this.hora = hora;
 		this.vagas = vagas;
 		this.idCarona = idCarona;
+		listaDeSolicitacoes = new LinkedList<SolicitacaoDeVaga>();
 	}
 
 	public String getOrigem() {
@@ -32,6 +35,10 @@ public class Carona {
 
 	public String getDestino() {
 		return destino;
+	}
+	
+	public void addSolicitacaoDeVaga(SolicitacaoDeVaga solicitacao){
+		listaDeSolicitacoes.add(solicitacao);
 	}
 
 	public void setDestino(String destino) {

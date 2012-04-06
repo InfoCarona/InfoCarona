@@ -26,7 +26,6 @@ public class Perfil {
 	
 	private Usuario usuario;
 	private List<Carona> listaDeCaronas;
-	private List<SolicitacaoDeVaga> listaDeSolicitacoes;
 	
 	public Perfil(Usuario usuario){
 		this.usuario = usuario;
@@ -303,5 +302,10 @@ public class Perfil {
 
 	private boolean checaAtributo(String atributo) {
 		return (atributo == null || atributo.equals(""));
+	}
+	
+	public void solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
+		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(idSessao, idCarona);
+		carona.addSolicitacaoDeVaga(novaSolicitacao);
 	}
 }

@@ -234,6 +234,7 @@ public class Sistema {
 
 	public Carona getCarona(String idCarona)
 			throws CaronaInexistenteException, CaronaInvalidaException {
+		
 		return perfil.getCarona(idCarona);
 	}
 
@@ -245,5 +246,10 @@ public class Sistema {
 			}
 		}
 		throw new CaronaInexistenteException();
+	}
+	
+	public void solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto) throws CaronaInexistenteException, CaronaInvalidaException{
+		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil.solicitarVagaPontoEncontro(idSessao, idCarona, ponto, carona);
 	}
 }
