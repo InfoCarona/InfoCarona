@@ -31,6 +31,7 @@ public class Perfil {
 	public Perfil(Usuario usuario){
 		this.usuario = usuario;
 		this.listaDeCaronas = new LinkedList<Carona>();
+		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
 	}
 	
 	public Usuario getUsuario(){
@@ -308,11 +309,12 @@ public class Perfil {
 		}
 	}
 	
-	public void solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
-		String idSolicitacao = ("solicitacao" + listaDeSolicitacaoDeVagas.size() + "ID");
+	public String solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
+		String idSolicitacao = ("solicitacao" + (listaDeSolicitacaoDeVagas.size()+1) + "ID");
 		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona.getOrigem(), carona.getDestino(), carona.getDonoDaCarona(), usuario.getNome() ,ponto, idSolicitacao);
 		carona.setVagas(carona.getVagas()-1);
 		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
+		return idSolicitacao;
 	}
 	
 	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao, Carona carona){  //metodo depois criar excecao, caso nao exista

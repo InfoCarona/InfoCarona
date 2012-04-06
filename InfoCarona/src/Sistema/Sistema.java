@@ -249,9 +249,9 @@ public class Sistema {
 		throw new CaronaInexistenteException();
 	}
 	
-	public void solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto) throws CaronaInexistenteException, CaronaInvalidaException{
+	public String solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto) throws CaronaInexistenteException, CaronaInvalidaException{
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
-		perfil.solicitarVagaPontoEncontro(idSessao, idCarona, ponto, carona);
+		return perfil.solicitarVagaPontoEncontro(idSessao, idCarona, ponto, carona);
 	}
 	
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
