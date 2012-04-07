@@ -258,4 +258,8 @@ public class Sistema {
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
 		return perfil.getAtributoSolicitacao(idSolicitacao, atributo);
 	}
+
+	public void aceitarSolicitacaoPontoEncontro (String idSessao, String idSolicitacao){
+		 perfil.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
+	}
 }

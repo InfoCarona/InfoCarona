@@ -33,7 +33,7 @@ criarUsuario login="bill" senha="b1ll"  nome="William Henry Gates III" endereco=
 sessaoBill=abrirSessao login="bill" senha="b1ll"
 
 #Sugerir ponto de encontro para uma carona
-sugestaoID = sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
+sugestaoID=sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
 encerrarSessao login="bill"
 
 #Resposta a requisicao
@@ -67,12 +67,12 @@ criarUsuario login="bill" senha="b1ll" nome="William Henry Gates III" endereco="
 sessaoBill=abrirSessao login="bill" senha="b1ll"
 
 #Sugerir ponto de encontro para uma carona
-sugestaoID = sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
+sugestaoID=sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
 encerrarSessao login="bill"
 
 #Resposta a requisicao
 sessaoMark=abrirSessao login="mark" senha="m@rk"
-respostaID = responderSugestaoPontoEncontro idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID} pontos="Acude Velho;Parque da Crianca"
+respostaID=responderSugestaoPontoEncontro idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID} pontos="Acude Velho;Parque da Crianca"
 encerrarSessao login="mark"
 
 #Requisitar vaga na carona.

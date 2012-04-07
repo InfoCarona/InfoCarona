@@ -320,7 +320,7 @@ public class Perfil {
 	
 	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao, Carona carona) throws SugestaoInexistenteException{  //metodo depois criar excecao, caso nao exista
 		for (SugestaoDePontoDeEncontro sugestao: carona.getListaDeSugestoes()){
-			if (sugestao.getIdSugestao().equals(sugestao)){
+			if (sugestao.getIdSugestao().equals(idSugestao)){
 				return sugestao;
 			}
 		}
