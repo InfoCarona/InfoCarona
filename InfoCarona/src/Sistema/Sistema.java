@@ -262,4 +262,5 @@ public class Sistema {
 	public void aceitarSolicitacaoPontoEncontro (String idSessao, String idSolicitacao){
 		 perfil.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
 	}
+	
 }
