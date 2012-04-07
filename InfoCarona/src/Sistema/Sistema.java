@@ -256,7 +256,15 @@ public class Sistema {
 	}
 	
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
-		return perfil.getAtributoSolicitacao(idSolicitacao, atributo);
+		for (Perfil perfil: BD) {
+			SolicitacaoDeVaga solicitacao = perfil.procuraSolicitacao(idSolicitacao);
+			if (solicitacao != null){
+				if (solicitacao.getIdSolicitacao().equals(idSolicitacao)) {
+					return perfil.getAtributoSolicitacao(solicitacao, atributo);
+				}
+			}
+		}
+		return null;
 	}
 
 	public void aceitarSolicitacaoPontoEncontro (String idSessao, String idSolicitacao){

@@ -27,12 +27,10 @@ public class Perfil {
 	
 	private Usuario usuario;
 	private List<Carona> listaDeCaronas;
-	private List<SolicitacaoDeVaga> listaDeSolicitacaoDeVagas;
 	
 	public Perfil(Usuario usuario){
 		this.usuario = usuario;
 		this.listaDeCaronas = new LinkedList<Carona>();
-		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
 	}
 	
 	public Usuario getUsuario(){
@@ -312,9 +310,9 @@ public class Perfil {
 	}
 	
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
-		String idSolicitacao = ("solicitacao" + (listaDeSolicitacaoDeVagas.size()+1) + "ID");
+		String idSolicitacao = ("solicitacao" + (carona.getListaDeSolicitacaoDeVagas().size()+1) + "ID");
 		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona, usuario.getNome() ,ponto, idSolicitacao);
-		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
+		carona.getListaDeSolicitacaoDeVagas().add(novaSolicitacao);
 		return idSolicitacao;
 	}
 	
@@ -327,24 +325,28 @@ public class Perfil {
 		throw new SugestaoInexistenteException();
 	}
 	
-	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
-		SolicitacaoDeVaga solicitacao = procuraSolicitacao(idSolicitacao);
+	public String getAtributoSolicitacao(SolicitacaoDeVaga solicitacao, String atributo){
 		return solicitacao.getAtributoSolicitacao(atributo);
+
 	}
 
-	private SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) {
-		for(SolicitacaoDeVaga solicitacao: listaDeSolicitacaoDeVagas){
-			if(solicitacao.getIdSolicitacao().equals(idSolicitacao)){
-				return solicitacao;
+	public SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) {
+		SolicitacaoDeVaga retorno = null;
+		
+		for(Carona carona: listaDeCaronas){
+			for(SolicitacaoDeVaga solicitacao: carona.getListaDeSolicitacaoDeVagas()){
+				if(solicitacao.getIdSolicitacao().equals(idSolicitacao)){
+					retorno = solicitacao;
+				}
 			}
 		}
-		return null;
+		
+		return retorno;
 	}
 	
 	public void aceitarSolicitacaoPontoEncontro(String idSessao, String idSolicitacao){
 		SolicitacaoDeVaga solicitacao = procuraSolicitacao(idSolicitacao);
 		solicitacao.solicitacaoAceita();
 	}
-	
 	
 }
