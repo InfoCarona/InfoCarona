@@ -24,6 +24,7 @@ import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.SugestaoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInvalidoException;
 import Exception.ExceptionsCarona.VagaInvalidaException;
@@ -67,7 +68,7 @@ public class Sistema {
 
 	}
 	
-	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException{
+	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException, SugestaoInexistenteException{
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
 		perfil.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao, pontos, carona);
 	}

@@ -18,6 +18,7 @@ import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.SugestaoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInvalidoException;
 import Exception.ExceptionsCarona.VagaInvalidaException;
@@ -302,7 +303,7 @@ public class Perfil {
 		return idSugestao;
 	}
 	
-	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException{
+	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos, Carona carona) throws CaronaInexistenteException, CaronaInvalidaException, SugestaoInexistenteException{
 		SugestaoDePontoDeEncontro sugestao = procuraSugestao(idSugestao, carona);
 		String[] locais = pontos.split(";");
 		for (String local : locais) {
@@ -317,13 +318,13 @@ public class Perfil {
 		return idSolicitacao;
 	}
 	
-	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao, Carona carona){  //metodo depois criar excecao, caso nao exista
+	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao, Carona carona) throws SugestaoInexistenteException{  //metodo depois criar excecao, caso nao exista
 		for (SugestaoDePontoDeEncontro sugestao: carona.getListaDeSugestoes()){
 			if (sugestao.getIdSugestao().equals(sugestao)){
 				return sugestao;
 			}
 		}
-		return null;
+		throw new SugestaoInexistenteException();
 	}
 	
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
