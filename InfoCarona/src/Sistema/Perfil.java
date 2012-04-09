@@ -37,7 +37,10 @@ public class Perfil {
 		return this.usuario;
 	}
 	
+	
 	public String cadastrarCarona(String idSessao, String origem, String destino, String data, String hora, int vagas) throws SessaoInvalidaException, SessaoInexistenteException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException, HoraInvalidaException, VagaInvalidaException{
+		
+	
 		
 		if(checaIdSessao(idSessao)){
 			throw new SessaoInvalidaException();

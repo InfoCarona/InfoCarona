@@ -210,12 +210,20 @@ public class Sistema {
 	}
 
 	public String cadastrarCarona(String idSessao, String origem,
-			String destino, String data, String hora, int vagas)
+			String destino, String data, String hora, String vagas)
 			throws SessaoInvalidaException, SessaoInexistenteException,
 			OrigemInvalidaException, DestinoInvalidoException,
 			DataInvalidaException, HoraInvalidaException, VagaInvalidaException {
+		
+		int vaga = 0;
+		try {
+			vaga = Integer.parseInt(vagas);
+		} catch (Exception e) {
+			throw new VagaInvalidaException();
+		}
+		
 		return perfil.cadastrarCarona(idSessao, origem, destino, data, hora,
-				vagas);
+				vaga);
 	}
 
 	public String localizarCarona(String idSessao, String origem, String destino)
