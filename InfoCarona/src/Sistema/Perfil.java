@@ -109,6 +109,7 @@ public class Perfil {
 		List<String> listaAux = new LinkedList<String>();
 		for (Carona  carona : listaDeCaronas){
 			if (carona.getOrigem().equals(origem)){
+				System.out.println(carona.toString());
 				listaAux.add(carona.getIdCarona());
 			}	
 		}
@@ -132,6 +133,7 @@ public class Perfil {
 				listaAux.add(carona.getIdCarona());
 			}
 		}
+		
 		return listaAux.toString().replace("[", "{").replace("]", "}");
 	}
 	
@@ -183,13 +185,12 @@ public class Perfil {
 		if(checaIdCarona(idCarona)){
 			throw new CaronaInvalidaException();
 		}
-		Carona retorno = null;
 		for(Carona carona : listaDeCaronas){
 			if(carona.getIdCarona().equals(idCarona)){
-				retorno = carona;
+				return carona;
 			}
 		}
-		return retorno;
+		throw new CaronaInexistenteException();
 	}
 	
 	
