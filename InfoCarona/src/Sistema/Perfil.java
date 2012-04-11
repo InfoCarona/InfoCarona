@@ -305,6 +305,25 @@ public class Perfil {
 	private boolean checaAtributo(String atributo) {
 		return (atributo == null || atributo.equals(""));
 	}
+	
+	private boolean checaPontos(String pontos){
+		boolean retorno = false;
+		if(pontos.equals("") || pontos == null){
+			retorno = true;
+		}
+		return retorno;
+	}
+	
+	private boolean checaExisteSugestao(String ponto, Carona carona){
+		boolean retorno = false;
+		for(SugestaoDePontoDeEncontro sugestao : carona.getListaDeSugestoes()){
+			if(sugestao.getListaDeSugestaoDePontosDeEncontro().contains(ponto)){
+				retorno = true;
+			}
+		}
+		
+	return retorno;	
+	}
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos, Carona carona) throws CaronaInexistenteException,
@@ -313,12 +332,15 @@ public class Perfil {
 				+ (carona.getListaDeSugestoes().size() + 1) + "ID");
 		SugestaoDePontoDeEncontro sugestao = new SugestaoDePontoDeEncontro(
 				idSessao, idCarona, idSugestao);
+		
+		if(checaPontos(pontos)){
+			throw new PontoInvalidoException();
+		}
+		
+		
 		String[] locais = pontos.split(";");//sugestao de locais(ponto) de encontro
 
 		for (String local : locais) {
-			if(sugestao.existeSugestao(local)){
-				throw new PontoInvalidoException();
-			}
 			sugestao.getListaDeSugestaoDePontosDeEncontro().add(local);
 		}
 
@@ -392,6 +414,7 @@ public class Perfil {
 		}
 		solicitacao.solicitacaoAceita();
 	}
+	
 
 	public void desistirRequisicao(String idSessao, String idSugestao,
 			Carona caronaTemp) {

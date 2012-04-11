@@ -78,7 +78,8 @@ encerrarSessao login="mark"
 #Requisitar vaga na carona.
 desistirRequisicao idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID}
 
-
+#sessaoBill=abrirSessao login="bill" senha="b1ll"
+#na linha acima nem tinha esse abrir sessao no teste, foi eu q coloquei
 expectError "Ponto Inválido" sugestaoID=sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
 expectError "Ponto Inválido" responderSugestaoPontoEncontro idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID} pontos=""
 expectError "Ponto Inválido" solicitacao1ID=solicitarVagaPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} ponto="Acude Velho"
