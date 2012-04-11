@@ -12,7 +12,6 @@ public class Carona {
 	private String idSessao, origem, destino, data, hora, idCarona, donoDaCarona;
 	private int vagas;
 	private List<SugestaoDePontoDeEncontro> listaDeSugestoes;
-	private List<SolicitacaoDeVaga> listaDeSolicitacaoDeVagas;
 	
 	public Carona(String idSessao, String origem, String destino, String data,
 			String hora, int vagas, String idCarona, String donoDaCarona) {
@@ -25,15 +24,10 @@ public class Carona {
 		this.idCarona = idCarona;
 		this.donoDaCarona = donoDaCarona;
 		this.listaDeSugestoes = new LinkedList<SugestaoDePontoDeEncontro>();
-		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
 	}
 	
 	public List<SugestaoDePontoDeEncontro> getListaDeSugestoes(){
 		return this.listaDeSugestoes;
-	}
-	
-	public List<SolicitacaoDeVaga> getListaDeSolicitacaoDeVagas(){
-		return this.listaDeSolicitacaoDeVagas;
 	}
 	
 	public String getOrigem() {

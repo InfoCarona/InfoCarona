@@ -29,11 +29,13 @@ public class Perfil {
 
 	private Usuario usuario;
 	private List<Carona> listaDeCaronas;
+	private List<SolicitacaoDeVaga> listaDeSolicitacaoDeVagas;
 
 	public Perfil(String login, String senha, String nome, String endereco,
 			String email) throws Exception {
 		this.usuario = new Usuario(nome, email, endereco, senha, login);
 		this.listaDeCaronas = new LinkedList<Carona>();
+		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
 	}
 
 	public Usuario getUsuario() {
@@ -359,14 +361,14 @@ public class Perfil {
 		}
 	}
 
-	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
+	public String solicitarVagaPontoEncontro(String idSessao, 
 			String ponto, Carona carona) throws CaronaInexistenteException,
 			CaronaInvalidaException {
 		String idSolicitacao = ("solicitacao"
-				+ (carona.getListaDeSolicitacaoDeVagas().size() + 1) + "ID");
+				+ (listaDeSolicitacaoDeVagas.size() + 1) + "ID");
 		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona,
 				usuario.getNome(), ponto, idSolicitacao);
-		carona.getListaDeSolicitacaoDeVagas().add(novaSolicitacao);
+		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
 		return idSolicitacao;
 	}
 
@@ -393,29 +395,23 @@ public class Perfil {
 
 	public SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) {
 		SolicitacaoDeVaga retorno = null;
-
-		for (Carona carona : listaDeCaronas) {
-			for (SolicitacaoDeVaga solicitacao : carona
-					.getListaDeSolicitacaoDeVagas()) {
-				if (solicitacao.getIdSolicitacao().equals(idSolicitacao)) {
-					retorno = solicitacao;
-				}
+		
+		for(SolicitacaoDeVaga solicitacao: listaDeSolicitacaoDeVagas){
+			if (solicitacao.getIdSolicitacao().equalsIgnoreCase(idSolicitacao)) {
+				retorno = solicitacao;
 			}
 		}
 
 		return retorno;
 	}
 
-	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao) throws SolicitacaoInexistenteException {
-		SolicitacaoDeVaga solicitacao = procuraSolicitacao(idSolicitacao);
+	public void aceitarSolicitacaoPontoEncontro(String idSessao, SolicitacaoDeVaga solicitacao) throws SolicitacaoInexistenteException {
 		if(solicitacao.isSolicitacaoAceita()){
 			throw new SolicitacaoInexistenteException();
 		}
 		solicitacao.solicitacaoAceita();
 	}
 	
-
 	public void desistirRequisicao(String idSessao, String idSugestao,
 			Carona caronaTemp) {
 		for (SugestaoDePontoDeEncontro sugestao : caronaTemp.getListaDeSugestoes()) {
