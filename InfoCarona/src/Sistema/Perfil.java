@@ -433,7 +433,26 @@ public class Perfil {
 			retorno = perfil.getUsuario().getEndereco();
 		} else if (atributo.equals("email")) {
 			retorno = perfil.getUsuario().getEmail();
+		} else if (atributo.equals("historico de caronas")) {
+			for (Carona caronaTemp : listaDeCaronas) {
+				retorno += caronaTemp.getDadosCarona();
+			}
+		}else if (atributo.equals("historico de vagas em caronas")) {
+			for (SolicitacaoDeVaga solicitacaoTemp : listaDeSolicitacaoDeVagas) {
+				retorno += solicitacaoTemp.toString();
+			}
+			
+		}else if (atributo.equals("caronas seguras e tranquilas")){
+			retorno = "0";
+		}else if (atributo.equals("caronas que não funcionaram")){
+			retorno = "0";
+		}else if (atributo.equals("faltas em vagas de caronas")){
+			retorno = "0";
+		}else if (atributo.equals("presenças em vagas de caronas")){
+			retorno = "0";
 		}
+		
+		
 		return retorno;
 	}
 

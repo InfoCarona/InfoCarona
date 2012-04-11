@@ -145,7 +145,7 @@ public class Fachada {
 
 	}
 
-	public String visualizarPerfil(String idSesao, String login) {
+	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException {
 		return sistema.visualizarPerfil(idSesao, login);
 	}
 

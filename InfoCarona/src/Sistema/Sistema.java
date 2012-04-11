@@ -165,8 +165,7 @@ public class Sistema {
 	// Metodos abaixo servem para checar se os atributos para criar são passados
 	// como null ou vazio
 
-	private boolean checaExisteLogin(String login)
-			throws LoginExistenteException {
+	private boolean checaExisteLogin(String login){
 		iterador = BD.iterator();
 		while (iterador.hasNext()) {
 			Perfil perfilTemp = iterador.next();
@@ -201,7 +200,8 @@ public class Sistema {
 		}
 		return false;
 	}
-
+	
+	
 	private boolean checaEmail(String email) throws EmailInvalidoException {
 
 		return (!(email == null || email.equals("")));
@@ -314,7 +314,10 @@ public class Sistema {
 		return retorno;
 	}
 
-	public String visualizarPerfil(String idSesao, String login) {
+	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException{
+		if(!checaExisteLogin(login)){
+			throw new LoginInvalidoException();
+		}
 		return perfil.toString();
 	}
 
@@ -332,5 +335,7 @@ public class Sistema {
 		Perfil perfilTemp = getPerfilLogin(login);
 		return perfil.getAtributoPerfil(perfilTemp, atributo);
 	}
+	
+	
 
 }

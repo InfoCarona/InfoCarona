@@ -102,4 +102,8 @@ public class Carona {
 		return (this.origem + " para " + this.destino + ", no dia " + this.data + ", as " + this.hora);
 	}
 	
+	public String getDadosCarona(){
+		return ("origem=" + origem + " destino=" + destino + " data=" + data + " hora=" + hora + " vagas=" + vagas);
+	}
+	
 }
