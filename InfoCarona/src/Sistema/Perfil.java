@@ -16,8 +16,10 @@ import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.IDCaronaInexistenteException;
 import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
+import Exception.ExceptionsCarona.PontoInvalidoException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.SolicitacaoInexistenteException;
 import Exception.ExceptionsCarona.SugestaoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInvalidoException;
@@ -306,14 +308,17 @@ public class Perfil {
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos, Carona carona) throws CaronaInexistenteException,
-			CaronaInvalidaException {
+			CaronaInvalidaException, PontoInvalidoException {
 		String idSugestao = ("sugestao"
 				+ (carona.getListaDeSugestoes().size() + 1) + "ID");
 		SugestaoDePontoDeEncontro sugestao = new SugestaoDePontoDeEncontro(
 				idSessao, idCarona, idSugestao);
-		String[] locais = pontos.split(";");
+		String[] locais = pontos.split(";");//sugestao de locais(ponto) de encontro
 
 		for (String local : locais) {
+			if(sugestao.existeSugestao(local)){
+				throw new PontoInvalidoException();
+			}
 			sugestao.getListaDeSugestaoDePontosDeEncontro().add(local);
 		}
 
@@ -380,9 +385,22 @@ public class Perfil {
 	}
 
 	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao) {
+			String idSolicitacao) throws SolicitacaoInexistenteException {
 		SolicitacaoDeVaga solicitacao = procuraSolicitacao(idSolicitacao);
+		if(solicitacao.isSolicitacaoAceita()){
+			throw new SolicitacaoInexistenteException();
+		}
 		solicitacao.solicitacaoAceita();
+	}
+
+	public void desistirRequisicao(String idSessao, String idSugestao,
+			Carona caronaTemp) {
+		for (SugestaoDePontoDeEncontro sugestao : caronaTemp.getListaDeSugestoes()) {
+			if(sugestao.getIdSugestao().equals(idSugestao)){
+				caronaTemp.getListaDeSugestoes().remove(sugestao);
+			}
+		}
+		
 	}
 
 }

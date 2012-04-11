@@ -16,8 +16,10 @@ import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.IDCaronaInexistenteException;
 import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
+import Exception.ExceptionsCarona.PontoInvalidoException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.SolicitacaoInexistenteException;
 import Exception.ExceptionsCarona.SugestaoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInvalidoException;
@@ -90,8 +92,8 @@ public class Fachada {
 	}
 	
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
-			String pontos) throws CaronaInexistenteException, CaronaInvalidaException{
-		return sistema.sugerirPontoEncontro(argInvalido, idCarona, pontos);
+			String pontos) throws CaronaInexistenteException, CaronaInvalidaException, PontoInvalidoException{
+		return sistema.sugerirPontoEncontro(idSessao, idCarona, pontos);
 	}
 	
 	public void responderSugestaoPontoEncontro(String idSessao,
@@ -108,8 +110,12 @@ public class Fachada {
 		return sistema.getAtributoSolicitacao(idSolicitacao, atributo);
 	}
 	
-	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao){
+	public void aceitarSolicitacaoPontoEncontro(String idSessao, String idSolicitacao) throws SolicitacaoInexistenteException{
 		sistema.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
+	}
+	
+	public void desistirRequisicao(String idSessao, String idCarona, String idSugestao) throws CaronaInexistenteException, CaronaInvalidaException{
+		sistema.desistirRequisicao(idSessao, idCarona, idSugestao);
+		
 	}
 }

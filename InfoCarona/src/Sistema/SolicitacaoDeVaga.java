@@ -60,6 +60,7 @@ public class SolicitacaoDeVaga {
 	public void solicitacaoAceita(){
 		this.solicitacao = true;
 		carona.setVagas(carona.getVagas()-1);
+		
 	}
 	
 	public boolean isSolicitacaoAceita(){

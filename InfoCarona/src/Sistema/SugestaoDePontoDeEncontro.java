@@ -37,5 +37,15 @@ public class SugestaoDePontoDeEncontro {
 	public List<String> getlistaDeRespostasDePontosDeEncontro(){
 		return this.listaDeRespostasDePontosDeEncontro;
 	}
+	public boolean existeSugestao(String pontoSugestao){
+		boolean retorno = false;
+		for (String sugestao : listaDeSugestaoDePontosDeEncontro) {
+			if(sugestao.equals(pontoSugestao)){
+				retorno = true;
+				break;
+		}
+		}
+		return retorno;
+	}
 	
 }

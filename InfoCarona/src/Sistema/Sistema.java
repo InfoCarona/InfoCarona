@@ -23,8 +23,10 @@ import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.IDCaronaInexistenteException;
 import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
+import Exception.ExceptionsCarona.PontoInvalidoException;
 import Exception.ExceptionsCarona.SessaoInexistenteException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.SolicitacaoInexistenteException;
 import Exception.ExceptionsCarona.SugestaoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInexistenteException;
 import Exception.ExceptionsCarona.TrajetoInvalidoException;
@@ -74,7 +76,7 @@ public class Sistema {
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
-			CaronaInvalidaException {
+			CaronaInvalidaException, PontoInvalidoException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
 		return perfil.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
 
@@ -276,8 +278,17 @@ public class Sistema {
 	}
 
 	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao) {
+			String idSolicitacao) throws SolicitacaoInexistenteException {
+		
 		perfil.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
+	}
+
+	public void desistirRequisicao(String idSessao, String idCarona,
+			String idSugestao) throws CaronaInexistenteException, CaronaInvalidaException {
+		Carona caronaTemp = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil.desistirRequisicao(idSessao,idSugestao, caronaTemp);
+		
+		
 	}
 
 }

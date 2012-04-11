@@ -58,7 +58,7 @@ expect 2 getAtributoCarona idCarona=${carona4ID} atributo="vagas"
 expect "Acude Velho" getAtributoSolicitacao idSolicitacao="solicitacao1ID" atributo="Ponto de Encontro"
 
 #Tentar aceitar novamente a requisição
-expectError "Solicitação inexistente" aceitarSolicitacao idSessao=${sessaoBill} idSolicitacao=${solicitacao1ID}
+expectError "Solicitação inexistente" aceitarSolicitacaoPontoEncontro idSessao=${sessaoBill} idSolicitacao=${solicitacao1ID}
 expect 2 getAtributoCarona idCarona=${carona4ID} atributo="vagas"
 
 
@@ -79,6 +79,6 @@ encerrarSessao login="mark"
 desistirRequisicao idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID}
 
 
-expectError "Ponto Inválido" sugestaoID = sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
+expectError "Ponto Inválido" sugestaoID=sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
 expectError "Ponto Inválido" responderSugestaoPontoEncontro idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID} pontos=""
 expectError "Ponto Inválido" solicitacao1ID=solicitarVagaPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} ponto="Acude Velho"
