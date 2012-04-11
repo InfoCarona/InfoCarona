@@ -3,6 +3,7 @@ package Sistema;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class Sistema {
 	LinkedList<Perfil> BD;
 	String idSessao;
 	Perfil perfil;
+	private Iterator<Perfil> iterador, iterador2;
 
 	public Sistema() {
 		BD = new LinkedList<Perfil>();
@@ -40,23 +42,33 @@ public class Sistema {
 	}
 
 	public void zerarSistema() {
-		return;
+		BD = new LinkedList<Perfil>();
 	}
 
-	public String criarUsuario(String login, String senha, String nome,
-			String endereco, String email) {
-		try {
-			Usuario novoUsuario = new Usuario(nome, email, endereco, senha,
-					login);
-			Perfil novoPerfil = new Perfil(novoUsuario);
-			BD.add(novoPerfil);
-		} catch (Exception e) {
-			return e.getMessage();
+	public void criarUsuario(String login, String senha, String nome,
+			String endereco, String email) throws Exception {
+
+		if(!(checaLogin(login))){
+			throw new LoginInvalidoException();
 		}
-		for (Perfil user : BD) {
-			System.out.println(user.toString());
+		
+		if (checaExisteLogin(login)){
+			throw new LoginExistenteException();
 		}
-		return "";
+
+		if (checaNome(nome)) {
+			throw new NomeInvalidoException();
+		}
+		if (!(checaEmail(email))){
+			throw new EmailInvalidoException();
+		}
+		
+		if (checaExisteEmail(email)){
+			throw new EmailExistenteException();
+		}
+		
+		Perfil novoPerfil = new Perfil(login, senha, nome, endereco, email);
+		BD.add(novoPerfil);
 
 	}
 
@@ -67,69 +79,23 @@ public class Sistema {
 		return perfil.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
 
 	}
-	
-	public void responderSugestaoPontoEncontro(String idSessao, String idCarona, String idSugestao, String pontos) throws CaronaInexistenteException, CaronaInvalidaException, SugestaoInexistenteException{
+
+	public void responderSugestaoPontoEncontro(String idSessao,
+			String idCarona, String idSugestao, String pontos)
+			throws CaronaInexistenteException, CaronaInvalidaException,
+			SugestaoInexistenteException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
-		perfil.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao, pontos, carona);
-	}
-
-	public String criarUsuario(String login, String nome, String endereco,
-			String email) throws LoginInvalidoException, NomeInvalidoException,
-			EmailInvalidoException, EmailExistenteException,
-			LoginExistenteException {
-
-		if (checaLogin(login)) {
-			throw new LoginInvalidoException();
-		}
-		if (checaNome(nome)) {
-			throw new NomeInvalidoException();
-		}
-		if (checaEmail(email)) {
-			throw new EmailInvalidoException();
-		}
-		java.util.Iterator<Perfil> iterador = BD.iterator();
-		while (iterador.hasNext()) {
-			Perfil perfilTemp = iterador.next();
-			Usuario userTemp = perfilTemp.getUsuario();
-			if (userTemp.getEmail().equals(email)) {
-				throw new EmailExistenteException();
-			}
-			if (userTemp.getLogin().equals(login)) {
-				throw new LoginExistenteException();
-			}
-		}
-		return "";
-	}
-
-	public String criarUsuario(String login, String nome, String endereco)
-			throws LoginInvalidoException, NomeInvalidoException,
-			EmailInvalidoException, EmailExistenteException,
-			LoginExistenteException {
-
-		if (checaLogin(login)) {
-			throw new LoginInvalidoException();
-		}
-		if (checaNome(nome)) {
-			throw new NomeInvalidoException();
-		}
-
-		java.util.Iterator<Perfil> iterador = BD.iterator();
-		while (iterador.hasNext()) {
-			Perfil perfilTemp = iterador.next();
-			Usuario userTemp = perfilTemp.getUsuario();
-			if (userTemp.getLogin().equals(login)) {
-				throw new LoginExistenteException();
-			}
-		}
-		return "";
+		perfil.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao,
+				pontos, carona);
 	}
 
 	public String abrirSessao(String login, String senha)
-			throws LoginInvalidoException, UsuarioInexistenteException {
+			throws LoginInvalidoException, UsuarioInexistenteException, LoginExistenteException {
 		boolean userExist = false;
-		if (checaLogin(login)) {
+		if(!(checaLogin(login))){
 			throw new LoginInvalidoException();
 		}
+
 		for (Perfil perfilTemp : BD) {
 			Usuario usuarioTemp = perfilTemp.getUsuario();
 			if (usuarioTemp.getLogin().equals(login)) {
@@ -155,11 +121,13 @@ public class Sistema {
 
 	public String getAtributoUsuario(String login, String atributo)
 			throws LoginInvalidoException, AtributoInvalidoException,
-			UsuarioInexistenteException, AtributoInexistenteException {
+			UsuarioInexistenteException, AtributoInexistenteException, LoginExistenteException {
 
-		if (checaLogin(login)) {
+		
+		if(!checaLogin(login)){
 			throw new LoginInvalidoException();
 		}
+		
 		if (checaAtributo(atributo)) {
 			throw new AtributoInvalidoException();
 		}
@@ -193,16 +161,44 @@ public class Sistema {
 
 	// Metodos abaixo servem para checar se os atributos para criar são passados
 	// como null ou vazio
-	private boolean checaLogin(String login) {
-		return (login == null || login.equals(""));
+	
+	private boolean checaExisteLogin(String login) throws LoginExistenteException{
+		iterador = BD.iterator();
+		while (iterador.hasNext()) {
+			Perfil perfilTemp = iterador.next();
+			Usuario userTemp = perfilTemp.getUsuario();
+
+			if (userTemp.getLogin().equals(login)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	private boolean checaLogin(String login) throws LoginInvalidoException {
+		return (!(login == null || login.equals("")));
+		
 	}
 
 	private boolean checaNome(String nome) {
 		return (nome == null || nome.equals(""));
 	}
+	
+	
+	private boolean checaExisteEmail(String email) throws EmailExistenteException{
+		iterador2 = BD.iterator();
+		while (iterador2.hasNext()) {
+			Perfil perfilTemp = iterador2.next();
+			Usuario userTemp = perfilTemp.getUsuario();
 
-	private boolean checaEmail(String email) {
-		return (email == null || email.equals(""));
+			if (userTemp.getEmail().equals(email)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	private boolean checaEmail(String email) throws EmailInvalidoException{
+		
+		return (!(email == null || email.equals("")));
 	}
 
 	private boolean checaAtributo(String atributo) {
@@ -214,14 +210,14 @@ public class Sistema {
 			throws SessaoInvalidaException, SessaoInexistenteException,
 			OrigemInvalidaException, DestinoInvalidoException,
 			DataInvalidaException, HoraInvalidaException, VagaInvalidaException {
-		
+
 		int vaga = 0;
 		try {
 			vaga = Integer.parseInt(vagas);
 		} catch (Exception e) {
 			throw new VagaInvalidaException();
 		}
-		
+
 		return perfil.cadastrarCarona(idSessao, origem, destino, data, hora,
 				vaga);
 	}
@@ -242,31 +238,35 @@ public class Sistema {
 		return perfil.getTrajeto(idCarona);
 	}
 
-	public Carona getCarona(String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException {
-		
+	public Carona getCarona(String idCarona) throws CaronaInexistenteException,
+			CaronaInvalidaException {
+
 		return perfil.getCarona(idCarona);
 	}
 
-	public Perfil getPerfilComCarona(String idCarona) throws CaronaInexistenteException,
-			CaronaInvalidaException {
-		for(Perfil perfil : BD){
-			if(perfil.isCaronaDoPerfil(idCarona)){
+	public Perfil getPerfilComCarona(String idCarona)
+			throws CaronaInexistenteException, CaronaInvalidaException {
+		for (Perfil perfil : BD) {
+			if (perfil.isCaronaDoPerfil(idCarona)) {
 				return perfil;
 			}
 		}
 		throw new CaronaInexistenteException();
 	}
-	
-	public String solicitarVagaPontoEncontro(String idSessao, String idCarona, String ponto) throws CaronaInexistenteException, CaronaInvalidaException{
+
+	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
+			String ponto) throws CaronaInexistenteException,
+			CaronaInvalidaException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
-		return perfil.solicitarVagaPontoEncontro(idSessao, idCarona, ponto, carona);
+		return perfil.solicitarVagaPontoEncontro(idSessao, idCarona, ponto,
+				carona);
 	}
-	
-	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
-		for (Perfil perfil: BD) {
-			SolicitacaoDeVaga solicitacao = perfil.procuraSolicitacao(idSolicitacao);
-			if (solicitacao != null){
+
+	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {
+		for (Perfil perfil : BD) {
+			SolicitacaoDeVaga solicitacao = perfil
+					.procuraSolicitacao(idSolicitacao);
+			if (solicitacao != null) {
 				if (solicitacao.getIdSolicitacao().equals(idSolicitacao)) {
 					return perfil.getAtributoSolicitacao(solicitacao, atributo);
 				}
@@ -275,8 +275,9 @@ public class Sistema {
 		return null;
 	}
 
-	public void aceitarSolicitacaoPontoEncontro (String idSessao, String idSolicitacao){
-		 perfil.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
+	public void aceitarSolicitacaoPontoEncontro(String idSessao,
+			String idSolicitacao) {
+		perfil.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
 	}
-	
+
 }

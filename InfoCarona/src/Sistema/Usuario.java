@@ -9,10 +9,8 @@ public class Usuario {
 	private String nome, email, endereco, senha, id, login;
 	
 	
-	public Usuario(String nome, String email, String endereco, String senha, String login) throws Exception{
-		if(login == null || login.equals("")){
-			throw new LoginInvalidoException();
-		}
+	public Usuario(String nome, String email, String endereco, String senha, String login){
+		
 		this.nome = nome;
 		this.email = email;
 		this.endereco = endereco;
