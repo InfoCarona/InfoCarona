@@ -31,8 +31,8 @@ criarUsuario login="bill" senha="bilz@o" nome="William Henry Gates III" endereco
 sessaoBill=abrirSessao login="bill" senha="bilz@o"
 
 #Requisitar vaga na carona.
-solicitacao1ID=solicitarVaga idSessao=${sessaoBill} idCarona=${carona4ID}
-expect "Campina Grande" getAtributoSolicitacao idSolicitacao={solicitacao1ID} atributo="origem"
+solicitacao1ID=SolicitarVaga idSessao=${sessaoBill} idCarona=${carona4ID}
+expect "Campina Grande" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="origem"
 expect "João Pessoa" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="destino"
 expect "Mark Zuckerberg" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="Dono da carona"
 expect "William Henry Gates III" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="Dono da solicitacao"

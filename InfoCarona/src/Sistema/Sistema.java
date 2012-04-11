@@ -291,4 +291,9 @@ public class Sistema {
 		
 	}
 
+	public String solicitarVaga(String idSessao2, String idCarona) throws CaronaInexistenteException, CaronaInvalidaException {
+		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		return perfil.solicitarVagaPontoEncontro(idSessao2, idCarona, null, carona);		
+	}
+
 }

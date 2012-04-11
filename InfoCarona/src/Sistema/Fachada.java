@@ -106,6 +106,9 @@ public class Fachada {
 		return sistema.solicitarVagaPontoEncontro(idSessao, idCarona, ponto);
 	}
 	
+	public String SolicitarVaga(String idSessao, String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return sistema.solicitarVaga(idSessao,idCarona);
+	}
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo){
 		return sistema.getAtributoSolicitacao(idSolicitacao, atributo);
 	}
