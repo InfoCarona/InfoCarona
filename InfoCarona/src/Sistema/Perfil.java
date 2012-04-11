@@ -307,24 +307,24 @@ public class Perfil {
 	private boolean checaAtributo(String atributo) {
 		return (atributo == null || atributo.equals(""));
 	}
-	
-	private boolean checaPontos(String pontos){
+
+	private boolean checaPontos(String pontos) {
 		boolean retorno = false;
-		if(pontos.equals("") || pontos == null){
+		if (pontos.equals("") || pontos == null) {
 			retorno = true;
 		}
 		return retorno;
 	}
-	
-	private boolean checaExisteSugestao(String ponto, Carona carona){
+
+	private boolean checaExisteSugestao(String ponto, Carona carona) {
 		boolean retorno = false;
-		for(SugestaoDePontoDeEncontro sugestao : carona.getListaDeSugestoes()){
-			if(sugestao.getListaDeSugestaoDePontosDeEncontro().contains(ponto)){
+		for (SugestaoDePontoDeEncontro sugestao : carona.getListaDeSugestoes()) {
+			if (sugestao.getListaDeSugestaoDePontosDeEncontro().contains(ponto)) {
 				retorno = true;
 			}
 		}
-		
-	return retorno;	
+
+		return retorno;
 	}
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
@@ -334,13 +334,13 @@ public class Perfil {
 				+ (carona.getListaDeSugestoes().size() + 1) + "ID");
 		SugestaoDePontoDeEncontro sugestao = new SugestaoDePontoDeEncontro(
 				idSessao, idCarona, idSugestao);
-		
-		if(checaPontos(pontos)){
+
+		if (checaPontos(pontos)) {
 			throw new PontoInvalidoException();
 		}
-		
-		
-		String[] locais = pontos.split(";");//sugestao de locais(ponto) de encontro
+
+		String[] locais = pontos.split(";");// sugestao de locais(ponto) de
+											// encontro
 
 		for (String local : locais) {
 			sugestao.getListaDeSugestaoDePontosDeEncontro().add(local);
@@ -361,8 +361,8 @@ public class Perfil {
 		}
 	}
 
-	public String solicitarVagaPontoEncontro(String idSessao, 
-			String ponto, Carona carona) throws CaronaInexistenteException,
+	public String solicitarVagaPontoEncontro(String idSessao, String ponto,
+			Carona carona) throws CaronaInexistenteException,
 			CaronaInvalidaException {
 		String idSolicitacao = ("solicitacao"
 				+ (listaDeSolicitacaoDeVagas.size() + 1) + "ID");
@@ -395,8 +395,8 @@ public class Perfil {
 
 	public SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) {
 		SolicitacaoDeVaga retorno = null;
-		
-		for(SolicitacaoDeVaga solicitacao: listaDeSolicitacaoDeVagas){
+
+		for (SolicitacaoDeVaga solicitacao : listaDeSolicitacaoDeVagas) {
 			if (solicitacao.getIdSolicitacao().equalsIgnoreCase(idSolicitacao)) {
 				retorno = solicitacao;
 			}
@@ -405,21 +405,36 @@ public class Perfil {
 		return retorno;
 	}
 
-	public void aceitarSolicitacaoPontoEncontro(String idSessao, SolicitacaoDeVaga solicitacao) throws SolicitacaoInexistenteException {
-		if(solicitacao.isSolicitacaoAceita()){
+	public void aceitarSolicitacaoPontoEncontro(String idSessao,
+			SolicitacaoDeVaga solicitacao)
+			throws SolicitacaoInexistenteException {
+		if (solicitacao.isSolicitacaoAceita()) {
 			throw new SolicitacaoInexistenteException();
 		}
 		solicitacao.solicitacaoAceita();
 	}
-	
+
 	public void desistirRequisicao(String idSessao, String idSugestao,
 			Carona caronaTemp) {
-		for (SugestaoDePontoDeEncontro sugestao : caronaTemp.getListaDeSugestoes()) {
-			if(sugestao.getIdSugestao().equals(idSugestao)){
+		for (SugestaoDePontoDeEncontro sugestao : caronaTemp
+				.getListaDeSugestoes()) {
+			if (sugestao.getIdSugestao().equals(idSugestao)) {
 				caronaTemp.getListaDeSugestoes().remove(sugestao);
 			}
 		}
-		
+
+	}
+
+	public String getAtributoPerfil(Perfil perfil, String atributo) {
+		String retorno = "";
+		if (atributo.equals("nome")) {
+			retorno = perfil.getUsuario().getNome();
+		} else if (atributo.equals("endereco")) {
+			retorno = perfil.getUsuario().getEndereco();
+		} else if (atributo.equals("email")) {
+			retorno = perfil.getUsuario().getEmail();
+		}
+		return retorno;
 	}
 
 }
