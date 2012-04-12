@@ -30,12 +30,20 @@ public class Perfil {
 	private Usuario usuario;
 	private List<Carona> listaDeCaronas;
 	private List<SolicitacaoDeVaga> listaDeSolicitacaoDeVagas;
+	private int caronasSeguras;
+	private int caronaNaoFuncionaram;
+	private int faltasEmVagas;
+	private int presencaEmVagas;
 
 	public Perfil(String login, String senha, String nome, String endereco,
 			String email) throws Exception {
 		this.usuario = new Usuario(nome, email, endereco, senha, login);
 		this.listaDeCaronas = new LinkedList<Carona>();
 		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
+		this.caronasSeguras = 0;
+		this.caronaNaoFuncionaram = 0;
+		this.faltasEmVagas = 0;
+		this.presencaEmVagas = 0;
 	}
 
 	public Usuario getUsuario() {
@@ -443,17 +451,48 @@ public class Perfil {
 			}
 			
 		}else if (atributo.equals("caronas seguras e tranquilas")){
-			retorno = "0";
+			retorno = this.caronasSeguras + "";
 		}else if (atributo.equals("caronas que não funcionaram")){
-			retorno = "0";
+			retorno = this.caronaNaoFuncionaram + "";
 		}else if (atributo.equals("faltas em vagas de caronas")){
-			retorno = "0";
+			retorno = this.faltasEmVagas + "";
 		}else if (atributo.equals("presenças em vagas de caronas")){
-			retorno = "0";
+			retorno = this.presencaEmVagas + "";
 		}
 		
 		
 		return retorno;
 	}
-
+	
+		public int getCaronasSeguras(){
+			return this.caronasSeguras;
+		}
+		
+		public void setCaronasSeguras(){
+			this.caronasSeguras++;
+		}
+		
+		public int getCaronasNaoFuncionaram(){
+			return this.caronaNaoFuncionaram;
+		}
+		
+		public void setCaronasNaoFuncionaram(){
+			this.caronaNaoFuncionaram++;
+		}
+		
+		public int getFaltasEmVagas(){
+			return this.faltasEmVagas;
+		}
+		
+		public void setFaltasEmVagas(){
+			this.faltasEmVagas++;
+		}
+		
+		public int getPresencaEmVagas(){
+			return this.presencaEmVagas;
+		}
+		
+		public void setPresencaEmVagas(){
+			this.presencaEmVagas++;
+		}
 }
