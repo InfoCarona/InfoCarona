@@ -34,12 +34,14 @@ import Exception.ExceptionsCarona.VagaInvalidaException;
 
 public class Sistema {
 	LinkedList<Perfil> BD;
+	LinkedList<Perfil> PerfisLogados;
 	String idSessao;
 	Perfil perfil;
 	private Iterator<Perfil> iterador, iterador2;
 
 	public Sistema() {
 		BD = new LinkedList<Perfil>();
+		PerfisLogados = new LinkedList<Perfil>();
 		idSessao = "";
 	}
 
@@ -76,8 +78,9 @@ public class Sistema {
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
-			CaronaInvalidaException, PontoInvalidoException {
+			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
 
 	}
@@ -85,8 +88,9 @@ public class Sistema {
 	public void responderSugestaoPontoEncontro(String idSessao,
 			String idCarona, String idSugestao, String pontos)
 			throws CaronaInexistenteException, CaronaInvalidaException,
-			SugestaoInexistenteException {
+			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil = procuraPerfilLogado(idSessao);
 		perfil.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao,
 				pontos, carona);
 	}
@@ -105,7 +109,8 @@ public class Sistema {
 				userExist = true;
 				if (usuarioTemp.getSenha().equals(senha)) {
 					idSessao = usuarioTemp.getIdSessao();
-					perfil = perfilTemp;
+					//perfil = perfilTemp;
+					PerfisLogados.add(perfilTemp);
 				} else {
 					throw new LoginInvalidoException();
 				}
@@ -118,8 +123,9 @@ public class Sistema {
 	}
 
 	public void encerrarSessao(String login) {
-		idSessao = "";
-		perfil = null;
+		Perfil perfilTemp = getPerfilLogin(login);
+		PerfisLogados.remove(perfilTemp);
+		
 	}
 
 	public String getAtributoUsuario(String login, String atributo)
@@ -223,38 +229,41 @@ public class Sistema {
 		} catch (Exception e) {
 			throw new VagaInvalidaException();
 		}
-
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.cadastrarCarona(idSessao, origem, destino, data, hora,
 				vaga);
 	}
 
 	public String localizarCarona(String idSessao, String origem, String destino)
-			throws OrigemInvalidaException, DestinoInvalidoException {
+			throws OrigemInvalidaException, DestinoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.localizarCarona(idSessao, origem, destino);
 	}
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException {
+			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.getAtributoCarona(idCarona, atributo);
 	}
 
 	public String getTrajeto(String idCarona)
-			throws TrajetoInexistenteException, TrajetoInvalidoException {
+			throws TrajetoInexistenteException, TrajetoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.getTrajeto(idCarona);
 	}
 
 	public Carona getCarona(String idCarona) throws CaronaInexistenteException,
-			CaronaInvalidaException {
-
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.getCarona(idCarona);
 	}
 
 	public Perfil getPerfilComCarona(String idCarona)
 			throws CaronaInexistenteException, CaronaInvalidaException {
-		for (Perfil perfil : BD) {
-			if (perfil.isCaronaDoPerfil(idCarona)) {
-				return perfil;
+		for (Perfil perfilTemp : BD) {
+			if (perfilTemp.isCaronaDoPerfil(idCarona)) {
+				return perfilTemp;
 			}
 		}
 		throw new CaronaInexistenteException();
@@ -262,8 +271,9 @@ public class Sistema {
 
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
 			String ponto) throws CaronaInexistenteException,
-			CaronaInvalidaException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.solicitarVagaPontoEncontro(idSessao, ponto, carona);
 	}
 
@@ -281,26 +291,30 @@ public class Sistema {
 	}
 
 	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao) throws SolicitacaoInexistenteException {
+			String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
 		SolicitacaoDeVaga solicitacao = this.procuraSolicitacao(idSolicitacao);
+		
+		perfil = procuraPerfilLogado(idSessao);
 		perfil.aceitarSolicitacaoPontoEncontro(idSessao, solicitacao);
 	}
 
 	public void desistirRequisicao(String idSessao, String idCarona,
 			String idSugestao) throws CaronaInexistenteException,
-			CaronaInvalidaException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		Carona caronaTemp = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil = procuraPerfilLogado(idSessao);
 		perfil.desistirRequisicao(idSessao, idSugestao, caronaTemp);
 
 	}
 
 	public String solicitarVaga(String idSessao2, String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException {
+			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.solicitarVagaPontoEncontro(idSessao2, null, carona);
 	}
 
-	private SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) {
+	private SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) throws SolicitacaoInexistenteException {
 		SolicitacaoDeVaga retorno = null;
 
 		for (Perfil perfil : BD) {
@@ -310,14 +324,18 @@ public class Sistema {
 				retorno = solicitacao;
 			}
 		}
+		if(retorno == null){
+			throw new SolicitacaoInexistenteException();
+		}
 
 		return retorno;
 	}
 
-	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException{
+	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException, SessaoInvalidaException, SessaoInexistenteException{
 		if(!checaExisteLogin(login)){
 			throw new LoginInvalidoException();
 		}
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.toString();
 	}
 
@@ -331,11 +349,32 @@ public class Sistema {
 		return retorno;
 	}
 
-	public String getAtributoPerfil(String login, String atributo) {
+	public String getAtributoPerfil(String login, String atributo) throws SessaoInvalidaException, SessaoInexistenteException {
 		Perfil perfilTemp = getPerfilLogin(login);
+		perfil = procuraPerfilLogado(idSessao);
 		return perfil.getAtributoPerfil(perfilTemp, atributo);
 	}
 	
+	private Perfil procuraPerfilLogado(String idSessao) throws SessaoInvalidaException, SessaoInexistenteException{
+		Perfil retorno = null;
+		if(!checaIdSessao(idSessao)){
+			throw new SessaoInvalidaException();
+		}
+		
+		for(Perfil perfilTemp : PerfisLogados){
+			if(perfilTemp.getUsuario().getIdSessao().equals(idSessao)){
+				retorno = perfilTemp;
+			}
+		}
+		if(retorno == null){
+			throw new SessaoInexistenteException();
+		}
+		return retorno;
+	}
 	
+	private boolean checaIdSessao(String idSessao) {
+		return (!(idSessao == null || idSessao.equals("")));
+	}
+
 
 }

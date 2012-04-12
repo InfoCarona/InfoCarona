@@ -80,23 +80,23 @@ public class Fachada {
 	}
 
 	public String localizarCarona(String idSessao, String origem, String destino)
-			throws OrigemInvalidaException, DestinoInvalidoException {
+			throws OrigemInvalidaException, DestinoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.localizarCarona(idSessao, origem, destino);
 	}
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException {
+			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.getAtributoCarona(idCarona, atributo);
 	}
 
 	public String getTrajeto(String idCarona)
-			throws TrajetoInexistenteException, TrajetoInvalidoException {
+			throws TrajetoInexistenteException, TrajetoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.getTrajeto(idCarona);
 	}
 
 	public Carona getCarona(String idCarona) throws CaronaInexistenteException,
-			CaronaInvalidaException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.getCarona(idCarona);
 	}
 
@@ -106,26 +106,26 @@ public class Fachada {
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
-			CaronaInvalidaException, PontoInvalidoException {
+			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.sugerirPontoEncontro(idSessao, idCarona, pontos);
 	}
 
 	public void responderSugestaoPontoEncontro(String idSessao,
 			String idCarona, String idSugestao, String pontos)
 			throws CaronaInexistenteException, CaronaInvalidaException,
-			SugestaoInexistenteException {
+			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
 		sistema.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao,
 				pontos);
 	}
 
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
 			String ponto) throws CaronaInexistenteException,
-			CaronaInvalidaException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.solicitarVagaPontoEncontro(idSessao, idCarona, ponto);
 	}
 
 	public String SolicitarVaga(String idSessao, String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException {
+			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.solicitarVaga(idSessao, idCarona);
 	}
 
@@ -134,22 +134,22 @@ public class Fachada {
 	}
 
 	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao) throws SolicitacaoInexistenteException {
+			String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
 		sistema.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
 	}
 
 	public void desistirRequisicao(String idSessao, String idCarona,
 			String idSugestao) throws CaronaInexistenteException,
-			CaronaInvalidaException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		sistema.desistirRequisicao(idSessao, idCarona, idSugestao);
 
 	}
 
-	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException {
+	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.visualizarPerfil(idSesao, login);
 	}
 
-	public String getAtributoPerfil(String login, String atributo) {
+	public String getAtributoPerfil(String login, String atributo) throws SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.getAtributoPerfil(login, atributo);
 	}
 }
