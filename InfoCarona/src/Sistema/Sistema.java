@@ -242,8 +242,8 @@ public class Sistema {
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
-		perfil = procuraPerfilLogado(idSessao);
+			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException {
+		perfil = getPerfilComCarona(idCarona);
 		return perfil.getAtributoCarona(idCarona, atributo);
 	}
 
@@ -278,12 +278,11 @@ public class Sistema {
 	}
 
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {
-		for (Perfil perfil : BD) {
-			SolicitacaoDeVaga solicitacao = perfil
-					.procuraSolicitacao(idSolicitacao);
+		for (Perfil perfilTemp : BD) {
+			SolicitacaoDeVaga solicitacao = perfilTemp.procuraSolicitacao(idSolicitacao);
 			if (solicitacao != null) {
 				if (solicitacao.getIdSolicitacao().equals(idSolicitacao)) {
-					return perfil.getAtributoSolicitacao(solicitacao, atributo);
+					return perfilTemp.getAtributoSolicitacao(solicitacao, atributo);
 				}
 			}
 		}
@@ -307,11 +306,11 @@ public class Sistema {
 
 	}
 
-	public String solicitarVaga(String idSessao2, String idCarona)
+	public String solicitarVaga(String idSessao, String idCarona)
 			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
 		Carona carona = getPerfilComCarona(idCarona).getCarona(idCarona);
 		perfil = procuraPerfilLogado(idSessao);
-		return perfil.solicitarVagaPontoEncontro(idSessao2, null, carona);
+		return perfil.solicitarVagaPontoEncontro(idSessao, null, carona);
 	}
 
 	private SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) throws SolicitacaoInexistenteException {

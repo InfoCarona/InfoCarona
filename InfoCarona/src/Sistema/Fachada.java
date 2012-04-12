@@ -86,7 +86,7 @@ public class Fachada {
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
+			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException {
 		return sistema.getAtributoCarona(idCarona, atributo);
 	}
 
