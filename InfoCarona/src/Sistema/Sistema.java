@@ -33,12 +33,19 @@ import Exception.ExceptionsCarona.TrajetoInvalidoException;
 import Exception.ExceptionsCarona.VagaInvalidaException;
 
 public class Sistema {
-	LinkedList<Usuario> BD;
-	LinkedList<Usuario> PerfisLogados;
+/**
+ * Classe Sistema utilizada incialmente para a logica do sistema
+ * todos os metodos da fachada, são chamadas por ele.
+ */
+	
+	List<Usuario> BD;
+	List<Usuario> PerfisLogados;
 	String idSessao;
 	Usuario usuario;
 	private Iterator<Usuario> iterador, iterador2;
-
+/**
+ * 
+ */
 	public Sistema() {
 		BD = new LinkedList<Usuario>();
 		PerfisLogados = new LinkedList<Usuario>();
@@ -48,7 +55,15 @@ public class Sistema {
 	public void zerarSistema() {
 		BD = new LinkedList<Usuario>();
 	}
-
+/**
+ * 
+ * @param login
+ * @param senha
+ * @param nome
+ * @param endereco
+ * @param email
+ * @throws Exception
+ */
 	public void criarUsuario(String login, String senha, String nome,
 			String endereco, String email) throws Exception {
 
@@ -191,9 +206,6 @@ public class Sistema {
 		return false;
 	}
 	
-	
-
-
 	private boolean checaAtributo(String atributo) {
 		return (atributo == null || atributo.equals(""));
 	}
