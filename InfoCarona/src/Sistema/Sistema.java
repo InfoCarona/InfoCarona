@@ -23,6 +23,7 @@ import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.IDCaronaInexistenteException;
+import Exception.ExceptionsCarona.IDCaronaInvalidoException;
 import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.PontoInvalidoException;
@@ -93,7 +94,7 @@ public class Sistema {
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
-			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
+			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
@@ -103,7 +104,7 @@ public class Sistema {
 	public void responderSugestaoPontoEncontro(String idSessao,
 			String idCarona, String idSugestao, String pontos)
 			throws CaronaInexistenteException, CaronaInvalidaException,
-			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
+			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		usuario.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao,
@@ -245,7 +246,7 @@ public class Sistema {
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException {
+			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException {
 		usuario = getUsuarioComCarona(idCarona);
 		return usuario.getAtributoCarona(idCarona, atributo);
 	}
@@ -263,7 +264,13 @@ public class Sistema {
 	}
 
 	public Usuario getUsuarioComCarona(String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException {
+			throws CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException, ItemInexistenteException {
+		if(idCarona == null || idCarona.equals("")){
+			throw new IDCaronaInvalidoException();
+		}
+		if(!idCarona.contains("carona")){
+			throw new ItemInexistenteException();
+		}
 		for (Usuario usuarioTemp : BD) {
 			if (usuarioTemp.isCaronaDoPerfil(idCarona)) {
 				return usuarioTemp;
@@ -274,7 +281,7 @@ public class Sistema {
 
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
 			String ponto) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.solicitarVagaPontoEncontro(idSessao, ponto, carona);
@@ -302,7 +309,7 @@ public class Sistema {
 
 	public void desistirRequisicao(String idSessao, String idCarona,
 			String idSugestao) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona caronaTemp = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		usuario.desistirRequisicao(idSessao, idSugestao, caronaTemp);
@@ -310,7 +317,7 @@ public class Sistema {
 	}
 
 	public String solicitarVaga(String idSessao, String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.solicitarVagaPontoEncontro(idSessao, null, carona);

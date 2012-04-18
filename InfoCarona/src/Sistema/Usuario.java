@@ -21,6 +21,7 @@ import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.IDCaronaInexistenteException;
+import Exception.ExceptionsCarona.IDCaronaInvalidoException;
 import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.PontoInvalidoException;
@@ -172,10 +173,10 @@ public class Usuario {
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException {
+			AtributoInvalidoException, AtributoInexistenteException, IDCaronaInvalidoException {
 
 		if (checaIdCarona(idCarona) || idCarona.equals("")) {
-			throw new IDCaronaInexistenteException();
+			throw new IDCaronaInvalidoException();
 		}
 		if (checaAtributo(atributo)) {
 			throw new AtributoInvalidoException();
