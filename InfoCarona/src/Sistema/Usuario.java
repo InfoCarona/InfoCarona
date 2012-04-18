@@ -8,6 +8,13 @@ import java.util.List;
 
 import Exception.ExceptionUsuario.AtributoInexistenteException;
 import Exception.ExceptionUsuario.AtributoInvalidoException;
+import Exception.ExceptionUsuario.EmailExistenteException;
+import Exception.ExceptionUsuario.EmailInvalidoException;
+import Exception.ExceptionUsuario.EnderecoInvalidoException;
+import Exception.ExceptionUsuario.LoginExistenteException;
+import Exception.ExceptionUsuario.LoginInvalidoException;
+import Exception.ExceptionUsuario.NomeInvalidoException;
+import Exception.ExceptionUsuario.SenhaInvalidoException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
 import Exception.ExceptionsCarona.DataInvalidaException;
@@ -36,6 +43,17 @@ public class Usuario {
 	private String nome, email, endereco, senha, id, login;
 
 	public Usuario(String nome, String email, String endereco, String senha, String login) throws Exception {
+		
+
+		this.nome = nome;
+		this.email = email;
+		this.endereco = endereco;
+		this.senha = senha;
+		this.login = login;
+		
+		validaDadosDoConstrutor(nome, email, endereco, senha, login);
+		
+		this.id  = "sessao" + login.substring(0,1).toUpperCase() + login.substring(1, login.length());
 		this.listaDeCaronas = new LinkedList<Carona>();
 		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
 		this.caronasSeguras = 0;
@@ -43,12 +61,6 @@ public class Usuario {
 		this.faltasEmVagas = 0;
 		this.presencaEmVagas = 0;
 		
-		this.nome = nome;
-		this.email = email;
-		this.endereco = endereco;
-		this.senha = senha;
-		this.login = login;
-		this.id  = "sessao" + login.substring(0,1).toUpperCase() + login.substring(1, login.length());
 	}
 
 
@@ -89,7 +101,7 @@ public class Usuario {
 	}
 
 	public String toString() {
-		return this.toString();
+		return "Nome: "+nome + " Login: " + login;
 	}
 
 	public String localizarCarona(String idSessao, String origem, String destino)
@@ -534,6 +546,52 @@ public class Usuario {
 		public void setNome(String nome) {
 			this.nome = nome;
 		}
+		
+		private void validaDadosDoConstrutor(String nome, String email, String endereco, String senha, String login) throws EmailInvalidoException, NomeInvalidoException, LoginInvalidoException, SenhaInvalidoException, EnderecoInvalidoException{
+			if (!(checaLogin(login))) {
+				throw new LoginInvalidoException();
+			}
+
+			if (checaNome(nome)) {
+				throw new NomeInvalidoException();
+			}
+			if (!(checaEmail(email))) {
+				throw new EmailInvalidoException();
+			}
+			//if (checaSenha(senha)) {
+				//throw new SenhaInvalidoException();
+			//}
+			//if (!(checaEndereco(endereco))) {
+				//throw new EnderecoInvalidoException();
+			//}
+
+			
+		}
+		
+		
+		private boolean checaLogin(String login) throws LoginInvalidoException {
+			return (!(login == null || login.equals("")));
+
+		}
+		
+		private boolean checaEndereco(String endereco) throws LoginInvalidoException {
+			return (!(endereco == null || endereco.equals("")));
+		}
+		
+		private boolean checaSenha(String senha) throws LoginInvalidoException {
+			return (!(senha == null || senha.equals("")));
+		}
+
+		private boolean checaNome(String nome) {
+			return (nome == null || nome.equals(""));
+		}
+		
+		private boolean checaEmail(String email) throws EmailInvalidoException {
+
+			return (!(email == null || email.equals("")));
+		}
+		
+		
 		
 		public String getAtributoUsuario(String login, String atributo){
 			String retorno = "";

@@ -52,19 +52,9 @@ public class Sistema {
 	public void criarUsuario(String login, String senha, String nome,
 			String endereco, String email) throws Exception {
 
-		if (!(checaLogin(login))) {
-			throw new LoginInvalidoException();
-		}
 
 		if (checaExisteLogin(login)) {
 			throw new LoginExistenteException();
-		}
-
-		if (checaNome(nome)) {
-			throw new NomeInvalidoException();
-		}
-		if (!(checaEmail(email))) {
-			throw new EmailInvalidoException();
 		}
 
 		if (checaExisteEmail(email)) {
@@ -136,7 +126,7 @@ public class Sistema {
 		if (!checaLogin(login)) {
 			throw new LoginInvalidoException();
 		}
-
+		
 		if (checaAtributo(atributo)) {
 			throw new AtributoInvalidoException();
 		}
@@ -181,16 +171,13 @@ public class Sistema {
 		}
 		return false;
 	}
-
+	
 	private boolean checaLogin(String login) throws LoginInvalidoException {
 		return (!(login == null || login.equals("")));
 
 	}
 
-	private boolean checaNome(String nome) {
-		return (nome == null || nome.equals(""));
-	}
-
+	
 	private boolean checaExisteEmail(String email)
 			throws EmailExistenteException {
 		iterador2 = BD.iterator();
@@ -205,10 +192,7 @@ public class Sistema {
 	}
 	
 	
-	private boolean checaEmail(String email) throws EmailInvalidoException {
 
-		return (!(email == null || email.equals("")));
-	}
 
 	private boolean checaAtributo(String atributo) {
 		return (atributo == null || atributo.equals(""));
