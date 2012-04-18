@@ -29,7 +29,7 @@ carona6ID=cadastrarCarona idSessao=${sessaoMark} origem="Leeds" destino="Londres
 #Localizar carona.
 expect {carona2ID} localizarCarona idSessao=${sessaoMark} origem="São Francisco" destino="Palo Alto"
 expect {} localizarCarona idSessao=${sessaoMark} origem="Rio de Janeiro" destino="São Paulo"
-expect {carona3ID, carona4ID, carona5ID} localizarCarona idSessao=${sessaoMark} origem="Campina Grande" destino="João Pessoa"
+expect {${carona3ID},${carona4ID},${carona5ID}} localizarCarona idSessao=${sessaoMark} origem="Campina Grande" destino="João Pessoa"
 
 
 #Testa possiveis erros no sistema.

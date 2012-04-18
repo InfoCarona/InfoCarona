@@ -95,6 +95,9 @@ public class Sistema {
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
 			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
+		if(pontos == null || pontos.equals("")){
+			throw new PontoInvalidoException();
+		}
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
