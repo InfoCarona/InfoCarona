@@ -17,6 +17,7 @@ import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
 import Exception.ExceptionUsuario.SenhaInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
+import Exception.ExceptionUsuario.numeroMaximoException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
 import Exception.ExceptionsCarona.DataInvalidaException;
@@ -46,6 +47,10 @@ public class Sistema {
 	String idSessao;
 	Usuario usuario;
 	private Iterator<Usuario> iterador, iterador2;
+	private Id idSessao1 = new Id(5);
+	private Id idCarona = new Id(5);
+	private Id idSolicitacao = new Id(5);
+	private Id idSugestao = new Id(5);
 
 	public Sistema() {
 		BD = new LinkedList<Usuario>();
@@ -94,13 +99,13 @@ public class Sistema {
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
-			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
+			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
 		if(pontos == null || pontos.equals("")){
 			throw new PontoInvalidoException();
 		}
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
+		return usuario.sugerirPontoEncontro(idSessao, idCarona, pontos, carona, idSugestao);
 
 	}
 
@@ -228,7 +233,7 @@ public class Sistema {
 			String destino, String data, String hora, String vagas)
 			throws SessaoInvalidaException, SessaoInexistenteException,
 			OrigemInvalidaException, DestinoInvalidoException,
-			DataInvalidaException, HoraInvalidaException, VagaInvalidaException {
+			DataInvalidaException, HoraInvalidaException, VagaInvalidaException, numeroMaximoException {
 
 		int vaga = 0;
 		try {
@@ -238,7 +243,7 @@ public class Sistema {
 		}
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.cadastrarCarona(idSessao, origem, destino, data, hora,
-				vaga);
+				vaga, idCarona);
 	}
 
 	public String localizarCarona(String idSessao, String origem, String destino)
@@ -284,10 +289,10 @@ public class Sistema {
 
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
 			String ponto) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.solicitarVagaPontoEncontro(idSessao, ponto, carona);
+		return usuario.solicitarVagaPontoEncontro(idSessao, ponto, carona, idSolicitacao);
 	}
 
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {
@@ -320,10 +325,10 @@ public class Sistema {
 	}
 
 	public String solicitarVaga(String idSessao, String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
+			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.solicitarVagaPontoEncontro(idSessao, null, carona);
+		return usuario.solicitarVagaPontoEncontro(idSessao, null, carona, idSolicitacao);
 	}
 
 	private SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) throws SolicitacaoInexistenteException {

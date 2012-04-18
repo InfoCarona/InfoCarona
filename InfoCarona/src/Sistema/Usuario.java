@@ -15,6 +15,7 @@ import Exception.ExceptionUsuario.LoginExistenteException;
 import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
 import Exception.ExceptionUsuario.SenhaInvalidoException;
+import Exception.ExceptionUsuario.numeroMaximoException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
 import Exception.ExceptionsCarona.DataInvalidaException;
@@ -66,10 +67,10 @@ public class Usuario {
 
 
 	public String cadastrarCarona(String idSessao, String origem,
-			String destino, String data, String hora, int vagas)
+			String destino, String data, String hora, int vagas, Id idCarona)
 			throws SessaoInvalidaException, SessaoInexistenteException,
 			OrigemInvalidaException, DestinoInvalidoException,
-			DataInvalidaException, HoraInvalidaException, VagaInvalidaException {
+			DataInvalidaException, HoraInvalidaException, VagaInvalidaException, numeroMaximoException {
 
 		if (!(checaIdSessao(idSessao))) {
 			throw new SessaoInvalidaException();
@@ -94,11 +95,11 @@ public class Usuario {
 			throw new HoraInvalidaException();
 		}
 
-		String idCarona = ("carona" + (listaDeCaronas.size() + 1) + "ID");
+		String id = idCarona.gerarId();
 		Carona carona = new Carona(idSessao, origem, destino, data, hora,
-				vagas, idCarona, this.getNome());
+				vagas, id, this.getNome());
 		listaDeCaronas.add(carona);
-		return idCarona;
+		return id;
 	}
 
 	public String toString() {
@@ -351,12 +352,11 @@ public class Usuario {
 	}
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
-			String pontos, Carona carona) throws CaronaInexistenteException,
-			CaronaInvalidaException, PontoInvalidoException {
-		String idSugestao = ("sugestao"
-				+ (carona.getListaDeSugestoes().size() + 1) + "ID");
+			String pontos, Carona carona, Id idSugestao) throws CaronaInexistenteException,
+			CaronaInvalidaException, PontoInvalidoException, numeroMaximoException {
+		String id = idSugestao.gerarId();
 		SugestaoDePontoDeEncontro sugestao = new SugestaoDePontoDeEncontro(
-				idSessao, idCarona, idSugestao);
+				idSessao, idCarona, id);
 
 		if (checaPontos(pontos)) {
 			throw new PontoInvalidoException();
@@ -370,7 +370,7 @@ public class Usuario {
 		}
 
 		carona.getListaDeSugestoes().add(sugestao);
-		return idSugestao;
+		return id;
 	}
 
 	public void responderSugestaoPontoEncontro(String idSessao,
@@ -385,14 +385,13 @@ public class Usuario {
 	}
 
 	public String solicitarVagaPontoEncontro(String idSessao, String ponto,
-			Carona carona) throws CaronaInexistenteException,
-			CaronaInvalidaException {
-		String idSolicitacao = ("solicitacao"
-				+ (listaDeSolicitacaoDeVagas.size() + 1) + "ID");
+			Carona carona, Id IdSolicitacao) throws CaronaInexistenteException,
+			CaronaInvalidaException, numeroMaximoException {
+		String id = IdSolicitacao.gerarId();
 		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona,
-				this.getNome(), ponto, idSolicitacao);
+				this.getNome(), ponto, id);
 		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
-		return idSolicitacao;
+		return id;
 	}
 
 	private SugestaoDePontoDeEncontro procuraSugestao(String idSugestao,
