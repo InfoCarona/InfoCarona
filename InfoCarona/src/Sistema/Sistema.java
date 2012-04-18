@@ -71,7 +71,7 @@ public class Sistema {
 			throw new EmailExistenteException();
 		}
 
-		Perfil novoPerfil = new Perfil(login, senha, nome, endereco, email);
+		Perfil novoPerfil = new Perfil(nome, email, endereco, senha, login);
 		BD.add(novoPerfil);
 
 	}
@@ -104,11 +104,11 @@ public class Sistema {
 		}
 
 		for (Perfil perfilTemp : BD) {
-			Usuario usuarioTemp = perfilTemp.getUsuario();
-			if (usuarioTemp.getLogin().equals(login)) {
+			
+			if (perfilTemp.getLogin().equals(login)) {
 				userExist = true;
-				if (usuarioTemp.getSenha().equals(senha)) {
-					idSessao = usuarioTemp.getIdSessao();
+				if (perfilTemp.getSenha().equals(senha)) {
+					idSessao = perfilTemp.getIdSessao();
 					//perfil = perfilTemp;
 					PerfisLogados.add(perfilTemp);
 				} else {
@@ -146,10 +146,9 @@ public class Sistema {
 		String retorno = "";
 		boolean userExist = false;
 		for (Perfil perfilTemp : BD) {
-			Usuario usuarioTemp = perfilTemp.getUsuario();
-			if (usuarioTemp.getLogin().equals(login)) {
+			if (perfilTemp.getLogin().equals(login)) {
 				userExist = true;
-				retorno = usuarioTemp.getAtributoUsuario(login, atributo);
+				retorno = perfilTemp.getAtributoUsuario(login, atributo);
 			}
 		}
 		if (!userExist) {
@@ -175,9 +174,8 @@ public class Sistema {
 		iterador = BD.iterator();
 		while (iterador.hasNext()) {
 			Perfil perfilTemp = iterador.next();
-			Usuario userTemp = perfilTemp.getUsuario();
 
-			if (userTemp.getLogin().equals(login)) {
+			if (perfilTemp.getLogin().equals(login)) {
 				return true;
 			}
 		}
@@ -198,9 +196,8 @@ public class Sistema {
 		iterador2 = BD.iterator();
 		while (iterador2.hasNext()) {
 			Perfil perfilTemp = iterador2.next();
-			Usuario userTemp = perfilTemp.getUsuario();
 
-			if (userTemp.getEmail().equals(email)) {
+			if (perfilTemp.getEmail().equals(email)) {
 				return true;
 			}
 		}
@@ -341,7 +338,7 @@ public class Sistema {
 	public Perfil getPerfilLogin(String login) {
 		Perfil retorno = null;
 		for (Perfil perfilTemp : BD) {
-			if (perfilTemp.getUsuario().getLogin().equals(login)) {
+			if (perfilTemp.getLogin().equals(login)) {
 				retorno = perfilTemp;
 			}
 		}
@@ -361,7 +358,7 @@ public class Sistema {
 		}
 		
 		for(Perfil perfilTemp : PerfisLogados){
-			if(perfilTemp.getUsuario().getIdSessao().equals(idSessao)){
+			if(perfilTemp.getIdSessao().equals(idSessao)){
 				retorno = perfilTemp;
 			}
 		}

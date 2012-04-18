@@ -27,28 +27,30 @@ import Exception.ExceptionsCarona.VagaInvalidaException;
 
 public class Perfil {
 
-	private Usuario usuario;
 	private List<Carona> listaDeCaronas;
 	private List<SolicitacaoDeVaga> listaDeSolicitacaoDeVagas;
 	private int caronasSeguras;
 	private int caronaNaoFuncionaram;
 	private int faltasEmVagas;
 	private int presencaEmVagas;
+	private String nome, email, endereco, senha, id, login;
 
-	public Perfil(String login, String senha, String nome, String endereco,
-			String email) throws Exception {
-		this.usuario = new Usuario(nome, email, endereco, senha, login);
+	public Perfil(String nome, String email, String endereco, String senha, String login) throws Exception {
 		this.listaDeCaronas = new LinkedList<Carona>();
 		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
 		this.caronasSeguras = 0;
 		this.caronaNaoFuncionaram = 0;
 		this.faltasEmVagas = 0;
 		this.presencaEmVagas = 0;
+		
+		this.nome = nome;
+		this.email = email;
+		this.endereco = endereco;
+		this.senha = senha;
+		this.login = login;
+		this.id  = "sessao" + login.substring(0,1).toUpperCase() + login.substring(1, login.length());
 	}
 
-	public Usuario getUsuario() {
-		return this.usuario;
-	}
 
 	public String cadastrarCarona(String idSessao, String origem,
 			String destino, String data, String hora, int vagas)
@@ -81,13 +83,13 @@ public class Perfil {
 
 		String idCarona = ("carona" + (listaDeCaronas.size() + 1) + "ID");
 		Carona carona = new Carona(idSessao, origem, destino, data, hora,
-				vagas, idCarona, usuario.getNome());
+				vagas, idCarona, this.getNome());
 		listaDeCaronas.add(carona);
 		return idCarona;
 	}
 
 	public String toString() {
-		return usuario.toString();
+		return this.toString();
 	}
 
 	public String localizarCarona(String idSessao, String origem, String destino)
@@ -260,7 +262,7 @@ public class Perfil {
 	}
 
 	private boolean checaIdSessaoInexistente(String idSessao) {
-		return (!idSessao.equals(usuario.getIdSessao()));
+		return (!idSessao.equals(this.getIdSessao()));
 	}
 
 	private boolean checaHoraInvalida(String hora) {
@@ -375,7 +377,7 @@ public class Perfil {
 		String idSolicitacao = ("solicitacao"
 				+ (listaDeSolicitacaoDeVagas.size() + 1) + "ID");
 		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona,
-				usuario.getNome(), ponto, idSolicitacao);
+				this.getNome(), ponto, idSolicitacao);
 		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
 		return idSolicitacao;
 	}
@@ -436,11 +438,11 @@ public class Perfil {
 	public String getAtributoPerfil(Perfil perfil, String atributo) {
 		String retorno = "";
 		if (atributo.equals("nome")) {
-			retorno = perfil.getUsuario().getNome();
+			retorno = this.getNome();
 		} else if (atributo.equals("endereco")) {
-			retorno = perfil.getUsuario().getEndereco();
+			retorno = this.getEndereco();
 		} else if (atributo.equals("email")) {
-			retorno = perfil.getUsuario().getEmail();
+			retorno = this.getEmail();
 		} else if (atributo.equals("historico de caronas")) {
 			for (Carona caronaTemp : listaDeCaronas) {
 				retorno += caronaTemp.getDadosCarona();
@@ -494,5 +496,53 @@ public class Perfil {
 		
 		public void setPresencaEmVagas(){
 			this.presencaEmVagas++;
+		}
+		
+		
+		//aki começa os metodos do usuario
+		
+		public String getEmail() {
+			return email;
+		}
+		public void setEmail(String email) {
+			this.email = email;
+		}
+		public String getEndereco() {
+			return endereco;
+		}
+		public void setEndereco(String endereco) {
+			this.endereco = endereco;
+		}
+		public String getSenha() {
+			return senha;
+		}
+		public void setSenha(String senha) {
+			this.senha = senha;
+		}
+		public String getNome() {
+			return nome;
+		}
+		public String getIdSessao(){
+			return id;
+		}
+		public String getLogin() {
+			return login;
+		}
+		public void setLogin(String login) {
+			this.login = login;
+		}
+		public void setNome(String nome) {
+			this.nome = nome;
+		}
+		
+		public String getAtributoUsuario(String login, String atributo){
+			String retorno = "";
+			if(atributo.equals("nome")){
+				retorno = nome;
+			}else if(atributo.equals("endereco")){
+				retorno = endereco;
+			}
+			
+			return retorno;
 		}
 }
