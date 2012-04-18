@@ -11,9 +11,11 @@ import Exception.ExceptionUsuario.AtributoInexistenteException;
 import Exception.ExceptionUsuario.AtributoInvalidoException;
 import Exception.ExceptionUsuario.EmailExistenteException;
 import Exception.ExceptionUsuario.EmailInvalidoException;
+import Exception.ExceptionUsuario.EnderecoInvalidoException;
 import Exception.ExceptionUsuario.LoginExistenteException;
 import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
+import Exception.ExceptionUsuario.SenhaInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
@@ -35,7 +37,7 @@ import Exception.ExceptionsCarona.VagaInvalidaException;
 public class Sistema {
 /**
  * Classe Sistema utilizada incialmente para a logica do sistema
- * todos os metodos da fachada, são chamadas por ele.
+ * todos os metodos da fachada, são chamadas por ele. 
  */
 	
 	List<Usuario> BD;
@@ -43,29 +45,37 @@ public class Sistema {
 	String idSessao;
 	Usuario usuario;
 	private Iterator<Usuario> iterador, iterador2;
-/**
- * 
- */
+
 	public Sistema() {
 		BD = new LinkedList<Usuario>();
 		PerfisLogados = new LinkedList<Usuario>();
 		idSessao = "";
 	}
-
+/**
+ * Metodo para Zerar as configurações do Usuario
+ */
 	public void zerarSistema() {
 		BD = new LinkedList<Usuario>();
 	}
 /**
- * 
- * @param login
- * @param senha
- * @param nome
- * @param endereco
- * @param email
- * @throws Exception
- */
+ * criarUsuario metodo para criar um novo objeto da Classe 
+ * Usuario. 
+ * @param login - login a ser cadastrado no usuario.
+ * @param senha - senha de acesso do usuario.
+ * @param nome - nome do usuario a ser cadastrado.
+ * @param endereco - endereco do usuario.
+ * @param email - email do usuario
+ * @throws EnderecoInvalidoException  
+ * @throws SenhaInvalidoException 
+ * @throws LoginInvalidoException 
+ * @throws NomeInvalidoException 
+ * @throws EmailInvalidoException 
+ * @throws LoginExistenteException 
+ * @throws EmailExistenteException 
+ *
+ * */
 	public void criarUsuario(String login, String senha, String nome,
-			String endereco, String email) throws Exception {
+			String endereco, String email) throws EmailInvalidoException, NomeInvalidoException, LoginInvalidoException, SenhaInvalidoException, EnderecoInvalidoException, LoginExistenteException, EmailExistenteException {
 
 
 		if (checaExisteLogin(login)) {

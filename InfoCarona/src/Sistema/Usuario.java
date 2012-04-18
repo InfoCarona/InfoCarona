@@ -42,7 +42,7 @@ public class Usuario {
 	private int presencaEmVagas;
 	private String nome, email, endereco, senha, id, login;
 
-	public Usuario(String nome, String email, String endereco, String senha, String login) throws Exception {
+	public Usuario(String nome, String email, String endereco, String senha, String login) throws EmailInvalidoException, NomeInvalidoException, LoginInvalidoException, SenhaInvalidoException, EnderecoInvalidoException  {
 		
 
 		this.nome = nome;
