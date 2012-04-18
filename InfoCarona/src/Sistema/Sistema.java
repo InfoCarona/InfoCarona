@@ -11,9 +11,11 @@ import Exception.ExceptionUsuario.AtributoInexistenteException;
 import Exception.ExceptionUsuario.AtributoInvalidoException;
 import Exception.ExceptionUsuario.EmailExistenteException;
 import Exception.ExceptionUsuario.EmailInvalidoException;
+import Exception.ExceptionUsuario.EnderecoInvalidoException;
 import Exception.ExceptionUsuario.LoginExistenteException;
 import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
+import Exception.ExceptionUsuario.SenhaInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
@@ -21,6 +23,7 @@ import Exception.ExceptionsCarona.DataInvalidaException;
 import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.IDCaronaInexistenteException;
+import Exception.ExceptionsCarona.IDCaronaInvalidoException;
 import Exception.ExceptionsCarona.ItemInexistenteException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.PontoInvalidoException;
@@ -33,8 +36,13 @@ import Exception.ExceptionsCarona.TrajetoInvalidoException;
 import Exception.ExceptionsCarona.VagaInvalidaException;
 
 public class Sistema {
-	LinkedList<Usuario> BD;
-	LinkedList<Usuario> PerfisLogados;
+/**
+ * Classe Sistema utilizada incialmente para a logica do sistema
+ * todos os metodos da fachada, são chamadas por ele. 
+ */
+	
+	List<Usuario> BD;
+	List<Usuario> PerfisLogados;
 	String idSessao;
 	Usuario usuario;
 	private Iterator<Usuario> iterador, iterador2;
@@ -44,13 +52,31 @@ public class Sistema {
 		PerfisLogados = new LinkedList<Usuario>();
 		idSessao = "";
 	}
-
+/**
+ * Metodo para Zerar as configurações do Usuario
+ */
 	public void zerarSistema() {
 		BD = new LinkedList<Usuario>();
 	}
-
+/**
+ * criarUsuario metodo para criar um novo objeto da Classe 
+ * Usuario. 
+ * @param login - login a ser cadastrado no usuario.
+ * @param senha - senha de acesso do usuario.
+ * @param nome - nome do usuario a ser cadastrado.
+ * @param endereco - endereco do usuario.
+ * @param email - email do usuario
+ * @throws EnderecoInvalidoException  
+ * @throws SenhaInvalidoException 
+ * @throws LoginInvalidoException 
+ * @throws NomeInvalidoException 
+ * @throws EmailInvalidoException 
+ * @throws LoginExistenteException 
+ * @throws EmailExistenteException 
+ *
+ * */
 	public void criarUsuario(String login, String senha, String nome,
-			String endereco, String email) throws Exception {
+			String endereco, String email) throws EmailInvalidoException, NomeInvalidoException, LoginInvalidoException, SenhaInvalidoException, EnderecoInvalidoException, LoginExistenteException, EmailExistenteException {
 
 
 		if (checaExisteLogin(login)) {
@@ -68,7 +94,7 @@ public class Sistema {
 
 	public String sugerirPontoEncontro(String idSessao, String idCarona,
 			String pontos) throws CaronaInexistenteException,
-			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
+			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.sugerirPontoEncontro(idSessao, idCarona, pontos, carona);
@@ -78,7 +104,7 @@ public class Sistema {
 	public void responderSugestaoPontoEncontro(String idSessao,
 			String idCarona, String idSugestao, String pontos)
 			throws CaronaInexistenteException, CaronaInvalidaException,
-			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
+			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		usuario.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao,
@@ -191,9 +217,6 @@ public class Sistema {
 		return false;
 	}
 	
-	
-
-
 	private boolean checaAtributo(String atributo) {
 		return (atributo == null || atributo.equals(""));
 	}
@@ -223,7 +246,7 @@ public class Sistema {
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException {
+			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException {
 		usuario = getUsuarioComCarona(idCarona);
 		return usuario.getAtributoCarona(idCarona, atributo);
 	}
@@ -241,7 +264,13 @@ public class Sistema {
 	}
 
 	public Usuario getUsuarioComCarona(String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException {
+			throws CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException, ItemInexistenteException {
+		if(idCarona == null || idCarona.equals("")){
+			throw new IDCaronaInvalidoException();
+		}
+		if(!idCarona.contains("carona")){
+			throw new ItemInexistenteException();
+		}
 		for (Usuario usuarioTemp : BD) {
 			if (usuarioTemp.isCaronaDoPerfil(idCarona)) {
 				return usuarioTemp;
@@ -252,7 +281,7 @@ public class Sistema {
 
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
 			String ponto) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.solicitarVagaPontoEncontro(idSessao, ponto, carona);
@@ -280,7 +309,7 @@ public class Sistema {
 
 	public void desistirRequisicao(String idSessao, String idCarona,
 			String idSugestao) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona caronaTemp = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		usuario.desistirRequisicao(idSessao, idSugestao, caronaTemp);
@@ -288,7 +317,7 @@ public class Sistema {
 	}
 
 	public String solicitarVaga(String idSessao, String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.solicitarVagaPontoEncontro(idSessao, null, carona);
