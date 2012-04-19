@@ -419,7 +419,7 @@ public class Usuario {
 		SolicitacaoDeVaga retorno = null;
 
 		for (SolicitacaoDeVaga solicitacao : listaDeSolicitacaoDeVagas) {
-			if (solicitacao.getIdSolicitacao().equalsIgnoreCase(idSolicitacao)) {
+			if (solicitacao.getIdSolicitacao().equals(idSolicitacao)) {
 				retorno = solicitacao;
 			}
 		}

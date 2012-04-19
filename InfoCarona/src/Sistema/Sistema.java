@@ -256,6 +256,9 @@ public class Sistema {
 			throws ItemInexistenteException, IDCaronaInexistenteException,
 			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException {
 		usuario = getUsuarioComCarona(idCarona);
+		if (usuario == null){
+			throw new ItemInexistenteException();
+		}
 		return usuario.getAtributoCarona(idCarona, atributo);
 	}
 
@@ -276,21 +279,22 @@ public class Sistema {
 		if(idCarona == null || idCarona.equals("")){
 			throw new IDCaronaInvalidoException();
 		}
-		if(!idCarona.contains("carona")){
-			throw new ItemInexistenteException();
-		}
 		for (Usuario usuarioTemp : BD) {
 			if (usuarioTemp.isCaronaDoPerfil(idCarona)) {
 				return usuarioTemp;
 			}
 		}
-		throw new CaronaInexistenteException();
+		return null;
 	}
 
 	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
 			String ponto) throws CaronaInexistenteException,
 			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
-		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
+		Usuario usuarioTemp = getUsuarioComCarona(idCarona);
+		if (usuario == null){
+			throw new CaronaInexistenteException();
+		}
+		Carona carona = usuarioTemp.getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
 		return usuario.solicitarVagaPontoEncontro(idSessao, ponto, carona, idSolicitacao);
 	}
