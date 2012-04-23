@@ -45,23 +45,18 @@ public class Usuario {
 	private String nome, email, endereco, senha, id, login;
 
 	public Usuario(String nome, String email, String endereco, String senha, String login) throws EmailInvalidoException, NomeInvalidoException, LoginInvalidoException, SenhaInvalidoException, EnderecoInvalidoException  {
-		
-
-		this.nome = nome;
-		this.email = email;
-		this.endereco = endereco;
-		this.senha = senha;
-		this.login = login;
-		
-		validaDadosDoConstrutor(nome, email, endereco, senha, login);
-		
-		this.id  = "sessao" + login.substring(0,1).toUpperCase() + login.substring(1, login.length());
-		this.listaDeCaronas = new LinkedList<Carona>();
-		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
-		this.caronasSeguras = 0;
-		this.caronaNaoFuncionaram = 0;
-		this.faltasEmVagas = 0;
-		this.presencaEmVagas = 0;
+		setNome(nome);
+        setEmail(email);
+        setEndereco(endereco);
+        setSenha(senha);
+        setLogin(login);
+        this.id  = "sessao" + login.substring(0,1).toUpperCase() + login.substring(1, login.length());
+        this.listaDeCaronas = new LinkedList<Carona>();
+        this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
+        this.caronasSeguras = 0;
+        this.caronaNaoFuncionaram = 0;
+        this.faltasEmVagas = 0;
+        this.presencaEmVagas = 0;
 		
 	}
 
@@ -72,29 +67,10 @@ public class Usuario {
 			OrigemInvalidaException, DestinoInvalidoException,
 			DataInvalidaException, HoraInvalidaException, VagaInvalidaException, numeroMaximoException {
 
-		if (!(checaIdSessao(idSessao))) {
-			throw new SessaoInvalidaException();
-		}
-
 		if (checaIdSessaoInexistente(idSessao)) {
-			throw new SessaoInexistenteException();
+            throw new SessaoInexistenteException();
 		}
-
-		if ((!checaOrigem(origem)) || origem.equals("")) {
-			throw new OrigemInvalidaException();
-		}
-
-		if ((!checaDestino(destino)) || destino.equals("")) {
-			throw new DestinoInvalidoException();
-		}
-
-		if (!(checaData(data))) {
-			throw new DataInvalidaException();
-		}
-		if (!(checaHoraInvalida(hora))) {
-			throw new HoraInvalidaException();
-		}
-
+    
 		String id = idCarona.gerarId();
 		Carona carona = new Carona(idSessao, origem, destino, data, hora,
 				vagas, id, this.getNome());
@@ -105,224 +81,12 @@ public class Usuario {
 	public String toString() {
 		return "Nome: "+nome + " Login: " + login;
 	}
-
-	public String localizarCarona(String idSessao, String origem, String destino)
-			throws OrigemInvalidaException, DestinoInvalidoException {
-		if (!(checaOrigem(origem))) {
-			throw new OrigemInvalidaException();
-		}
-
-		if (!(checaDestino(destino))) {
-			throw new DestinoInvalidoException();
-		}
-
-		String retorno;
-		if ((!origem.equals("")) && ((!destino.equals("")))) {
-			retorno = auxiliaLocalizaCarona(idSessao, origem, destino);
-		} else if ((origem.equals("")) && ((!destino.equals("")))) {
-			retorno = auxiliaLocalizaCaronaDestino(idSessao, destino);
-
-		} else if ((!origem.equals("")) && ((destino.equals("")))) {
-			retorno = auxiliaLocalizaCaronaOrigem(idSessao, origem);
-		} else {
-			retorno = auxiliaLocalizaCarona(idSessao);
-		}
-		return retorno;
-	}
-
-	private String auxiliaLocalizaCarona(String idSessao) {
-		List<String> listaAux = new LinkedList<String>();
-		for (Carona carona : listaDeCaronas) {
-			listaAux.add(carona.getIdCarona());
-		}
-		return listaAux.toString().replace("[", "{").replace("]", "}");
-	}
-
-	private String auxiliaLocalizaCaronaOrigem(String idSessao, String origem) {
-		List<String> listaAux = new LinkedList<String>();
-		for (Carona carona : listaDeCaronas) {
-			if (carona.getOrigem().equals(origem)) {
-				System.out.println(carona.toString());
-				listaAux.add(carona.getIdCarona());
-			}
-		}
-		return listaAux.toString().replace("[", "{").replace("]", "}");
-	}
-
-	private String auxiliaLocalizaCaronaDestino(String idSessao, String destino) {
-		List<String> listaAux = new LinkedList<String>();
-		for (Carona carona : listaDeCaronas) {
-			if (carona.getDestino().equals(destino)) {
-				listaAux.add(carona.getIdCarona());
-			}
-		}
-		return listaAux.toString().replace("[", "{").replace("]", "}");
-	}
-
-	private String auxiliaLocalizaCarona(String idSessao, String origem,
-			String destino) {
-		List<String> listaAux = new LinkedList<String>();
-		for (Carona carona : listaDeCaronas) {
-			if ((carona.getOrigem().equals(origem))
-					&& (carona.getDestino().equals(destino))) {
-				listaAux.add(carona.getIdCarona());
-			}
-		}
-
-		return listaAux.toString().replace("[", "{").replace("]", "}");
-	}
-
-	public String getAtributoCarona(String idCarona, String atributo)
-			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException, IDCaronaInvalidoException {
-
-		if (checaIdCarona(idCarona) || idCarona.equals("")) {
-			throw new IDCaronaInvalidoException();
-		}
-		if (checaAtributo(atributo)) {
-			throw new AtributoInvalidoException();
-		}
-		boolean existeCarona = false;
-		String retorno = "";
-		for (Carona carona : listaDeCaronas) {
-			if (carona.getIdCarona().equals(idCarona)) {
-				existeCarona = true;
-				retorno = carona.getAtributo(atributo);
-				break;
-			}
-		}
-		if (retorno == null) {
-			throw new AtributoInexistenteException();
-		}
-		if (!existeCarona) {
-			throw new ItemInexistenteException();
-		}
-		return retorno;
-	}
-
-	public String getTrajeto(String idCarona)
-			throws TrajetoInexistenteException, TrajetoInvalidoException {
-		if (checaIdCarona(idCarona)) {
-			throw new TrajetoInvalidoException();
-		}
-		String retorno = "";
-		for (Carona carona : listaDeCaronas) {
-			if (carona.getIdCarona().equals(idCarona)) {
-				retorno = carona.getOrigem() + " - " + carona.getDestino();
-			}
-		}
-		if (retorno.equals("")) {
-			throw new TrajetoInexistenteException();
-		}
-		return retorno;
-	}
-
-	public Carona getCarona(String idCarona) throws CaronaInexistenteException,
-			CaronaInvalidaException {
-		if (checaIdCarona(idCarona)) {
-			throw new CaronaInvalidaException();
-		}
-		for (Carona carona : listaDeCaronas) {
-			if (carona.getIdCarona().equals(idCarona)) {
-				return carona;
-			}
-		}
-		throw new CaronaInexistenteException();
-	}
-
-	public boolean isCaronaDoPerfil(String idCarona) {
-		for (Carona carona : listaDeCaronas) {
-			if (carona.getIdCarona().equals(idCarona)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean checaDestino(String destino) {
-		String charInvalidos = "()!-?.";
-		boolean retorno = true;
-
-		if (destino == null) {
-			retorno = false;
-		} else {
-			for (int i = 0; i < charInvalidos.length(); i++) {
-				if (destino.contains(charInvalidos.charAt(i) + "")) {
-					retorno = false;
-				}
-			}
-		}
-		return retorno;
-	}
-
-	private boolean checaOrigem(String origem) {
-		String charInvalidos = "()!-?.";
-		boolean retorno = true;
-
-		if (origem == null) {
-			retorno = false;
-		} else {
-			for (int i = 0; i < charInvalidos.length(); i++) {
-				if (origem.contains(charInvalidos.charAt(i) + "")) {
-					retorno = false;
-				}
-			}
-		}
-		return retorno;
-	}
-
-	private boolean checaIdSessao(String idSessao) {
-		return (!(idSessao == null || idSessao.equals("")));
-	}
+	
 
 	private boolean checaIdSessaoInexistente(String idSessao) {
 		return (!idSessao.equals(this.getIdSessao()));
 	}
 
-	private boolean checaHoraInvalida(String hora) {
-		boolean retorno = true;
-
-		if (hora == null || hora.equals("")) {
-			retorno = false;
-		}
-		try {
-			Integer.parseInt(hora.substring(0, 2));
-			Integer.parseInt(hora.substring(3, 5));
-		} catch (Exception e) {
-			retorno = false;
-		}
-		return retorno;
-	}
-
-	private boolean checaData(String stringData) {
-		boolean retorno = true;
-		if (stringData == null || stringData.equals("")) {
-			retorno = false;
-		} else {
-			Calendar data = Calendar.getInstance();
-			try {
-				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-				formato.setLenient(false);
-				data.setTime(formato.parse(stringData));
-			} catch (ParseException e) {
-				retorno = false;
-			}
-
-			Calendar dataAtual = Calendar.getInstance();
-			if (dataAtual.getTime().compareTo(data.getTime()) == 1) { // -1 data
-																		// válida/
-																		// 1
-																		// data
-																		// inválida
-				retorno = false;
-			}
-		}
-		return retorno;
-	}
-
-	private boolean checaVaga(String idSessao) {
-		return false;
-	}
 
 	private boolean checaIdCarona(String idCarona) {
 		return (idCarona == null);
@@ -340,23 +104,23 @@ public class Usuario {
 		return retorno;
 	}
 
-	private boolean checaExisteSugestao(String ponto, Carona carona) {
-		boolean retorno = false;
-		for (SugestaoDePontoDeEncontro sugestao : carona.getListaDeSugestoes()) {
-			if (sugestao.getListaDeSugestaoDePontosDeEncontro().contains(ponto)) {
-				retorno = true;
-			}
-		}
+//	private boolean checaExisteSugestao(String ponto, Carona carona) {
+//		boolean retorno = false;
+//		for (SugestaoDePontoDeEncontro sugestao : carona.getListaDeSugestoes()) {
+//			if (sugestao.getListaDeSugestaoDePontosDeEncontro().contains(ponto)) {
+//				retorno = true;
+//			}
+//		}
+//
+//		return retorno;
+//	}
 
-		return retorno;
-	}
-
-	public String sugerirPontoEncontro(String idSessao, String idCarona,
+	public String sugerirPontoEncontro(String idSessao,
 			String pontos, Carona carona, Id idSugestao) throws CaronaInexistenteException,
 			CaronaInvalidaException, PontoInvalidoException, numeroMaximoException {
 		String id = idSugestao.gerarId();
 		SugestaoDePontoDeEncontro sugestao = new SugestaoDePontoDeEncontro(
-				idSessao, idCarona, id);
+				idSessao, carona.getIdCarona(), id);
 
 		if (checaPontos(pontos)) {
 			throw new PontoInvalidoException();
@@ -409,11 +173,7 @@ public class Usuario {
 		throw new SugestaoInexistenteException();
 	}
 
-	public String getAtributoSolicitacao(SolicitacaoDeVaga solicitacao,
-			String atributo) {
-		return solicitacao.getAtributoSolicitacao(atributo);
 
-	}
 
 	public SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) {
 		SolicitacaoDeVaga retorno = null;
@@ -448,6 +208,7 @@ public class Usuario {
 	}
 
 	public String getAtributoUsuario(Usuario perfil, String atributo) {
+		List<String> listaTemp = new LinkedList<String>();
 		String retorno = "";
 		if (atributo.equals("nome")) {
 			retorno = this.getNome();
@@ -457,8 +218,10 @@ public class Usuario {
 			retorno = this.getEmail();
 		} else if (atributo.equals("historico de caronas")) {
 			for (Carona caronaTemp : listaDeCaronas) {
-				retorno += caronaTemp.getDadosCarona();
+				listaTemp.add(caronaTemp.getIdCarona());
+				//retorno += caronaTemp;
 			}
+			retorno = listaTemp.toString().replace("{", "[").replace("}", "]");
 		}else if (atributo.equals("historico de vagas em caronas")) {
 			for (SolicitacaoDeVaga solicitacaoTemp : listaDeSolicitacaoDeVagas) {
 				retorno += solicitacaoTemp.toString();
@@ -511,86 +274,61 @@ public class Usuario {
 		}
 		
 		
-		//aki começa os metodos do usuario
+		//aki comeï¿½a os metodos do usuario
 		
 		public String getEmail() {
 			return email;
 		}
-		public void setEmail(String email) {
-			this.email = email;
+		
+		public void setEmail(String email) throws EmailInvalidoException {
+            if ((email == null || email.trim().equals(""))) {        
+                    throw new EmailInvalidoException();
+            }
+            this.email = email.trim();
 		}
+		
 		public String getEndereco() {
 			return endereco;
 		}
+		
 		public void setEndereco(String endereco) {
-			this.endereco = endereco;
+			this.endereco = endereco.trim();
 		}
 		public String getSenha() {
 			return senha;
 		}
-		public void setSenha(String senha) {
-			this.senha = senha;
+		
+		public void setSenha(String senha) throws SenhaInvalidoException {
+            if ((senha == null || senha.trim().equals(""))) {
+                    throw new SenhaInvalidoException();
+            }
+            this.senha = senha.trim();
 		}
+		
 		public String getNome() {
 			return nome;
 		}
+		
 		public String getIdSessao(){
 			return id;
 		}
 		public String getLogin() {
 			return login;
 		}
-		public void setLogin(String login) {
-			this.login = login;
-		}
-		public void setNome(String nome) {
-			this.nome = nome;
+		
+		private void setLogin(String login) throws LoginInvalidoException {
+            if ((login == null || login.trim().equals(""))) {
+                    throw new LoginInvalidoException();
+            }
+            this.login = login.trim();
 		}
 		
-		private void validaDadosDoConstrutor(String nome, String email, String endereco, String senha, String login) throws EmailInvalidoException, NomeInvalidoException, LoginInvalidoException, SenhaInvalidoException, EnderecoInvalidoException{
-			if (!(checaLogin(login))) {
-				throw new LoginInvalidoException();
-			}
-
-			if (checaNome(nome)) {
-				throw new NomeInvalidoException();
-			}
-			if (!(checaEmail(email))) {
-				throw new EmailInvalidoException();
-			}
-			//if (checaSenha(senha)) {
-				//throw new SenhaInvalidoException();
-			//}
-			//if (!(checaEndereco(endereco))) {
-				//throw new EnderecoInvalidoException();
-			//}
-
-			
+		public void setNome(String nome) throws NomeInvalidoException {
+            if (nome == null || nome.trim().equals("")) {
+                    throw new NomeInvalidoException();
+            }
+            this.nome = nome.trim();
 		}
-		
-		
-		private boolean checaLogin(String login) throws LoginInvalidoException {
-			return (!(login == null || login.equals("")));
-
-		}
-		
-		private boolean checaEndereco(String endereco) throws LoginInvalidoException {
-			return (!(endereco == null || endereco.equals("")));
-		}
-		
-		private boolean checaSenha(String senha) throws LoginInvalidoException {
-			return (!(senha == null || senha.equals("")));
-		}
-
-		private boolean checaNome(String nome) {
-			return (nome == null || nome.equals(""));
-		}
-		
-		private boolean checaEmail(String email) throws EmailInvalidoException {
-
-			return (!(email == null || email.equals("")));
-		}
-		
 		
 		
 		public String getAtributoUsuario(String login, String atributo){
@@ -603,4 +341,158 @@ public class Usuario {
 			
 			return retorno;
 		}
+		
+		public void rejeitarSolicitacao(SolicitacaoDeVaga solicitacao) throws SolicitacaoInexistenteException {
+			if (solicitacao.isSolicitacaoRejeitada()) {
+				throw new SolicitacaoInexistenteException();
+			}
+			solicitacao.solicitacaoRejeitada();
+			
+		}
+		
+		public List<Carona> getCaronas(){
+			return listaDeCaronas;
+		}
+		//Retirar da classe
+		
+		public String localizarCarona(String idSessao, String origem, String destino)
+				throws OrigemInvalidaException, DestinoInvalidoException {
+			if((origem == null) || (origem.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%¨&*0-9].*"))){
+	        	throw new OrigemInvalidaException();
+	        }
+			if ((destino == null) || (destino.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%¨&*0-9].*"))) {
+                throw new DestinoInvalidoException();
+			}
+
+			String retorno;
+			if ((!origem.equals("")) && ((!destino.equals("")))) {
+				retorno = auxiliaLocalizaCarona(idSessao, origem, destino);
+			} else if ((origem.equals("")) && ((!destino.equals("")))) {
+				retorno = auxiliaLocalizaCaronaDestino(idSessao, destino);
+
+			} else if ((!origem.equals("")) && ((destino.equals("")))) {
+				retorno = auxiliaLocalizaCaronaOrigem(idSessao, origem);
+			} else {
+				retorno = auxiliaLocalizaCarona(idSessao);
+			}
+			return retorno;
+		}
+
+		private String auxiliaLocalizaCarona(String idSessao) {
+			List<String> listaAux = new LinkedList<String>();
+			for (Carona carona : listaDeCaronas) {
+				listaAux.add(carona.getIdCarona());
+			}
+			return listaAux.toString().replace("[", "{").replace("]", "}");
+		}
+
+		private String auxiliaLocalizaCaronaOrigem(String idSessao, String origem) {
+			List<String> listaAux = new LinkedList<String>();
+			for (Carona carona : listaDeCaronas) {
+				if (carona.getOrigem().equals(origem)) {
+					listaAux.add(carona.getIdCarona());
+				}
+			}
+			return listaAux.toString().replace("[", "{").replace("]", "}");
+		}
+
+		private String auxiliaLocalizaCaronaDestino(String idSessao, String destino) {
+			List<String> listaAux = new LinkedList<String>();
+			for (Carona carona : listaDeCaronas) {
+				if (carona.getDestino().equals(destino)) {
+					listaAux.add(carona.getIdCarona());
+				}
+			}
+			return listaAux.toString().replace("[", "{").replace("]", "}");
+		}
+
+		private String auxiliaLocalizaCarona(String idSessao, String origem,
+				String destino) {
+			List<String> listaAux = new LinkedList<String>();
+			for (Carona carona : listaDeCaronas) {
+				if ((carona.getOrigem().equals(origem))
+						&& (carona.getDestino().equals(destino))) {
+					listaAux.add(carona.getIdCarona());
+				}
+			}
+
+			return listaAux.toString().replace("[", "{").replace("]", "}");
+		}
+
+		public String getAtributoCarona(String idCarona, String atributo)
+				throws ItemInexistenteException, IDCaronaInexistenteException,
+				AtributoInvalidoException, AtributoInexistenteException, IDCaronaInvalidoException {
+
+			if (checaIdCarona(idCarona) || idCarona.equals("")) {
+				throw new IDCaronaInvalidoException();
+			}
+			if (checaAtributo(atributo)) {
+				throw new AtributoInvalidoException();
+			}
+			boolean existeCarona = false;
+			String retorno = "";
+			for (Carona carona : listaDeCaronas) {
+				if (carona.getIdCarona().equals(idCarona)) {
+					existeCarona = true;
+					retorno = carona.getAtributo(atributo);
+					break;
+				}
+			}
+			if (retorno == null) {
+				throw new AtributoInexistenteException();
+			}
+			if (!existeCarona) {
+				throw new ItemInexistenteException();
+			}
+			return retorno;
+		}
+
+		public String getTrajeto(String idCarona)
+				throws TrajetoInexistenteException, TrajetoInvalidoException {
+			if (checaIdCarona(idCarona)) {
+				throw new TrajetoInvalidoException();
+			}
+			String retorno = "";
+			for (Carona carona : listaDeCaronas) {
+				if (carona.getIdCarona().equals(idCarona)) {
+					retorno = carona.getOrigem() + " - " + carona.getDestino();
+				}
+			}
+			if (retorno.equals("")) {
+				throw new TrajetoInexistenteException();
+			}
+			return retorno;
+		}
+
+		public Carona getCarona(String idCarona) throws CaronaInexistenteException,
+		CaronaInvalidaException {
+	if (checaIdCarona(idCarona)) {
+		throw new CaronaInvalidaException();
+	}
+	for (Carona carona : listaDeCaronas) {
+		if (carona.getIdCarona().equals(idCarona)) {
+			return carona;
+		}
+	}
+	throw new CaronaInexistenteException();
 }
+
+		public boolean isCaronaDoPerfil(String idCarona) {
+			for (Carona carona : listaDeCaronas) {
+				if (carona.getIdCarona().equals(idCarona)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public String getAtributoSolicitacao(SolicitacaoDeVaga solicitacao,
+				String atributo) {
+			return solicitacao.getAtributoSolicitacao(atributo);
+
+		}
+}
+
+
+
+

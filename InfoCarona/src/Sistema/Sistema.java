@@ -105,7 +105,7 @@ public class Sistema {
 		}
 		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
 		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.sugerirPontoEncontro(idSessao, idCarona, pontos, carona, idSugestao);
+		return usuario.sugerirPontoEncontro(idSessao,pontos, carona, idSugestao);
 
 	}
 
@@ -395,6 +395,25 @@ public class Sistema {
 	
 	private boolean checaIdSessao(String idSessao) {
 		return (!(idSessao == null || idSessao.equals("")));
+	}
+	
+	
+	public void rejeitarSolicitacao(String idSessao, String idSolicitacao) throws SolicitacaoInexistenteException {
+		 usuario = getUsuarioComIdSessao(idSessao);
+		 SolicitacaoDeVaga solicitacao = this.procuraSolicitacao(idSolicitacao);
+		usuario.rejeitarSolicitacao(solicitacao);
+		
+	}
+	
+	private Usuario getUsuarioComIdSessao(String idSessao){
+		Usuario retorno = null;
+		for(Usuario userTemp : BD){
+			if(userTemp.getIdSessao().equals(idSessao)){
+				retorno = userTemp;
+				break;
+			}
+		}
+		return retorno;
 	}
 
 

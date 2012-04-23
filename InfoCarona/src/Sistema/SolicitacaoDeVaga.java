@@ -7,7 +7,9 @@ public class SolicitacaoDeVaga {
 	
 	private Carona carona;
 	private String donoDaSolicitacao, ponto, idSolicitacao;
-	private boolean solicitacao = false;
+	private boolean solicitacaoAceita = false;
+	private boolean solicitacaoPendente = true;
+	private boolean solicitacaoRejeitada = false;
 	
 	public SolicitacaoDeVaga(Carona carona, String donoDaSolicitacao, String ponto, String idSolicitacao){
 		this.carona = carona;
@@ -58,11 +60,22 @@ public class SolicitacaoDeVaga {
 	}
 	
 	public void solicitacaoAceita(){
-		this.solicitacao = true;
+		this.solicitacaoAceita = true;
+		this.solicitacaoPendente = false;
 		carona.setVagas(carona.getVagas()-1);	
 	}
 	
+	public void solicitacaoRejeitada(){
+		this.solicitacaoRejeitada = true;
+		this.solicitacaoPendente = false;
+			
+	}
+	
 	public boolean isSolicitacaoAceita(){
-		return this.solicitacao;
+		return this.solicitacaoAceita;
+	}
+	
+	public boolean isSolicitacaoRejeitada(){
+		return this.solicitacaoRejeitada;
 	}
 }

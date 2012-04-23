@@ -1,10 +1,13 @@
 
 public class Teste {
 public static void main(String[] args) {
-	for (int i = 0; i < 10; i++) {
-		System.out.println(i);;
-		i += 2;
-		
-	}
+	String origem = "-";
+	
+	if (((origem.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%�&*0-9].*")))) {
+         System.out.println("entrou");
+	 }else{
+		 System.out.println("nao");
+	 }
+ 	
 }
 }

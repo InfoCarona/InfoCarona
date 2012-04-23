@@ -1,5 +1,7 @@
 package Sistema;
 
+import java.util.LinkedList;
+
 import Exception.ExceptionUsuario.AtributoInexistenteException;
 import Exception.ExceptionUsuario.AtributoInvalidoException;
 import Exception.ExceptionUsuario.EmailExistenteException;
@@ -126,7 +128,7 @@ public class Fachada {
 		return sistema.solicitarVagaPontoEncontro(idSessao, idCarona, ponto);
 	}
 
-	public String SolicitarVaga(String idSessao, String idCarona)
+	public String solicitarVaga(String idSessao, String idCarona)
 			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
 		return sistema.solicitarVaga(idSessao, idCarona);
 	}
@@ -154,4 +156,9 @@ public class Fachada {
 	public String getAtributoPerfil(String login, String atributo) throws SessaoInvalidaException, SessaoInexistenteException {
 		return sistema.getAtributoPerfil(login, atributo);
 	}
+	
+	public void rejeitarSolicitacao(String idSessao, String idSolicitacao) throws SolicitacaoInexistenteException{
+		sistema.rejeitarSolicitacao(idSessao, idSolicitacao);
+	}
+	
 }
