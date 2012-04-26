@@ -209,4 +209,7 @@ public class Fachada {
 		return false;
 	}
 	
+	public void reiniciarSistema(){
+		sistema.reiniciarSistema();
+	}
 }

@@ -8,21 +8,23 @@ import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
 
 public class Repositorio {
-	List<Usuario> listaDeUsuarios;
-
+	private List<Usuario> listaDeUsuarios;
+	private ManipulaArquivoXML arquivo;
+	
 	public Repositorio() {
 		criaRepositorio();
 	}
 
 	private void criaRepositorio() {
-		listaDeUsuarios = new LinkedList<Usuario>();
-
+		arquivo = new ManipulaArquivoXML("src/Arquivos/usuarios");
+		listaDeUsuarios = arquivo.ler();
 	}
 
 	// ///metodos que estao corretos no repositorio/////
 
 	public void addUsuario(Usuario usuario) {
 		listaDeUsuarios.add(usuario);
+		arquivo.addNoXML(usuario);
 	}
 
 	public Usuario buscaUsuarioLogin(String login) {
@@ -192,7 +194,12 @@ public class Repositorio {
 		}
 		return null;
 	}
-	
 
+	public void zerarSistema() {
+		arquivo.clear();
+		listaDeUsuarios = new LinkedList<Usuario>();
+	}
+	
+	
 
 }

@@ -53,6 +53,10 @@ public class Sistema {
 	private Map<String, Usuario> usuariosLogados;;
 	
 	public Sistema() {
+		this.criaSistema();
+	}
+	
+	private void criaSistema(){
 		controleRepositorio = new ControlerRepositorio();
 		usuariosLogados = new HashMap<String, Usuario>();
 	}
@@ -60,7 +64,8 @@ public class Sistema {
  * Metodo para Zerar as configurações do Usuario
  */
 	public void zerarSistema() {
-		usuariosLogados = new HashMap<String, Usuario>();
+		this.criaSistema();
+		controleRepositorio.zerarSistema();
 	}
 /**
  * criarUsuario metodo para criar um novo objeto da Classe 
@@ -336,5 +341,8 @@ public class Sistema {
 		}
 		return false;
 	}
-
+	
+	public void reiniciarSistema(){
+		this.criaSistema();
+	}
 }

@@ -162,6 +162,10 @@ public class ControlerRepositorio {
 	public SolicitacaoDeVaga localizaSolicitacaoPorId(String idSolicitacao) {
 		return repositorio.localizaSolicitacaoPorId(idSolicitacao);
 	}
+
+	public void zerarSistema() {
+		repositorio.zerarSistema();
+	}
 		
 	
 	

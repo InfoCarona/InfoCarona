@@ -1,6 +1,7 @@
 package Sistema;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -28,9 +29,9 @@ public class ManipulaArquivoXML {
 	public ManipulaArquivoXML(String nomeArquivo) {
 		this.setNomeArquivo(nomeArquivo);
 	}
-	
-	private void setNomeArquivo(String nome){
-		this.nomeDoArquivo = nome;
+
+	private void setNomeArquivo(String nome) {
+		this.nomeDoArquivo = nome + ".xml";
 	}
 
 	/**
@@ -90,8 +91,8 @@ public class ManipulaArquivoXML {
 	 * 
 	 * */
 	public void addNoXML(Object obj) {
-		
-		//verifica se o arquivo existe.
+
+		// verifica se o arquivo existe.
 		FileReader reader = null;
 		try {
 			reader = new FileReader(this.nomeDoArquivo);
@@ -110,7 +111,8 @@ public class ManipulaArquivoXML {
 			try {
 				writer.write(myXML);
 				writer.close();
-				System.out.println("Arquivo nao existia.\n...\nArquivo foi criado.");
+				System.out
+						.println("Arquivo nao existia.\n...\nArquivo foi criado.");
 
 			} catch (IOException f) {
 				f.printStackTrace();
@@ -139,7 +141,7 @@ public class ManipulaArquivoXML {
 			} catch (IOException f) {
 				f.printStackTrace();
 			}
-			
+
 		} catch (Exception e) {
 			System.out.println("Nao existe arquivo");
 		}
@@ -166,7 +168,7 @@ public class ManipulaArquivoXML {
 			String myXML = xstream.toXML(lista);
 
 			BufferedWriter writer = null;
-			
+
 			try {
 				writer = new BufferedWriter(new FileWriter(this.nomeDoArquivo));
 			} catch (IOException e1) {
@@ -176,7 +178,8 @@ public class ManipulaArquivoXML {
 			try {
 				writer.write(myXML);
 				writer.close();
-				System.out.println("Arquivo nao existia.\n...\nArquivo foi criado.");
+				System.out
+						.println("Arquivo nao existia.\n...\nArquivo foi criado.");
 
 			} catch (IOException f) {
 				f.printStackTrace();
@@ -242,4 +245,25 @@ public class ManipulaArquivoXML {
 		}
 	}
 
+	public void clear() {
+		LinkedList lista = new LinkedList();
+		FileWriter file = null;
+		try {
+			file = new FileWriter(this.nomeDoArquivo);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		XStream XS = new XStream(new DomDriver());
+
+		String string = XS.toXML(lista);
+		try {
+			file.write(string);
+			file.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
