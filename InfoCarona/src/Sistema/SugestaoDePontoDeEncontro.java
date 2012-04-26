@@ -45,4 +45,17 @@ public class SugestaoDePontoDeEncontro {
 		return retorno;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (!(obj instanceof SugestaoDePontoDeEncontro)) {
+			return false;
+		}
+		
+		if (!(((SugestaoDePontoDeEncontro) obj).getIdSugestao().equals(this.idSugestao))){
+			return false;
+		}
+		
+		return true;
+	}
 }

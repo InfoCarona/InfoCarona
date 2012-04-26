@@ -174,7 +174,19 @@ public class Carona {
     		vagas++;
     	}
     	listaDeSolicitacao.remove(solicitacao);
-    	
     }
 	
+    @Override
+	public boolean equals(Object obj) {
+		
+		if (!(obj instanceof Carona)) {
+			return false;
+		}
+		
+		if (!(((Carona) obj).getIdCarona().equals(this.idCarona))){
+			return false;
+		}
+		
+		return true;
+	}
 }

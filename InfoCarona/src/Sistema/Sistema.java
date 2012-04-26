@@ -46,9 +46,7 @@ public class Sistema {
  * todos os metodos da fachada, são chamadas por ele. 
  */
 	
-	ControlerRepositorio controleRepositorio;
-	
-	private Iterator<Usuario> iterador, iterador2;
+	private ControlerRepositorio controleRepositorio;
 	private Id id = new Id(5);
 	private Map<String, Usuario> usuariosLogados;;
 	
@@ -344,5 +342,11 @@ public class Sistema {
 	
 	public void reiniciarSistema(){
 		this.criaSistema();
+	}
+
+	public Carona getCaronaUsuario(String idSessao, int indexCarona) throws SessaoInvalidaException, SessaoInexistenteException {
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao); 
+		System.out.println(usuarioTemp.getCaronas());
+		return usuarioTemp.getCaronas().get(indexCarona-1);
 	}
 }

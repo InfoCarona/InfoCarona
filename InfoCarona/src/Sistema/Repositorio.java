@@ -197,7 +197,7 @@ public class Repositorio {
 
 	public void zerarSistema() {
 		arquivo.clear();
-		listaDeUsuarios = new LinkedList<Usuario>();
+		criaRepositorio();
 	}
 	
 	

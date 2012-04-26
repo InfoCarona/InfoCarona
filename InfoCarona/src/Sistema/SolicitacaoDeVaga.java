@@ -79,4 +79,18 @@ public class SolicitacaoDeVaga {
 		return this.solicitacaoRejeitada;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (!(obj instanceof SolicitacaoDeVaga)) {
+			return false;
+		}
+		
+		if (!(((SolicitacaoDeVaga) obj).getIdSolicitacao().equals(this.idSolicitacao))){
+			return false;
+		}
+		
+		return true;
+	}
+	
 }

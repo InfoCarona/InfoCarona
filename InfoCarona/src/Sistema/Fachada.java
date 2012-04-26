@@ -212,4 +212,8 @@ public class Fachada {
 	public void reiniciarSistema(){
 		sistema.reiniciarSistema();
 	}
+	
+	public Carona getCaronaUsuario(String idSessao, int indexCarona) throws SessaoInvalidaException, SessaoInexistenteException{
+		return sistema.getCaronaUsuario(idSessao, indexCarona);
+	}
 }
