@@ -1,6 +1,7 @@
 package Sistema;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import Exception.ExceptionUsuario.AtributoInexistenteException;
 import Exception.ExceptionUsuario.AtributoInvalidoException;
@@ -59,7 +60,7 @@ public class Fachada {
 
 	public String abrirSessao(String login, String senha)
 			throws LoginInvalidoException, UsuarioInexistenteException,
-			LoginExistenteException {
+			LoginExistenteException, numeroMaximoException {
 		return sistema.abrirSessao(login, senha);
 	}
 
@@ -79,29 +80,66 @@ public class Fachada {
 			throws SessaoInvalidaException, SessaoInexistenteException,
 			OrigemInvalidaException, DestinoInvalidoException,
 			DataInvalidaException, HoraInvalidaException, VagaInvalidaException, numeroMaximoException {
+		int vaga = 0;
+		try {
+			vaga = Integer.parseInt(vagas);
+		} catch (Exception e) {
+			
+		}
 		return sistema.cadastrarCarona(idSessao, origem, destino, data, hora,
-				vagas);
+				vaga);
 	}
 
 	public String localizarCarona(String idSessao, String origem, String destino)
 			throws OrigemInvalidaException, DestinoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
-		return sistema.localizarCarona(idSessao, origem, destino).replace(", ", ",");
+		LinkedList<String> retorno = new LinkedList<String>();
+		List<Carona> listaCaronas = sistema.localizarCarona(origem, destino);
+		for(Carona caronaTemp : listaCaronas){
+			retorno.add(caronaTemp.getIdCarona());
+		}
+		return retorno.toString().replace("[", "{").replace("]", "}").replace(", ", ",");
 	}
 
 	public String getAtributoCarona(String idCarona, String atributo)
 			throws ItemInexistenteException, IDCaronaInexistenteException,
 			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException {
-		return sistema.getAtributoCarona(idCarona, atributo);
+		if(ehVazioOuNull(idCarona)){
+			throw new IDCaronaInvalidoException();
+		}else if(ehVazioOuNull(atributo)){
+			throw new AtributoInvalidoException();
+		}
+		String retorno = sistema.getAtributoCarona(idCarona, atributo);
+		  if(retorno.equals("")){
+	        	throw new AtributoInexistenteException();
+	    }
+		return retorno;
 	}
 
 	public String getTrajeto(String idCarona)
-			throws TrajetoInexistenteException, TrajetoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
+			throws TrajetoInexistenteException, TrajetoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException {
+		if(idCarona == null){
+			throw new TrajetoInvalidoException();
+		}
+		if(idCarona.equals("")){
+			throw new TrajetoInexistenteException();
+		}
 		return sistema.getTrajeto(idCarona);
 	}
 
-	public Carona getCarona(String idCarona) throws CaronaInexistenteException,
+	public String getCarona(String idCarona) throws CaronaInexistenteException,
 			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
-		return sistema.getCarona(idCarona);
+		if(idCarona == null){
+			throw new CaronaInvalidaException();
+		}
+		if(idCarona.equals("")){
+			throw new CaronaInexistenteException();
+		}
+		
+		Carona retorno = sistema.getCarona(idCarona);
+		if(retorno == null){
+			throw new CaronaInexistenteException();
+		}
+		return retorno.toString();
 	}
 
 	public void encerrarSessao(String login) {
@@ -117,7 +155,10 @@ public class Fachada {
 	public void responderSugestaoPontoEncontro(String idSessao,
 			String idCarona, String idSugestao, String pontos)
 			throws CaronaInexistenteException, CaronaInvalidaException,
-			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
+			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, PontoInvalidoException {
+		if(pontos.equals("")){
+			throw new PontoInvalidoException();
+		}
 		sistema.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao,
 				pontos);
 	}
@@ -130,7 +171,7 @@ public class Fachada {
 
 	public String solicitarVaga(String idSessao, String idCarona)
 			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
-		return sistema.solicitarVaga(idSessao, idCarona);
+		return sistema.solicitarVagaPontoEncontro(idSessao, idCarona, "Default");
 	}
 
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {
@@ -138,7 +179,7 @@ public class Fachada {
 	}
 
 	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
+			String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, VagaInvalidaException {
 		sistema.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);
 	}
 
@@ -149,16 +190,23 @@ public class Fachada {
 
 	}
 
-	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
+	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException, SessaoInvalidaException, SessaoInexistenteException, UsuarioInexistenteException {
 		return sistema.visualizarPerfil(idSesao, login);
 	}
 
-	public String getAtributoPerfil(String login, String atributo) throws SessaoInvalidaException, SessaoInexistenteException {
+	public String getAtributoPerfil(String login, String atributo) throws SessaoInvalidaException, SessaoInexistenteException, LoginInvalidoException, UsuarioInexistenteException {
 		return sistema.getAtributoPerfil(login, atributo);
 	}
 	
-	public void rejeitarSolicitacao(String idSessao, String idSolicitacao) throws SolicitacaoInexistenteException{
+	public void rejeitarSolicitacao(String idSessao, String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException{
 		sistema.rejeitarSolicitacao(idSessao, idSolicitacao);
+	}
+	
+	public boolean ehVazioOuNull(String atributo){
+		if(atributo == null || atributo.equals("")){
+			return true;
+		}
+		return false;
 	}
 	
 }

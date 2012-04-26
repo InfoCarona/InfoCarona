@@ -3,9 +3,12 @@ package Sistema;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import Exception.ExceptionUsuario.AtributoInexistenteException;
 import Exception.ExceptionUsuario.AtributoInvalidoException;
@@ -17,6 +20,7 @@ import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
 import Exception.ExceptionUsuario.SenhaInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
+import Exception.ExceptionUsuario.UsuarioLoginExistenteException;
 import Exception.ExceptionUsuario.numeroMaximoException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
@@ -42,26 +46,21 @@ public class Sistema {
  * todos os metodos da fachada, são chamadas por ele. 
  */
 	
-	List<Usuario> BD;
-	List<Usuario> PerfisLogados;
-	String idSessao;
-	Usuario usuario;
+	ControlerRepositorio controleRepositorio;
+	
 	private Iterator<Usuario> iterador, iterador2;
-	private Id idSessao1 = new Id(5);
-	private Id idCarona = new Id(5);
-	private Id idSolicitacao = new Id(5);
-	private Id idSugestao = new Id(5);
-
+	private Id id = new Id(5);
+	private Map<String, Usuario> usuariosLogados;;
+	
 	public Sistema() {
-		BD = new LinkedList<Usuario>();
-		PerfisLogados = new LinkedList<Usuario>();
-		idSessao = "";
+		controleRepositorio = new ControlerRepositorio();
+		usuariosLogados = new HashMap<String, Usuario>();
 	}
 /**
  * Metodo para Zerar as configurações do Usuario
  */
 	public void zerarSistema() {
-		BD = new LinkedList<Usuario>();
+		usuariosLogados = new HashMap<String, Usuario>();
 	}
 /**
  * criarUsuario metodo para criar um novo objeto da Classe 
@@ -83,80 +82,59 @@ public class Sistema {
 	public void criarUsuario(String login, String senha, String nome,
 			String endereco, String email) throws EmailInvalidoException, NomeInvalidoException, LoginInvalidoException, SenhaInvalidoException, EnderecoInvalidoException, LoginExistenteException, EmailExistenteException {
 
-
-		if (checaExisteLogin(login)) {
+		if (controleRepositorio.checaExisteLogin(login)) {
 			throw new LoginExistenteException();
 		}
 
-		if (checaExisteEmail(email)) {
+		if (controleRepositorio.checaExisteEmail(email)) {
 			throw new EmailExistenteException();
 		}
 
 		Usuario novoUsuario = new Usuario(nome, email, endereco, senha, login);
-		BD.add(novoUsuario);
+		controleRepositorio.addUsuario(novoUsuario);
 
-	}
-
-	public String sugerirPontoEncontro(String idSessao, String idCarona,
-			String pontos) throws CaronaInexistenteException,
-			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
-		if(pontos == null || pontos.equals("")){
-			throw new PontoInvalidoException();
-		}
-		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.sugerirPontoEncontro(idSessao,pontos, carona, idSugestao);
-
-	}
-
-	public void responderSugestaoPontoEncontro(String idSessao,
-			String idCarona, String idSugestao, String pontos)
-			throws CaronaInexistenteException, CaronaInvalidaException,
-			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
-		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
-		usuario = procuraUsuarioLogado(idSessao);
-		usuario.responderSugestaoPontoEncontro(idSessao, idCarona, idSugestao,
-				pontos, carona);
 	}
 
 	public String abrirSessao(String login, String senha)
 			throws LoginInvalidoException, UsuarioInexistenteException,
-			LoginExistenteException {
-		boolean userExist = false;
+			LoginExistenteException, numeroMaximoException {
+		
+		String idSessao = id.gerarId();
+		
 		if (!(checaLogin(login))) {
 			throw new LoginInvalidoException();
 		}
-
-		for (Usuario usuarioTemp : BD) {
+		
+		Usuario usuarioTemp = controleRepositorio.buscarUsuarioPorLogin(login);
+		
+		if (usuarioTemp.getSenha().equals(senha)) {
+			usuariosLogados.put(idSessao, usuarioTemp);
+		} else {
+			throw new LoginInvalidoException();
+		}
 			
-			if (usuarioTemp.getLogin().equals(login)) {
-				userExist = true;
-				if (usuarioTemp.getSenha().equals(senha)) {
-					idSessao = usuarioTemp.getIdSessao();
-					//perfil = perfilTemp;
-					PerfisLogados.add(usuarioTemp);
-				} else {
-					throw new LoginInvalidoException();
-				}
-			}
-		}
-		if (!userExist) {
-			throw new UsuarioInexistenteException();
-		}
 		return idSessao;
 	}
 
 	public void encerrarSessao(String login) {
-		Usuario usuarioTemp = getUsuarioComLogin(login);
-		PerfisLogados.remove(usuarioTemp);
-		
+		Collection<String> listaUsuariosLogados = usuariosLogados.keySet();
+		Usuario removeUsuario = null;
+		for (String idSessao : listaUsuariosLogados) {
+			if(usuariosLogados.get(idSessao).getLogin().equals(login)){
+				removeUsuario = usuariosLogados.get(idSessao);
+				break;
+			}
+		}
+		listaUsuariosLogados.remove(removeUsuario);
 	}
-
+		
 	public String getAtributoUsuario(String login, String atributo)
 			throws LoginInvalidoException, AtributoInvalidoException,
 			UsuarioInexistenteException, AtributoInexistenteException,
 			LoginExistenteException {
-
+		
+		String retorno = "";
+		
 		if (!checaLogin(login)) {
 			throw new LoginInvalidoException();
 		}
@@ -167,22 +145,89 @@ public class Sistema {
 		if (!checaAtributoValido(atributo)) {
 			throw new AtributoInexistenteException();
 		}
-		String retorno = "";
-		boolean userExist = false;
-		for (Usuario usuarioTemp : BD) {
-			if (usuarioTemp.getLogin().equals(login)) {
-				userExist = true;
-				retorno = usuarioTemp.getAtributoUsuario(login, atributo);
-			}
-		}
-		if (!userExist) {
-			throw new UsuarioInexistenteException();
-		}
+		
+		retorno = controleRepositorio.getAtributoUsuario(login, atributo);
+		
 		return retorno;
+	}
+	
+	public List<Carona> localizarCarona(String origem, String destino)
+			throws OrigemInvalidaException, DestinoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
+		
+		if ((origem == null)
+				|| (origem.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%¨&*0-9].*"))) {
+			throw new OrigemInvalidaException();
+		}
+		if ((destino == null)
+				|| (destino
+						.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%¨&*0-9].*"))) {
+			throw new DestinoInvalidoException();
+		}
+		
+		return controleRepositorio.localizarCarona(origem, destino);
+	}
+	
+	public String getAtributoCarona(String idCarona, String atributo)
+			throws ItemInexistenteException, IDCaronaInexistenteException,
+			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException {
+		
+		return controleRepositorio.getAtributoCarona(idCarona, atributo);
+	}
+	
+	public String cadastrarCarona(String idSessao, String origem,
+			String destino, String data, String hora, int vagas)
+			throws SessaoInvalidaException, SessaoInexistenteException,
+			OrigemInvalidaException, DestinoInvalidoException,
+			DataInvalidaException, HoraInvalidaException, VagaInvalidaException, numeroMaximoException {
+							
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		
+		String idCarona = usuarioTemp.cadastrarCarona(origem, destino, data, hora, vagas, id.gerarId());
+		
+		return idCarona;
+	}
+		
+	public Carona getCarona(String idCarona) throws CaronaInexistenteException,
+		CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
+		if(ehVazioOuNull(idCarona)){
+			throw new CaronaInvalidaException();
+		}
+		return controleRepositorio.localizaCaronaPorId(idCarona);
+	}
+	
+	public String getTrajeto(String idCarona)
+			throws TrajetoInexistenteException, TrajetoInvalidoException, SessaoInvalidaException,
+			SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException {
+		
+		return controleRepositorio.getTrajeto(idCarona);
+	}
+			
+	public String sugerirPontoEncontro(String idSessao, String idCarona,
+			String pontos) throws CaronaInexistenteException,
+			CaronaInvalidaException, PontoInvalidoException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
+			if(pontos == null || pontos.equals("")){
+				throw new PontoInvalidoException();
+			}
+			Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+			Carona caronaTemp = this.getCarona(idCarona);
+
+			return usuarioTemp.sugerirPontoEncontro(pontos, caronaTemp, id.gerarId(), usuarioTemp);
+
+	}
+	
+	public void responderSugestaoPontoEncontro(String idSessao,
+			String idCarona, String idSugestao, String pontos)
+			throws CaronaInexistenteException, CaronaInvalidaException,
+			SugestaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
+		
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		SugestaoDePontoDeEncontro sugestaoTemp = controleRepositorio.getSugestaoId(idSugestao, idCarona);
+		
+		usuarioTemp.responderSugestaoPontoEncontro(sugestaoTemp, pontos);
 	}
 
 	public void encerrarSistema() {
-
+		//TODO tem que fazer o metodo pois ainda nao sabemos o que o encerrar sistema deve fazer
 	}
 
 	// metodo pra ver se o atributo passado existe
@@ -193,228 +238,103 @@ public class Sistema {
 
 	// Metodos abaixo servem para checar se os atributos para criar são passados
 	// como null ou vazio
-
-	private boolean checaExisteLogin(String login){
-		iterador = BD.iterator();
-		while (iterador.hasNext()) {
-			Usuario usuarioTemp = iterador.next();
-
-			if (usuarioTemp.getLogin().equals(login)) {
-				return true;
-			}
-		}
-		return false;
-	}
 	
 	private boolean checaLogin(String login) throws LoginInvalidoException {
 		return (!(login == null || login.equals("")));
 
 	}
 
-	
-	private boolean checaExisteEmail(String email)
-			throws EmailExistenteException {
-		iterador2 = BD.iterator();
-		while (iterador2.hasNext()) {
-			Usuario usuarioTemp = iterador2.next();
-
-			if (usuarioTemp.getEmail().equals(email)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	private boolean checaAtributo(String atributo) {
 		return (atributo == null || atributo.equals(""));
 	}
 
-	public String cadastrarCarona(String idSessao, String origem,
-			String destino, String data, String hora, String vagas)
-			throws SessaoInvalidaException, SessaoInexistenteException,
-			OrigemInvalidaException, DestinoInvalidoException,
-			DataInvalidaException, HoraInvalidaException, VagaInvalidaException, numeroMaximoException {
-
-		int vaga = 0;
-		try {
-			vaga = Integer.parseInt(vagas);
-		} catch (Exception e) {
-			throw new VagaInvalidaException();
-		}
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.cadastrarCarona(idSessao, origem, destino, data, hora,
-				vaga, idCarona);
+	private boolean checaIdSessao(String idSessao) {
+		return (!(idSessao == null || idSessao.equals("")));
 	}
-
-	public String localizarCarona(String idSessao, String origem, String destino)
-			throws OrigemInvalidaException, DestinoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.localizarCarona(idSessao, origem, destino);
-	}
-
-	public String getAtributoCarona(String idCarona, String atributo)
-			throws ItemInexistenteException, IDCaronaInexistenteException,
-			AtributoInvalidoException, AtributoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException {
-		usuario = getUsuarioComCarona(idCarona);
-		if (usuario == null){
-			throw new ItemInexistenteException();
-		}
-		return usuario.getAtributoCarona(idCarona, atributo);
-	}
-
-	public String getTrajeto(String idCarona)
-			throws TrajetoInexistenteException, TrajetoInvalidoException, SessaoInvalidaException, SessaoInexistenteException {
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.getTrajeto(idCarona);
-	}
-
-	public Carona getCarona(String idCarona) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException {
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.getCarona(idCarona);
-	}
-
-	public Usuario getUsuarioComCarona(String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException, IDCaronaInvalidoException, ItemInexistenteException {
-		if(idCarona == null || idCarona.equals("")){
-			throw new IDCaronaInvalidoException();
-		}
-		for (Usuario usuarioTemp : BD) {
-			if (usuarioTemp.isCaronaDoPerfil(idCarona)) {
-				return usuarioTemp;
-			}
-		}
-		return null;
-	}
-
-	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
-			String ponto) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
-		Usuario usuarioTemp = getUsuarioComCarona(idCarona);
-		if (usuario == null){
-			throw new CaronaInexistenteException();
-		}
-		Carona carona = usuarioTemp.getCarona(idCarona);
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.solicitarVagaPontoEncontro(idSessao, ponto, carona, idSolicitacao);
-	}
-
-	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {
-		for (Usuario perfilTemp : BD) {
-			SolicitacaoDeVaga solicitacao = perfilTemp.procuraSolicitacao(idSolicitacao);
-			if (solicitacao != null) {
-				if (solicitacao.getIdSolicitacao().equals(idSolicitacao)) {
-					return perfilTemp.getAtributoSolicitacao(solicitacao, atributo);
-				}
-			}
-		}
-		return null;
-	}
-
-	public void aceitarSolicitacaoPontoEncontro(String idSessao,
-			String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
-		SolicitacaoDeVaga solicitacao = this.procuraSolicitacao(idSolicitacao);
 		
-		usuario = procuraUsuarioLogado(idSessao);
-		usuario.aceitarSolicitacaoPontoEncontro(idSessao, solicitacao);
-	}
-
-	public void desistirRequisicao(String idSessao, String idCarona,
-			String idSugestao) throws CaronaInexistenteException,
-			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
-		Carona caronaTemp = getUsuarioComCarona(idCarona).getCarona(idCarona);
-		usuario = procuraUsuarioLogado(idSessao);
-		usuario.desistirRequisicao(idSessao, idSugestao, caronaTemp);
-
-	}
-
-	public String solicitarVaga(String idSessao, String idCarona)
-			throws CaronaInexistenteException, CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
-		Carona carona = getUsuarioComCarona(idCarona).getCarona(idCarona);
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.solicitarVagaPontoEncontro(idSessao, null, carona, idSolicitacao);
-	}
-
-	private SolicitacaoDeVaga procuraSolicitacao(String idSolicitacao) throws SolicitacaoInexistenteException {
-		SolicitacaoDeVaga retorno = null;
-
-		for (Usuario usuarioTemp : BD) {
-			SolicitacaoDeVaga solicitacao = usuarioTemp
-					.procuraSolicitacao(idSolicitacao);
-			if (solicitacao != null) {
-				retorno = solicitacao;
-			}
-		}
-		if(retorno == null){
-			throw new SolicitacaoInexistenteException();
-		}
-
-		return retorno;
-	}
-
-	public String visualizarPerfil(String idSesao, String login) throws LoginInvalidoException, SessaoInvalidaException, SessaoInexistenteException{
-		if(!checaExisteLogin(login)){
-			throw new LoginInvalidoException();
-		}
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.toString();
-	}
-
-	public Usuario getUsuarioComLogin(String login) {
-		Usuario retorno = null;
-		for (Usuario usuarioTemp : BD) {
-			if (usuarioTemp.getLogin().equals(login)) {
-				retorno = usuarioTemp;
-			}
-		}
-		return retorno;
-	}
-
-	public String getAtributoPerfil(String login, String atributo) throws SessaoInvalidaException, SessaoInexistenteException {
-		Usuario usuarioTemp = getUsuarioComLogin(login);
-		usuario = procuraUsuarioLogado(idSessao);
-		return usuario.getAtributoUsuario(usuarioTemp, atributo);
-	}
-	
 	private Usuario procuraUsuarioLogado(String idSessao) throws SessaoInvalidaException, SessaoInexistenteException{
 		Usuario retorno = null;
 		if(!checaIdSessao(idSessao)){
 			throw new SessaoInvalidaException();
 		}
 		
-		for(Usuario usuarioTemp : PerfisLogados){
-			if(usuarioTemp.getIdSessao().equals(idSessao)){
-				retorno = usuarioTemp;
-			}
-		}
+		retorno = usuariosLogados.get(idSessao);
+		
 		if(retorno == null){
 			throw new SessaoInexistenteException();
 		}
+		
 		return retorno;
 	}
 	
-	private boolean checaIdSessao(String idSessao) {
-		return (!(idSessao == null || idSessao.equals("")));
+	public String solicitarVagaPontoEncontro(String idSessao, String idCarona,
+			String ponto) throws CaronaInexistenteException,
+		
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
+		
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		
+		Carona carona = controleRepositorio.localizaCaronaPorId(idCarona);
+		if(ponto.equals("")){
+			ponto = null; // subtende-se que o usuario aceita os pontos que o dono da carona indicou
+		}
+		
+		return usuarioTemp.solicitarVagaPontoEncontro(ponto, carona, id.gerarId(), usuarioTemp);
 	}
+
+	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {
+		return controleRepositorio.getAtributoSolicitacao(idSolicitacao, atributo);
+	}
+
+	public void aceitarSolicitacaoPontoEncontro(String idSessao,
+			String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, VagaInvalidaException {
+		
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		SolicitacaoDeVaga solicitacao = controleRepositorio.localizaSolicitacaoPorId(idSolicitacao);
+		
+		usuarioTemp.aceitarSolicitacaoPontoEncontro(solicitacao);
+	}
+
 	
-	
-	public void rejeitarSolicitacao(String idSessao, String idSolicitacao) throws SolicitacaoInexistenteException {
-		 usuario = getUsuarioComIdSessao(idSessao);
-		 SolicitacaoDeVaga solicitacao = this.procuraSolicitacao(idSolicitacao);
-		usuario.rejeitarSolicitacao(solicitacao);
+	public void rejeitarSolicitacao(String idSessao, String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException {
+		 Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		 SolicitacaoDeVaga solicitacao = controleRepositorio.localizaSolicitacaoPorId(idSolicitacao);
+		usuarioTemp.rejeitarSolicitacao(solicitacao);
 		
 	}
 	
-	private Usuario getUsuarioComIdSessao(String idSessao){
-		Usuario retorno = null;
-		for(Usuario userTemp : BD){
-			if(userTemp.getIdSessao().equals(idSessao)){
-				retorno = userTemp;
-				break;
-			}
-		}
-		return retorno;
+	public void desistirRequisicao(String idSessao, String idCarona,
+			String idSolicitacao) throws CaronaInexistenteException,
+			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException {
+	
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		Carona caronaTemp = controleRepositorio.localizaCaronaPorId(idCarona);
+		SolicitacaoDeVaga solicitacaoTemp = controleRepositorio.localizaSolicitacaoPorId(idSolicitacao);
+		usuarioTemp.desistirRequisicao(solicitacaoTemp, caronaTemp);
+
 	}
 
+	public String visualizarPerfil(String idSessao, String login) throws LoginInvalidoException, SessaoInvalidaException, SessaoInexistenteException, UsuarioInexistenteException{
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		Usuario usuarioProcurado = null;
+		try {
+			usuarioProcurado = controleRepositorio.buscarUsuarioPorLogin(login);
+		} catch (Exception e) {
+			throw new LoginInvalidoException();
+		}
+		
+		return usuarioTemp.visualizarPerfil(usuarioProcurado);
+	}
+
+	public String getAtributoPerfil(String login, String atributo) throws SessaoInvalidaException, SessaoInexistenteException, LoginInvalidoException, UsuarioInexistenteException {
+		return controleRepositorio.getAtributoUsuario(login, atributo); 
+	}
+	
+	public boolean ehVazioOuNull(String atributo){
+		if(atributo == null || atributo.equals("")){
+			return true;
+		}
+		return false;
+	}
 
 }

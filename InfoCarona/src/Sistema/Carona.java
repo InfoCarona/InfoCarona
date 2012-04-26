@@ -1,10 +1,8 @@
 package Sistema;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,15 +11,16 @@ import Exception.ExceptionsCarona.DestinoInvalidoException;
 import Exception.ExceptionsCarona.HoraInvalidaException;
 import Exception.ExceptionsCarona.OrigemInvalidaException;
 import Exception.ExceptionsCarona.SessaoInvalidaException;
+import Exception.ExceptionsCarona.VagaInvalidaException;
 
 public class Carona {
 	
-	private String idSessao, origem, destino, data, hora, idCarona, donoDaCarona;
+	private String origem, destino, data, hora, idCarona, donoDaCarona;
 	private int vagas;
 	private List<SugestaoDePontoDeEncontro> listaDeSugestoes;
+	private List<SolicitacaoDeVaga> listaDeSolicitacao;
 	
-	public Carona(String idSessao, String origem, String destino, String data, String hora, int vagas, String idCarona, String donoDaCarona) throws SessaoInvalidaException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException, HoraInvalidaException {
-        setIdSessao(idSessao);
+	public Carona(String origem, String destino, String data, String hora, int vagas, String idCarona, String donoDaCarona) throws SessaoInvalidaException, OrigemInvalidaException, DestinoInvalidoException, DataInvalidaException, HoraInvalidaException, VagaInvalidaException {
         setOrigem(origem);
         setDestino(destino);
         setData(data);
@@ -30,8 +29,13 @@ public class Carona {
         setDonoDaCarona(donoDaCarona);
         this.idCarona = idCarona;
         this.listaDeSugestoes = new LinkedList<SugestaoDePontoDeEncontro>();
+        this.listaDeSolicitacao = new LinkedList<SolicitacaoDeVaga>();
 	}
 	
+	public List<SolicitacaoDeVaga> getListaDeSolicitacao() {
+		return listaDeSolicitacao;
+	}
+
 	public List<SugestaoDePontoDeEncontro> getListaDeSugestoes(){
 		return this.listaDeSugestoes;
 	}
@@ -93,20 +97,13 @@ public class Carona {
 		return vagas;
 	}
 
-	public void setVagas(int vagas) {
+	public void setVagas(int vagas) throws VagaInvalidaException {
+		if(vagas <= 0){
+			throw new VagaInvalidaException();
+		}
 		this.vagas = vagas;
 	}
 	
-	public String getIdSessao(){
-		return this.idSessao;
-	}
-	
-	private void setIdSessao(String idSessao) throws SessaoInvalidaException {
-        if ((idSessao == null) || (idSessao.trim().equals(""))) {
-                throw new SessaoInvalidaException();
-        }
-        this.idSessao = idSessao.trim();
-	}
 	
 	public String getIdCarona(){
 		return this.idCarona;
@@ -134,6 +131,9 @@ public class Carona {
 	
 	public String getDadosCarona(){
 		return ("origem=" + origem + " destino=" + destino + " data=" + data + " hora=" + hora + " vagas=" + vagas);
+	}
+	public void addNovaSolicitacao(SolicitacaoDeVaga novaSolicitacao){
+		listaDeSolicitacao.add(novaSolicitacao);
 	}
 	
 	//Metodos de verificacao
@@ -167,6 +167,14 @@ public class Carona {
                 retorno = false;
         }
         return retorno;
-}
+    }
+    
+    public void removeSolicitacao(SolicitacaoDeVaga solicitacao){
+    	if(solicitacao.isSolicitacaoAceita()){
+    		vagas++;
+    	}
+    	listaDeSolicitacao.remove(solicitacao);
+    	
+    }
 	
 }

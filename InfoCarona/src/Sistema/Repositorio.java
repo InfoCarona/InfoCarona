@@ -9,140 +9,190 @@ import Exception.ExceptionsCarona.CaronaInvalidaException;
 
 public class Repositorio {
 	List<Usuario> listaDeUsuarios;
-	List<Carona> listaDeCaronas;
-	Iterator<Carona> iterador;
-	public Repositorio(){
+
+	public Repositorio() {
 		criaRepositorio();
 	}
-	
-	private void criaRepositorio(){
+
+	private void criaRepositorio() {
 		listaDeUsuarios = new LinkedList<Usuario>();
 
 	}
-	
-	/////metodos que estao corretos no repositorio/////
-		
 
-	
-	public void addUsuario(Usuario user){
-		listaDeUsuarios.add(user);
-	}
-	
-	public void removeUsuarioLogin(Usuario user){
-		listaDeUsuarios.remove(user);
+	// ///metodos que estao corretos no repositorio/////
+
+	public void addUsuario(Usuario usuario) {
+		listaDeUsuarios.add(usuario);
 	}
 
-	public List<Usuario> getTodosOsUsuarios(){
+	public Usuario buscaUsuarioLogin(String login) {
+		Usuario retorno = null;
+		for (Usuario usuario : listaDeUsuarios) {
+			if (usuario.getLogin().equals(login)) {
+				retorno = usuario;
+			}
+		}
+
+		return retorno;
+	}
+
+	public void removeUsuarioLogin(Usuario usuario) {
+		listaDeUsuarios.remove(usuario);
+	}
+
+	public List<Usuario> getTodosOsUsuarios() {
 		return listaDeUsuarios;
 	}
-	
- 	public Usuario buscaUsuarioLogin(String login){
+
+	public Usuario buscaUsuarioEmail(String email) {
 		Usuario retorno = null;
-		for (Usuario user: listaDeUsuarios){
-			if(user.getLogin().equals(login)){
-				retorno = user;
+		for (Usuario usuario : listaDeUsuarios) {
+			if (usuario.getEmail().equals(email)) {
+				retorno = usuario;
 			}
 		}
-		
-		return retorno;
-	}
-	
-	public Usuario buscaUsuarioEmail(String email){
-		Usuario retorno = null;
-		for (Usuario user: listaDeUsuarios){
-			if(user.getEmail().equals(email)){
-				retorno = user;
-			}
-		}
-		
+
 		return retorno;
 	}
 
-	public List<Usuario> buscaUsuarioNome(String nome){
+	public List<Usuario> buscaUsuarioNome(String nome) {
 		List<Usuario> retorno = new LinkedList<Usuario>();
-		
-		for (Usuario user: listaDeUsuarios){
-			if(user.getNome().equals(nome)){
-				retorno.add(user);
+
+		for (Usuario usuario : listaDeUsuarios) {
+			if (usuario.getNome().equals(nome)) {
+				retorno.add(usuario);
 			}
 		}
-		
+
 		return retorno;
 	}
-	
-	public List<Carona> getTodasAsCaronas(){
+
+	public List<Carona> getTodasAsCaronas() {
 		List<Carona> retorno = new LinkedList<Carona>();
-		
-		for(Usuario user: listaDeUsuarios){
-			for(Carona caronaTemp : user.getCaronas()){
+
+		for (Usuario usuario : listaDeUsuarios) {
+			for (Carona caronaTemp : usuario.getCaronas()) {
 				retorno.add(caronaTemp);
 			}
 		}
 		return retorno;
 	}
+
+	public Carona getCaronaId(String idCarona)
+			throws CaronaInexistenteException, CaronaInvalidaException {
+		for (Usuario usuario : listaDeUsuarios) {
+			for(Carona caronaTemp : usuario.getCaronas()){
+				if(caronaTemp.getIdCarona().equals(idCarona)){
+					return caronaTemp;
+				}
+			}
+		}
+		return null;
+	}
 	
-	public Carona getCaronaId(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
-		Carona retorno = null;
+	public SugestaoDePontoDeEncontro getSugestaoId(String idSugestao, String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		Carona caronaTemp = this.getCaronaId(idCarona);
+		for (SugestaoDePontoDeEncontro sugestaoTemp : caronaTemp.getListaDeSugestoes()) {
+			if(sugestaoTemp.getIdSugestao().equals(idSugestao)){
+				return sugestaoTemp;
+			}
+		}
 		
-		for(Usuario user: listaDeUsuarios){
-			try{
-				retorno = user.getCarona(idCarona);
-			}catch(Exception e){
-				retorno = null;
+		return null;
+	}
+
+	
+	public List<Carona> localizaCaronaPorOrigemDestino(String origem,
+			String destino) {
+
+		List<Carona> retorno = new LinkedList<Carona>();
+
+		for (Usuario UsuarioTemp : listaDeUsuarios) {
+			for (Carona caronaTemp : UsuarioTemp.getCaronas()) {
+				if ((caronaTemp.getOrigem().equals(origem))
+						&& (caronaTemp.getDestino().equals(destino))) {
+					retorno.add(caronaTemp);
+				}
 			}
 		}
 		return retorno;
 	}
-	
-	
-	////////////metodos do repositorio onde a responsabilidade de pesquisar as caronas eh do repositorio
-	public List<Carona> buscaCaronasOrigemDestino(String origem, String destino) throws CaronaInexistenteException, CaronaInvalidaException{
-		List<Carona> caronas = new LinkedList<Carona>();
-		for(Usuario usuarioTemp : listaDeUsuarios){
-			for(Carona caronaTemp: usuarioTemp.getCaronas()){
-				if((caronaTemp.getOrigem().equals(origem) && caronaTemp.getDestino().equals(destino))){
-					caronas.add(caronaTemp);
+
+	public List<Carona> localizaCaronaPorDestino(String destino) {
+		List<Carona> retorno = new LinkedList<Carona>();
+
+		for (Usuario UsuarioTemp : listaDeUsuarios) {
+			for (Carona caronaTemp : UsuarioTemp.getCaronas()) {
+				if (caronaTemp.getDestino().equals(destino)) {
+					retorno.add(caronaTemp);
 				}
 			}
 		}
-		return caronas;
+		return retorno;
 	}
-	
-	public List<Carona> buscaCaronasOrigem(String origem){
-		List<Carona> caronas = new LinkedList<Carona>();
-		for(Usuario usuarioTemp : listaDeUsuarios){
-			for(Carona caronaTemp: usuarioTemp.getCaronas()){
-				if(caronaTemp.getOrigem().equals(origem)){
-					caronas.add(caronaTemp);
+
+	public List<Carona> localizaCaronaPorOrigem(String origem) {
+		List<Carona> retorno = new LinkedList<Carona>();
+
+		for (Usuario UsuarioTemp : listaDeUsuarios) {
+			for (Carona caronaTemp : UsuarioTemp.getCaronas()) {
+				if (caronaTemp.getOrigem().equals(origem)) {
+					retorno.add(caronaTemp);
 				}
 			}
 		}
-		return caronas;
+		return retorno;
 	}
-	
-	public List<Carona> buscaCaronasDestino(String destino){
-		List<Carona> caronas = new LinkedList<Carona>();
-		for(Usuario usuarioTemp : listaDeUsuarios){
-			for(Carona caronaTemp: usuarioTemp.getCaronas()){
-				if(caronaTemp.getDestino().equals(destino)){
-					caronas.add(caronaTemp);
+
+	public List<Carona> getCaronas() {
+		List<Carona> retorno = new LinkedList<Carona>();
+
+		for (Usuario UsuarioTemp : listaDeUsuarios) {
+			retorno.addAll(UsuarioTemp.getCaronas());
+		}
+		return retorno;
+	}
+
+	public Carona localizaCaronaPorId(String idCarona) {
+		for (Usuario usuarioTemp : listaDeUsuarios) {
+			for (Carona caronaTemp : usuarioTemp.getCaronas()) {
+				if (caronaTemp.getIdCarona().equals(idCarona)) {
+					return caronaTemp;
 				}
 			}
 		}
-		return caronas;
+		return null;
 	}
 	
-	//////// metodos onde eu utilizo um iterador para varrer as caronas
-	public void criaIterador(){
-		listaDeCaronas = getTodasAsCaronas();
-		iterador =  listaDeCaronas.iterator();
+	public boolean checaExisteLogin(String login){
+		for (Usuario UsuarioTemp : listaDeUsuarios) {
+			if(UsuarioTemp.getLogin().equals(login)){
+				return true;
+			}
+		}		
+		return false;
 	}
 	
-	public boolean temCarona(){
-		return iterador.hasNext();
+	public boolean checaExisteEmail(String email){
+		for (Usuario UsuarioTemp : listaDeUsuarios) {
+			if(UsuarioTemp.getEmail().equals(email)){
+				return true;
+			}
+		}		
+		return false;
 	}
 	
-	public Carona proximaCarona(){
-		return iterador.next();
+	public SolicitacaoDeVaga localizaSolicitacaoPorId(String idSolicitacao) {
+		for (Usuario usuarioTemp : listaDeUsuarios) {
+			for (SolicitacaoDeVaga solicitacaoTemp : usuarioTemp.getListaDeSolicitacaoDeVagas()) {
+				if (solicitacaoTemp.getIdSolicitacao().equals(idSolicitacao)) {
+					return solicitacaoTemp;
+				}
+			}
+		}
+		return null;
 	}
+	
+
+
 }

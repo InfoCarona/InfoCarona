@@ -3,147 +3,170 @@ package Sistema;
 import java.util.LinkedList;
 import java.util.List;
 
+import Exception.ExceptionUsuario.AtributoInexistenteException;
+import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
+import Exception.ExceptionsCarona.DestinoInvalidoException;
+import Exception.ExceptionsCarona.IDCaronaInexistenteException;
+import Exception.ExceptionsCarona.ItemInexistenteException;
+import Exception.ExceptionsCarona.OrigemInvalidaException;
+import Exception.ExceptionsCarona.TrajetoInexistenteException;
 
 public class ControlerRepositorio {
 	Repositorio repositorio;
+	
 	public ControlerRepositorio(){
 		repositorio = new Repositorio();
 	}
-	public String getAtributoUsuario(String login, String atributo) throws UsuarioInexistenteException{
-		String retorno = "";
-		Usuario usuarioTemp = this.getUsuario(login);
+
+	public void addUsuario(Usuario novoUsuario) {
+		repositorio.addUsuario(novoUsuario);
 		
-		if (atributo.equals("nome")) {
-			retorno = usuarioTemp.getNome();
-		} else if (atributo.equals("endereco")) {
-			retorno = usuarioTemp.getEndereco();
-		} else if (atributo.equals("email")) {
-			retorno = usuarioTemp.getEmail();
-		}
-			//			else if (atributo.equals("historico de caronas")) {
-			//			for (Carona caronaTemp : listaDeCaronas) {
-			//				retorno += caronaTemp.getDadosCarona();
-			//			}
-			//		}else if (atributo.equals("historico de vagas em caronas")) {
-			//			for (SolicitacaoDeVaga solicitacaoTemp : listaDeSolicitacaoDeVagas) {
-			//				retorno += solicitacaoTemp.toString();
-			//			}
-			//			
-			//		}else if (atributo.equals("caronas seguras e tranquilas")){
-			//			retorno = this.caronasSeguras + "";
-			//		}else if (atributo.equals("caronas que não funcionaram")){
-			//			retorno = this.caronaNaoFuncionaram + "";
-			//		}else if (atributo.equals("faltas em vagas de caronas")){
-			//			retorno = this.faltasEmVagas + "";
-			//		}else if (atributo.equals("presenças em vagas de caronas")){
-			//			retorno = this.presencaEmVagas + "";
-			//		}
-		
-		return retorno;
 	}
-	
-	public Usuario getUsuario(String login) throws UsuarioInexistenteException{
-		Usuario usuarioTemp = repositorio.buscaUsuarioLogin(login);
-		if(usuarioTemp == null){
+
+	public Usuario buscarUsuarioPorLogin(String login) throws LoginInvalidoException, UsuarioInexistenteException {
+		Usuario retorno = null;
+		retorno = repositorio.buscaUsuarioLogin(login);
+		if(retorno == null){
 			throw new UsuarioInexistenteException();
 		}
-		return usuarioTemp;
+		
+		return retorno;
+	}
+
+	public String getAtributoUsuario(String login, String atributo) throws LoginInvalidoException, UsuarioInexistenteException {
+		Usuario usuarioTemp = buscarUsuarioPorLogin(login);
+		List<String> listaTemp = new LinkedList<String>();
+		String retorno = "";
+
+		if (atributo.equals("nome")) {
+			retorno = usuarioTemp.getNome();
+		}
+		else if (atributo.equals("endereco")) {
+			retorno = usuarioTemp.getEndereco();
+		}
+		else if (atributo.equals("email")) {
+			retorno = usuarioTemp.getEmail();
+		}
+		else if (atributo.equals("historico de caronas")) {
+			for (Carona caronaTemp : usuarioTemp.getCaronas()) {
+				listaTemp.add(caronaTemp.getIdCarona());
+			}
+			retorno = listaTemp.toString().replace("{", "[").replace("}", "]");
+		}
+		else if (atributo.equals("historico de vagas em caronas")) {
+			//TODO fazer o historico com as solicitacoes ainda
+		}
+		else if (atributo.equals("caronas seguras e tranquilas")) {
+			retorno = usuarioTemp.getCaronasSeguras() + "";
+		}
+		else if (atributo.equals("caronas que não funcionaram")) {
+			retorno = usuarioTemp.getCaronasNaoFuncionaram() + "";
+		} 
+		else if (atributo.equals("faltas em vagas de caronas")) {
+			retorno = usuarioTemp.getFaltasEmVagas() + "";
+		} 
+		else if (atributo.equals("presenças em vagas de caronas")) {
+			retorno = usuarioTemp.getPresencaEmVagas()+ "";
+		}
+
+		return retorno;
 	}
 	
-	public List<Carona> getTodasAsCaronas(){
-		return repositorio.getTodasAsCaronas();
-	}
 	
-	
-	
-	///existe tbm os metodos no repositorio onde jah faz a pesquisa da carona por origem e destino, só é implementar aki pra chamar os do repositorio direto
-	
-	//////////metodos onde o repositorio retorna uma lista com todas as caronas e a responsabilidade de filtrar elas eh do controle
-	public List<Carona> getCaronaOrigemDestino(String origem, String destino) throws CaronaInexistenteException, CaronaInvalidaException{
-		List<Carona> retorno = null;
-		if(!(origem.equals("") && destino.equals(""))){
-			retorno = this.buscaCaronasOrigemDestino(origem, destino);
-		}
-		else if(!(origem.equals("")) && (destino.equals(""))){
-			retorno = this.buscaCaronasOrigem(origem);
-		}
-		else if(origem.equals("") && (!(destino.equals("")))){
-			retorno = this.buscaCaronasDestino(destino);
+
+	public List<Carona> localizarCarona(String origem, String destino) {
+		
+		List<Carona> retorno;
+		if ((!origem.equals("")) && ((!destino.equals("")))) {
+			retorno = repositorio.localizaCaronaPorOrigemDestino(origem, destino);
+		} else if ((origem.equals("")) && ((!destino.equals("")))) {
+			retorno = repositorio.localizaCaronaPorDestino(destino);
+
+		} else if ((!origem.equals("")) && ((destino.equals("")))) {
+			retorno = repositorio.localizaCaronaPorOrigem(origem);
+		} else {
+			retorno = repositorio.getCaronas();
 		}
 		return retorno;
-	}	
-	
-	public List<Carona> buscaCaronasOrigemDestino(String origem, String destino) throws CaronaInexistenteException, CaronaInvalidaException{
-		List<Carona> caronas = this.getTodasAsCaronas();
 		
-		for(Carona caronaTemp: caronas){
-			if(!(caronaTemp.getOrigem().equals(origem) && caronaTemp.getDestino().equals(destino))){
-				caronas.remove(caronaTemp);
-			}
+	}
+
+	public String getAtributoCarona(String idCarona, String atributo) throws ItemInexistenteException {
+		Carona caronaTemp = repositorio.localizaCaronaPorId(idCarona);
+		if(caronaTemp == null){
+			throw new ItemInexistenteException();
 		}
-		return caronas;
+		String retorno = "";
+        
+        if(atributo.equals("origem")){
+                retorno = caronaTemp.getOrigem();
+        }else if(atributo.equals("vagas")){
+                retorno = (caronaTemp.getVagas()+"");
+        }else if(atributo.equals("destino")){
+                retorno = caronaTemp.getDestino();
+        }else if(atributo.equals("data")){
+                retorno = caronaTemp.getData();
+        }
+        
+        return retorno;
 	}
 	
-	public List<Carona> buscaCaronasOrigem(String origem){
-		List<Carona> caronas = this.getTodasAsCaronas();
+	public Carona localizaCaronaPorId(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException {
+		return repositorio.getCaronaId(idCarona);
+	}
+
+	public String getTrajeto(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException, TrajetoInexistenteException {
 		
-		for(Carona caronaTemp: caronas){
-			if(!(caronaTemp.getOrigem().equals(origem))){
-				caronas.remove(caronaTemp);
-			}
+		Carona caronaTemp = repositorio.getCaronaId(idCarona);
+		if(caronaTemp == null){
+			throw new TrajetoInexistenteException();
 		}
-		return caronas;
+		return caronaTemp.getOrigem() + " - " + caronaTemp.getDestino();
 	}
 	
-	public List<Carona> buscaCaronasDestino(String destino){
-		List<Carona> caronas = this.getTodasAsCaronas();
-		
-		for(Carona caronaTemp: caronas){
-			if(!(caronaTemp.getDestino().equals(destino))){
-				caronas.remove(caronaTemp);
-			}
-		}
-		return caronas;
+	public SugestaoDePontoDeEncontro getSugestaoId(String idSugestao, String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return repositorio.getSugestaoId(idSugestao, idCarona);
 	}
+	
+	public boolean checaExisteLogin(String login){
+		return repositorio.checaExisteLogin(login);
+	}
+	
+	public boolean checaExisteEmail(String email){
+		return repositorio.checaExisteEmail(email);
+	}
+	
+	
+	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {		
+		SolicitacaoDeVaga solicitacaoTemp = localizaSolicitacaoPorId(idSolicitacao);
+		
+		String retorno = "";
+		if(atributo.equals("origem")){
+			retorno = solicitacaoTemp.getOrigem();
+		}else if(atributo.equals("destino")){
+			retorno = solicitacaoTemp.getDestino();
+		}else if(atributo.equals("Dono da carona")){
+			retorno = solicitacaoTemp.getDonoDaCarona();
+		}else if(atributo.equals("Dono da solicitacao")){
+         retorno = solicitacaoTemp.getDonoSolicitacao().getNome();
+		}else if(atributo.equals("Ponto de Encontro")){
+			retorno = solicitacaoTemp.getPonto();
+		}
+		
+		return retorno;
+	}
+	
+	public SolicitacaoDeVaga localizaSolicitacaoPorId(String idSolicitacao) {
+		return repositorio.localizaSolicitacaoPorId(idSolicitacao);
+	}
+		
+	
 	
 
 	
-	////////// metodos que usam os metodos do iterador do repositorio, acho q ele consome mais pq eu tenho q ter a lista das caronas
-	// e pra isso lá se foi 2 for neh, mas tah aii pra vcs excolherem
-	public List<Carona> buscaCaronasOrigemDestino2(String origem, String destino) throws CaronaInexistenteException, CaronaInvalidaException{
-		List<Carona> caronas = new LinkedList<Carona>();
-		while(repositorio.temCarona()){
-			Carona caronaTemp = repositorio.proximaCarona();
-			if((caronaTemp.getOrigem().equals(origem) && caronaTemp.getDestino().equals(destino))){
-				caronas.add(caronaTemp);
-			}
-		}
-		return caronas;
-	}
 	
-	public List<Carona> buscaCaronasOrigem2(String origem){
-		List<Carona> caronas = new LinkedList<Carona>();
-		while(repositorio.temCarona()){
-			Carona caronaTemp = repositorio.proximaCarona();
-			if((caronaTemp.getOrigem().equals(origem))){
-				caronas.add(caronaTemp);
-			}
-		}
-		return caronas;
-	}
-	
-	public List<Carona> buscaCaronasDestino2(String destino){
-		List<Carona> caronas = new LinkedList<Carona>();
-		while(repositorio.temCarona()){
-			Carona caronaTemp = repositorio.proximaCarona();
-			if((caronaTemp.getDestino().equals(destino))){
-				caronas.add(caronaTemp);
-			}
-		}
-		return caronas;
-	}
-	
+		
 }

@@ -1,23 +1,28 @@
 package Sistema;
 
-import java.util.LinkedList;
-import java.util.List;
+
+import Exception.ExceptionsCarona.VagaInvalidaException;
 
 public class SolicitacaoDeVaga {
 	
 	private Carona carona;
-	private String donoDaSolicitacao, ponto, idSolicitacao;
+	private Usuario donoSolicitacao;
+	private String ponto, idSolicitacao;
 	private boolean solicitacaoAceita = false;
 	private boolean solicitacaoPendente = true;
 	private boolean solicitacaoRejeitada = false;
 	
-	public SolicitacaoDeVaga(Carona carona, String donoDaSolicitacao, String ponto, String idSolicitacao){
+	public SolicitacaoDeVaga(Carona carona, String ponto, String idSolicitacao, Usuario donoSolicitacao){
 		this.carona = carona;
-		this.donoDaSolicitacao = donoDaSolicitacao;
 		this.ponto = ponto;
 		this.idSolicitacao = idSolicitacao;
+		this.donoSolicitacao = donoSolicitacao;
 	}
 	
+	public Usuario getDonoSolicitacao() {
+		return donoSolicitacao;
+	}
+
 	public String getOrigem(){
 		return this.carona.getOrigem();
 	}
@@ -30,9 +35,6 @@ public class SolicitacaoDeVaga {
 		return this.carona.getDonoDaCarona();
 	}
 	
-	public String getDonoDaSolicitacao(){
-		return this.donoDaSolicitacao;
-	}
 
 	public String getPonto(){
 		return this.ponto;
@@ -50,8 +52,6 @@ public class SolicitacaoDeVaga {
 			retorno = this.getDestino();
 		}else if(atributo.equals("Dono da carona")){
 			retorno = this.getDonoDaCarona();
-		}else if(atributo.equals("Dono da solicitacao")){
-			retorno = this.donoDaSolicitacao;
 		}else if(atributo.equals("Ponto de Encontro")){
 			retorno = this.ponto;
 		}
@@ -59,7 +59,7 @@ public class SolicitacaoDeVaga {
 		return retorno;
 	}
 	
-	public void solicitacaoAceita(){
+	public void solicitacaoAceita() throws VagaInvalidaException{
 		this.solicitacaoAceita = true;
 		this.solicitacaoPendente = false;
 		carona.setVagas(carona.getVagas()-1);	
@@ -78,4 +78,5 @@ public class SolicitacaoDeVaga {
 	public boolean isSolicitacaoRejeitada(){
 		return this.solicitacaoRejeitada;
 	}
+	
 }

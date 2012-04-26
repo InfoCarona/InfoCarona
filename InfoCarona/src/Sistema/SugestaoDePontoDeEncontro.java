@@ -5,31 +5,28 @@ import java.util.List;
 
 public class SugestaoDePontoDeEncontro {
 	
-	private String idSessao, idCarona, idSugestao;
+	private String idSugestao;
 	private List<String> listaDeSugestaoDePontosDeEncontro;
 	private List<String> listaDeRespostasDePontosDeEncontro;
+	private Usuario usuarioQueSugeriu;
 	
-	public SugestaoDePontoDeEncontro(String idSessao, String idCarona,
-			String idSugestao) {
-		this.idCarona = idCarona;
-		this.idSessao = idSessao;
+	public SugestaoDePontoDeEncontro(String idSugestao, Usuario usuarioQueSugeriu) {
+		this.usuarioQueSugeriu = usuarioQueSugeriu;
 		this.idSugestao = idSugestao;
 		this.listaDeSugestaoDePontosDeEncontro = new LinkedList<String>();
 		this.listaDeRespostasDePontosDeEncontro = new LinkedList<String>();
 	}
 	
-	public String getIdCarona(){
-		return this.idCarona;
-	}
-	
-	public String getIdSessao(){
-		return this.idSessao;
-	}
 
 	public String getIdSugestao(){
 		return this.idSugestao;
 	}
 	
+	public Usuario getUsuarioQueSugeriu() {
+		return usuarioQueSugeriu;
+	}
+
+
 	public List<String> getListaDeSugestaoDePontosDeEncontro(){
 		return this.listaDeSugestaoDePontosDeEncontro;
 	}
