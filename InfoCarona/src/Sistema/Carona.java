@@ -189,4 +189,24 @@ public class Carona {
 		
 		return true;
 	}
+    
+    public List<SolicitacaoDeVaga> getSolicitacoesConfirmadas() {
+		List<SolicitacaoDeVaga> retorno = new LinkedList<SolicitacaoDeVaga>();
+		for (SolicitacaoDeVaga solicitacao : listaDeSolicitacao) {
+			if(solicitacao.isSolicitacaoAceita()){
+				retorno.add(solicitacao);
+			}
+		}
+		return retorno;
+	}
+    
+    public List<SolicitacaoDeVaga> getSolicitacoesPendentes(){
+    	List<SolicitacaoDeVaga> retorno = new LinkedList<SolicitacaoDeVaga>();
+		for (SolicitacaoDeVaga solicitacao : listaDeSolicitacao) {
+			if(solicitacao.isSolicitacaoPendente()){
+				retorno.add(solicitacao);
+			}
+		}
+		return retorno;
+    }
 }

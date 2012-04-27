@@ -75,8 +75,6 @@ public class ControlerRepositorio {
 		return retorno;
 	}
 	
-	
-
 	public List<Carona> localizarCarona(String origem, String destino) {
 		
 		List<Carona> retorno;
@@ -139,7 +137,6 @@ public class ControlerRepositorio {
 		return repositorio.checaExisteEmail(email);
 	}
 	
-	
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {		
 		SolicitacaoDeVaga solicitacaoTemp = localizaSolicitacaoPorId(idSolicitacao);
 		
@@ -166,11 +163,5 @@ public class ControlerRepositorio {
 	public void zerarSistema() {
 		repositorio.zerarSistema();
 	}
-		
-	
-	
-
-	
-	
 		
 }

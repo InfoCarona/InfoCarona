@@ -19,10 +19,10 @@
     <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
     <faltasEmVagas>0</faltasEmVagas>
     <presencaEmVagas>0</presencaEmVagas>
-    <nome>William Henry Gates III</nome>
-    <email>billzin@gmail.com</email>
-    <endereco>Medina, Washington</endereco>
-    <senha>billz@o</senha>
-    <login>bill</login>
+    <nome>Steven Paul Jobs</nome>
+    <email>jobs@apple.com</email>
+    <endereco>Palo Alto, California</endereco>
+    <senha>5t3v3</senha>
+    <login>steve</login>
   </Sistema.Usuario>
 </linked-list>

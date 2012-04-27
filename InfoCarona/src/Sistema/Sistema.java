@@ -47,10 +47,11 @@ public class Sistema {
  */
 	
 	private ControlerRepositorio controleRepositorio;
-	private Id id = new Id(5);
-	private Map<String, Usuario> usuariosLogados;;
+	private Id id;
+	private Map<String, Usuario> usuariosLogados;
 	
 	public Sistema() {
+		id = new Id(5);
 		this.criaSistema();
 	}
 	
@@ -184,7 +185,6 @@ public class Sistema {
 			DataInvalidaException, HoraInvalidaException, VagaInvalidaException, numeroMaximoException {
 							
 		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
-		
 		String idCarona = usuarioTemp.cadastrarCarona(origem, destino, data, hora, vagas, id.gerarId());
 		
 		return idCarona;
@@ -276,7 +276,6 @@ public class Sistema {
 			CaronaInvalidaException, SessaoInvalidaException, SessaoInexistenteException, IDCaronaInvalidoException, ItemInexistenteException, numeroMaximoException {
 		
 		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
-		
 		Carona carona = controleRepositorio.localizaCaronaPorId(idCarona);
 		if(ponto.equals("")){
 			ponto = null; // subtende-se que o usuario aceita os pontos que o dono da carona indicou
@@ -346,7 +345,23 @@ public class Sistema {
 
 	public Carona getCaronaUsuario(String idSessao, int indexCarona) throws SessaoInvalidaException, SessaoInexistenteException {
 		Usuario usuarioTemp = procuraUsuarioLogado(idSessao); 
-		System.out.println(usuarioTemp.getCaronas());
 		return usuarioTemp.getCaronas().get(indexCarona-1);
+	}
+	
+	public List<Carona> getTodasCaronasUsuario(String idSessao) throws SessaoInvalidaException, SessaoInexistenteException{
+		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
+		return usuarioTemp.getCaronas();
+	}
+	
+	public List<SolicitacaoDeVaga> getSolicitacoesConfirmadas(String idCarona) throws SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException{
+		return controleRepositorio.localizaCaronaPorId(idCarona).getSolicitacoesConfirmadas();
+	}
+	
+	public List<SolicitacaoDeVaga> getSolicitacoesPendentes(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return controleRepositorio.localizaCaronaPorId(idCarona).getSolicitacoesPendentes();
+	}
+	
+	public List<SugestaoDePontoDeEncontro> getPontosEncontro(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return controleRepositorio.localizaCaronaPorId(idCarona).getListaDeSugestoes();
 	}
 }

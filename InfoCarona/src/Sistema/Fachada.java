@@ -216,4 +216,20 @@ public class Fachada {
 	public Carona getCaronaUsuario(String idSessao, int indexCarona) throws SessaoInvalidaException, SessaoInexistenteException{
 		return sistema.getCaronaUsuario(idSessao, indexCarona);
 	}
+	
+	public String getTodasCaronasUsuario(String idSessao) throws SessaoInvalidaException, SessaoInexistenteException{
+		return sistema.getTodasCaronasUsuario(idSessao).toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+	}
+	
+	public String getSolicitacoesConfirmadas(String idSessao, String idCarona) throws SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException{
+		return sistema.getSolicitacoesConfirmadas(idCarona).toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+	}
+	
+	public String getSolicitacoesPendentes(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return sistema.getSolicitacoesPendentes(idCarona).toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+	}
+	
+	public String getPontosEncontro(String idSessao, String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return sistema.getPontosEncontro(idCarona).toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+	}
 }

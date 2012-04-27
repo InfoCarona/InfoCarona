@@ -230,6 +230,7 @@ public class Usuario {
 		return usuarioProcurado.toString();
 	}
 	
+	
 	@Override
 	public boolean equals(Object obj) {
 		

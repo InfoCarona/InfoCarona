@@ -79,6 +79,10 @@ public class SolicitacaoDeVaga {
 		return this.solicitacaoRejeitada;
 	}
 	
+	public boolean isSolicitacaoPendente(){
+		return this.solicitacaoPendente;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		

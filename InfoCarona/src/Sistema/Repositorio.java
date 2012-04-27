@@ -199,7 +199,5 @@ public class Repositorio {
 		arquivo.clear();
 		criaRepositorio();
 	}
-	
-	
 
 }
