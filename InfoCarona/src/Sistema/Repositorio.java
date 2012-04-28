@@ -24,7 +24,6 @@ public class Repositorio {
 
 	public void addUsuario(Usuario usuario) {
 		listaDeUsuarios.add(usuario);
-		arquivo.addNoXML(usuario);
 	}
 
 	public Usuario buscaUsuarioLogin(String login) {
@@ -199,5 +198,13 @@ public class Repositorio {
 		arquivo.clear();
 		criaRepositorio();
 	}
+	
+	private void salvarXML(){
+		arquivo.setLista(listaDeUsuarios);
+		arquivo.finalizarXML();
+	}
 
+	public void encerrarSistema() {
+		this.salvarXML();
+	}
 }

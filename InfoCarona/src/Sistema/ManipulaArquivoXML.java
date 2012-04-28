@@ -28,10 +28,43 @@ public class ManipulaArquivoXML {
 	 * */
 	public ManipulaArquivoXML(String nomeArquivo) {
 		this.setNomeArquivo(nomeArquivo);
+		this.setLista();
+	}
+
+	private void setLista() {
+		lista = this.ler();
+	}
+	
+	public void setLista(List list){
+		lista = new LinkedList();
+		for (Object object : list) {
+			lista.add(object);
+		}
 	}
 
 	private void setNomeArquivo(String nome) {
 		this.nomeDoArquivo = nome + ".xml";
+	}
+	
+	public void addObject(Object obj){
+		lista.add(obj);
+	}
+	
+	public void finalizarXML(){
+		XStream xstream = new XStream(new DomDriver());
+		String myXML = xstream.toXML(lista);
+		
+		try {
+			
+			BufferedWriter writer = null;
+
+			writer = new BufferedWriter(new FileWriter(this.nomeDoArquivo));
+			writer.write(myXML);
+			writer.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	/**
@@ -44,38 +77,12 @@ public class ManipulaArquivoXML {
 		try {
 			reader = new FileReader(this.nomeDoArquivo);
 		} catch (FileNotFoundException e) {
-
-			XStream xstream = new XStream(new DomDriver());
-
-			String myXML = xstream.toXML(lista);
-
-			BufferedWriter writer = null;
-
-			try {
-				writer = new BufferedWriter(new FileWriter(this.nomeDoArquivo));
-			} catch (IOException e1) {
-				System.out.println(e1.getMessage());
-			}
-
-			try {
-				writer.write(myXML);
-				writer.close();
-				System.out
-						.println("Arquivo nao existia.\n...\nArquivo foi criado.");
-
-			} catch (IOException f) {
-
-				f.printStackTrace();
-			}
-		}
-		XStream xstream = new XStream(new DomDriver());
-		try {
-			List newList = ((List) xstream.fromXML(reader));
-
-			return newList;
-		} catch (Exception e) {
 			System.out.println("Nao existia dados no arquivo.");
+			return (new LinkedList());
 		}
+		
+		XStream xstream = new XStream(new DomDriver());
+		lista = ((List) xstream.fromXML(reader));
 
 		return lista;
 	}
@@ -90,60 +97,35 @@ public class ManipulaArquivoXML {
 	 *            Eh um Object para ser adicionado ao arquivo xml
 	 * 
 	 * */
-	public void addNoXML(Object obj) {
+	private void addNoXML(Object obj) {
 
 		// verifica se o arquivo existe.
 		FileReader reader = null;
+		XStream xstream = new XStream(new DomDriver());
+		lista = this.ler();
+		lista.add(obj);
+		
+		String myXML = xstream.toXML(lista);
 		try {
 			reader = new FileReader(this.nomeDoArquivo);
 		} catch (FileNotFoundException e) {
-			XStream xstream = new XStream(new DomDriver());
-			lista.add(obj);
-
-			String myXML = xstream.toXML(lista);
-			BufferedWriter writer = null;
-			try {
-				writer = new BufferedWriter(new FileWriter(this.nomeDoArquivo));
-
-			} catch (IOException e1) {
-				System.out.println(e1.getMessage());
-			}
-			try {
-				writer.write(myXML);
-				writer.close();
-				System.out
-						.println("Arquivo nao existia.\n...\nArquivo foi criado.");
-
-			} catch (IOException f) {
-				f.printStackTrace();
-			}
+			System.out.println("Arquivo não existe.");
+			
 		}
 
-		XStream xstream = new XStream(new DomDriver());
 		try {
-			List pw = ((List) xstream.fromXML(reader));
-			pw.add(obj);
-
-			String myXML = xstream.toXML(pw);
+			
 			BufferedWriter writer = null;
 
-			try {
-				writer = new BufferedWriter(new FileWriter(this.nomeDoArquivo));
-
-			} catch (IOException e1) {
-				System.out.println(e1.getMessage());
-			}
-
-			try {
-				writer.write(myXML);
-				writer.close();
-
-			} catch (IOException f) {
-				f.printStackTrace();
-			}
+			writer = new BufferedWriter(new FileWriter(this.nomeDoArquivo));
+			System.out.println("Arquivo foi criado.");
+			writer.write(myXML);
+			writer.close();
+			
+			System.out.println("Aquivo escrito.");
 
 		} catch (Exception e) {
-			System.out.println("Nao existe arquivo");
+			System.out.println(e.getMessage());
 		}
 	}
 
