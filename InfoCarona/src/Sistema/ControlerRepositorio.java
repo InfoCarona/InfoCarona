@@ -23,7 +23,6 @@ public class ControlerRepositorio {
 
 	public void addUsuario(Usuario novoUsuario) {
 		repositorio.addUsuario(novoUsuario);
-		
 	}
 
 	public Usuario buscarUsuarioPorLogin(String login) throws LoginInvalidoException, UsuarioInexistenteException {
@@ -164,6 +163,10 @@ public class ControlerRepositorio {
 
 	public void zerarSistema() {
 		repositorio.zerarSistema();
+	}
+
+	public void encerrarSistema() {
+		repositorio.encerrarSistema();
 	}
 		
 }

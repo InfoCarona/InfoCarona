@@ -1,6 +1,107 @@
 <linked-list>
   <Sistema.Usuario>
-    <listaDeCaronas class="linked-list"/>
+    <listaDeCaronas class="linked-list">
+      <Sistema.Carona>
+        <origem>Cajazeiras</origem>
+        <destino>Patos</destino>
+        <data>20/07/2012</data>
+        <hora>14:00</hora>
+        <idCarona>00002</idCarona>
+        <donoDaCarona>Mark Zuckerberg</donoDaCarona>
+        <vagas>4</vagas>
+        <listaDeSugestoes class="linked-list"/>
+        <listaDeSolicitacao class="linked-list"/>
+      </Sistema.Carona>
+      <Sistema.Carona>
+        <origem>São Francisco</origem>
+        <destino>Palo Alto</destino>
+        <data>12/09/2012</data>
+        <hora>21:00</hora>
+        <idCarona>00003</idCarona>
+        <donoDaCarona>Mark Zuckerberg</donoDaCarona>
+        <vagas>1</vagas>
+        <listaDeSugestoes class="linked-list">
+          <Sistema.SugestaoDePontoDeEncontro>
+            <idSugestao>00009</idSugestao>
+            <listaDeSugestaoDePontosDeEncontro class="linked-list">
+              <string>[Acude Velho</string>
+              <string>Hiper Bompreco]</string>
+            </listaDeSugestaoDePontosDeEncontro>
+            <listaDeRespostasDePontosDeEncontro class="linked-list"/>
+            <usuarioQueSugeriu>
+              <listaDeCaronas class="linked-list">
+                <Sistema.Carona>
+                  <origem>Campina Grande</origem>
+                  <destino>João Pessoa</destino>
+                  <data>02/06/2012</data>
+                  <hora>12:00</hora>
+                  <idCarona>00005</idCarona>
+                  <donoDaCarona>Steven Paul Jobs</donoDaCarona>
+                  <vagas>3</vagas>
+                  <listaDeSugestoes class="linked-list"/>
+                  <listaDeSolicitacao class="linked-list"/>
+                </Sistema.Carona>
+                <Sistema.Carona>
+                  <origem>Campina Grande</origem>
+                  <destino>João Pessoa</destino>
+                  <data>04/06/2012</data>
+                  <hora>16:00</hora>
+                  <idCarona>00006</idCarona>
+                  <donoDaCarona>Steven Paul Jobs</donoDaCarona>
+                  <vagas>2</vagas>
+                  <listaDeSugestoes class="linked-list"/>
+                  <listaDeSolicitacao class="linked-list"/>
+                </Sistema.Carona>
+                <Sistema.Carona>
+                  <origem>Leeds</origem>
+                  <destino>Londres</destino>
+                  <data>10/02/2013</data>
+                  <hora>10:00</hora>
+                  <idCarona>00007</idCarona>
+                  <donoDaCarona>Steven Paul Jobs</donoDaCarona>
+                  <vagas>3</vagas>
+                  <listaDeSugestoes class="linked-list"/>
+                  <listaDeSolicitacao class="linked-list"/>
+                </Sistema.Carona>
+              </listaDeCaronas>
+              <listaDeSolicitacaoDeVagas class="linked-list">
+                <Sistema.SolicitacaoDeVaga>
+                  <carona reference="../../../../../.."/>
+                  <donoSolicitacao reference="../../.."/>
+                  <ponto>Default</ponto>
+                  <idSolicitacao>00010</idSolicitacao>
+                  <solicitacaoAceita>true</solicitacaoAceita>
+                  <solicitacaoPendente>false</solicitacaoPendente>
+                  <solicitacaoRejeitada>false</solicitacaoRejeitada>
+                </Sistema.SolicitacaoDeVaga>
+              </listaDeSolicitacaoDeVagas>
+              <Reviews class="linked-list"/>
+              <caronasSeguras>0</caronasSeguras>
+              <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
+              <faltasEmVagas>0</faltasEmVagas>
+              <presencaEmVagas>0</presencaEmVagas>
+              <nome>Steven Paul Jobs</nome>
+              <email>jobs@apple.com</email>
+              <endereco>Palo Alto, California</endereco>
+              <senha>5t3v3</senha>
+              <login>steve</login>
+            </usuarioQueSugeriu>
+          </Sistema.SugestaoDePontoDeEncontro>
+        </listaDeSugestoes>
+        <listaDeSolicitacao class="linked-list"/>
+      </Sistema.Carona>
+      <Sistema.Carona>
+        <origem>Campina Grande</origem>
+        <destino>João Pessoa</destino>
+        <data>01/06/2012</data>
+        <hora>12:00</hora>
+        <idCarona>00004</idCarona>
+        <donoDaCarona>Mark Zuckerberg</donoDaCarona>
+        <vagas>1</vagas>
+        <listaDeSugestoes class="linked-list"/>
+        <listaDeSolicitacao class="linked-list"/>
+      </Sistema.Carona>
+    </listaDeCaronas>
     <listaDeSolicitacaoDeVagas class="linked-list"/>
     <Reviews class="linked-list"/>
     <caronasSeguras>0</caronasSeguras>
@@ -13,18 +114,5 @@
     <senha>m@rk</senha>
     <login>mark</login>
   </Sistema.Usuario>
-  <Sistema.Usuario>
-    <listaDeCaronas class="linked-list"/>
-    <listaDeSolicitacaoDeVagas class="linked-list"/>
-    <Reviews class="linked-list"/>
-    <caronasSeguras>0</caronasSeguras>
-    <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
-    <faltasEmVagas>0</faltasEmVagas>
-    <presencaEmVagas>0</presencaEmVagas>
-    <nome>Steven Paul Jobs</nome>
-    <email>jobs@apple.com</email>
-    <endereco>Palo Alto, California</endereco>
-    <senha>5t3v3</senha>
-    <login>steve</login>
-  </Sistema.Usuario>
+  <Sistema.Usuario reference="../Sistema.Usuario/listaDeCaronas/Sistema.Carona[2]/listaDeSugestoes/Sistema.SugestaoDePontoDeEncontro/usuarioQueSugeriu"/>
 </linked-list>

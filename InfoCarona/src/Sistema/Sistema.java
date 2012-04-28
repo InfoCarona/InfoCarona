@@ -261,7 +261,7 @@ public class Sistema {
 
 	public void encerrarSistema() {
 		usuariosLogados = new HashMap<String, Usuario>();
-				
+		controleRepositorio.encerrarSistema();		
 	}
 
 	// metodo pra ver se o atributo passado existe
