@@ -257,8 +257,8 @@ public class Sistema {
 	}
 
 	public void encerrarSistema() {
-		// TODO tem que fazer o metodo pois ainda nao sabemos o que o encerrar
-		// sistema deve fazer
+		usuariosLogados = new HashMap<String, Usuario>();
+				
 	}
 
 	// metodo pra ver se o atributo passado existe

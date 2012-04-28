@@ -46,14 +46,16 @@ sugestaoID=sugerirPontoEncontro idSessao=${sessaoSteve} idCarona=${carona2ID} po
 
 #Requisitar vaga na carona.
 solicitacao1ID=solicitarVaga idSessao=${sessaoSteve} idCarona=${carona2ID}
-expect "Campina Grande" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="origem"
-expect "João Pessoa" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="destino"
+expect "São Francisco" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="origem"
+expect "Palo Alto" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="destino"
 expect "Mark Zuckerberg" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="Dono da carona"
-expect "William Henry Gates III" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="Dono da solicitacao"
+expect "Steven Paul Jobs" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="Dono da solicitacao"
 
+
+#Modifiquei us dados ate a linha 59 pois carona4ID nao foi alterada e continua com suas 3 vagas
 #Aceitar requisição
-aceitarSolicitacao idSessao=${sessaoMark} idSolicitacao=${solicitacao1ID}
-expect 2 getAtributoCarona idCarona=${carona4ID} atributo="vagas"
+aceitarSolicitacaoPontoEncontro idSessao=${sessaoMark} idSolicitacao=${solicitacao1ID}
+expect 3 getAtributoCarona idCarona=${carona4ID} atributo="vagas"
 
 #Encerrar a sessao.
 encerrarSessao login="mark"
@@ -115,4 +117,3 @@ expect "[Acude Velho;Hiper Bompreco]" getPontosEncontro idSessao=${sessaoMark} i
 #Finaliza o sistema
 encerrarSistema
 quit
-
