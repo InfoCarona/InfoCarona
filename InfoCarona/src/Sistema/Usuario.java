@@ -115,6 +115,7 @@ public class Usuario {
 	public String solicitarVagaPontoEncontro(String ponto, Carona carona, String IdSolicitacao, Usuario donoSolcitacao) throws CaronaInexistenteException, CaronaInvalidaException, numeroMaximoException {
 		SolicitacaoDeVaga novaSolicitacao = new SolicitacaoDeVaga(carona,  ponto, IdSolicitacao, donoSolcitacao);
 		listaDeSolicitacaoDeVagas.add(novaSolicitacao);
+		carona.addNovaSolicitacao(novaSolicitacao);
 		return IdSolicitacao;
 	}
 

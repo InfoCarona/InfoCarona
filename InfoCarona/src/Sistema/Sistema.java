@@ -236,7 +236,10 @@ public class Sistema {
 		}
 		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
 		Carona caronaTemp = this.getCarona(idCarona);
-
+		if(usuarioJahEstahNaCarona(usuarioTemp, caronaTemp)){
+			throw new PontoInvalidoException();
+		}
+		
 		return usuarioTemp.sugerirPontoEncontro(pontos, caronaTemp,
 				id.gerarId(), usuarioTemp);
 
@@ -455,5 +458,17 @@ public class Sistema {
 			throws CaronaInexistenteException, CaronaInvalidaException {
 		return controleRepositorio.localizaCaronaPorId(idCarona)
 				.getListaDeSugestoes();
+	}
+	
+	public boolean usuarioJahEstahNaCarona(Usuario usuario, Carona carona){
+		for (SolicitacaoDeVaga solicitacao : carona.getListaDeSolicitacao()) {
+			if(solicitacao.getDonoSolicitacao().equals(usuario)){
+				if(solicitacao.isSolicitacaoAceita()){
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }
