@@ -10,7 +10,9 @@ import Exception.ExceptionUsuario.EmailInvalidoException;
 import Exception.ExceptionUsuario.LoginExistenteException;
 import Exception.ExceptionUsuario.LoginInvalidoException;
 import Exception.ExceptionUsuario.NomeInvalidoException;
+import Exception.ExceptionUsuario.OpcaoInvalidaException;
 import Exception.ExceptionUsuario.UsuarioInexistenteException;
+import Exception.ExceptionUsuario.UsuarioNaoPossuiVagaNaCaronaException;
 import Exception.ExceptionUsuario.numeroMaximoException;
 import Exception.ExceptionsCarona.CaronaInexistenteException;
 import Exception.ExceptionsCarona.CaronaInvalidaException;
@@ -177,7 +179,9 @@ public class Fachada {
 	public String getAtributoSolicitacao(String idSolicitacao, String atributo) {
 		return sistema.getAtributoSolicitacao(idSolicitacao, atributo);
 	}
-
+	public void reviewVagaEmCarona (String idSessao, String idCarona, String loginCaroneiro, String review) throws SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException, LoginInvalidoException, UsuarioInexistenteException, OpcaoInvalidaException, UsuarioNaoPossuiVagaNaCaronaException{
+		sistema.reviewVagaEmCarona(idSessao, idCarona, loginCaroneiro, review);
+	}
 	public void aceitarSolicitacaoPontoEncontro(String idSessao,
 			String idSolicitacao) throws SolicitacaoInexistenteException, SessaoInvalidaException, SessaoInexistenteException, VagaInvalidaException {
 		sistema.aceitarSolicitacaoPontoEncontro(idSessao, idSolicitacao);

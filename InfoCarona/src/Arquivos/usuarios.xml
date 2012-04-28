@@ -2,6 +2,7 @@
   <Sistema.Usuario>
     <listaDeCaronas class="linked-list"/>
     <listaDeSolicitacaoDeVagas class="linked-list"/>
+    <Reviews class="linked-list"/>
     <caronasSeguras>0</caronasSeguras>
     <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
     <faltasEmVagas>0</faltasEmVagas>
@@ -15,14 +16,29 @@
   <Sistema.Usuario>
     <listaDeCaronas class="linked-list"/>
     <listaDeSolicitacaoDeVagas class="linked-list"/>
+    <Reviews class="linked-list"/>
     <caronasSeguras>0</caronasSeguras>
     <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
     <faltasEmVagas>0</faltasEmVagas>
     <presencaEmVagas>0</presencaEmVagas>
-    <nome>Steven Paul Jobs</nome>
-    <email>jobs@apple.com</email>
-    <endereco>Palo Alto, California</endereco>
-    <senha>5t3v3</senha>
-    <login>steve</login>
+    <nome>William Henry Gates III</nome>
+    <email>billzin@gmail.com</email>
+    <endereco>Medina, Washington</endereco>
+    <senha>bilz@o</senha>
+    <login>bill</login>
+  </Sistema.Usuario>
+  <Sistema.Usuario>
+    <listaDeCaronas class="linked-list"/>
+    <listaDeSolicitacaoDeVagas class="linked-list"/>
+    <Reviews class="linked-list"/>
+    <caronasSeguras>0</caronasSeguras>
+    <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
+    <faltasEmVagas>0</faltasEmVagas>
+    <presencaEmVagas>0</presencaEmVagas>
+    <nome>Anakin Skywalker</nome>
+    <email>darthvader@empire.com</email>
+    <endereco>Death Star I</endereco>
+    <senha>d4rth</senha>
+    <login>vader</login>
   </Sistema.Usuario>
 </linked-list>

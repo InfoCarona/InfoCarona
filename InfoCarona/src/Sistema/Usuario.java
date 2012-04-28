@@ -38,6 +38,8 @@ public class Usuario {
 
 	private List<Carona> listaDeCaronas;
 	private List<SolicitacaoDeVaga> listaDeSolicitacaoDeVagas;
+	private List<String> Reviews;
+	
 	private int caronasSeguras;
 	private int caronaNaoFuncionaram;
 	private int faltasEmVagas;
@@ -55,10 +57,12 @@ public class Usuario {
 		setLogin(login);
 		this.listaDeCaronas = new LinkedList<Carona>();
 		this.listaDeSolicitacaoDeVagas = new LinkedList<SolicitacaoDeVaga>();
+		this.Reviews = new LinkedList<String>();
 		this.caronasSeguras = 0;
 		this.caronaNaoFuncionaram = 0;
 		this.faltasEmVagas = 0;
 		this.presencaEmVagas = 0;
+		
 
 	}
 
@@ -243,5 +247,25 @@ public class Usuario {
 		}
 		
 		return true;
+	}
+
+	public void adicionaReview(Carona caronaTemp, String review) {
+		if(review.equals("não faltou")){
+			this.setPresencaEmVagas();
+		}
+		else{
+			this.setFaltasEmVagas();
+		}
+		Reviews.add(review + " na Carona de " + caronaTemp.toString());
+	}
+
+	public LinkedList<Carona> getSolicitacaoAceitas() {
+		LinkedList<Carona> listaCaronaAceitas = new LinkedList<Carona>(); 
+		for (SolicitacaoDeVaga solicitacao : listaDeSolicitacaoDeVagas) {
+			if(solicitacao.isSolicitacaoAceita()){
+				listaCaronaAceitas.add(solicitacao.getCarona());
+			}
+		}
+		return listaCaronaAceitas;
 	}
 }

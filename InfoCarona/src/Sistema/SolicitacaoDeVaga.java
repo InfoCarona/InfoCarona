@@ -82,7 +82,9 @@ public class SolicitacaoDeVaga {
 	public boolean isSolicitacaoPendente(){
 		return this.solicitacaoPendente;
 	}
-	
+	public Carona getCarona(){
+		return this.carona;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -96,5 +98,7 @@ public class SolicitacaoDeVaga {
 		
 		return true;
 	}
+	
+	
 	
 }

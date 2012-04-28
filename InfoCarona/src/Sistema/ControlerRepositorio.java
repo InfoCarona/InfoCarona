@@ -54,11 +54,13 @@ public class ControlerRepositorio {
 			for (Carona caronaTemp : usuarioTemp.getCaronas()) {
 				listaTemp.add(caronaTemp.getIdCarona());
 			}
+			if(listaTemp.isEmpty()){
+				retorno = "";
+			}else{
 			retorno = listaTemp.toString().replace("{", "[").replace("}", "]");
+			}
 		}
-		else if (atributo.equals("historico de vagas em caronas")) {
-			//TODO fazer o historico com as solicitacoes ainda
-		}
+		
 		else if (atributo.equals("caronas seguras e tranquilas")) {
 			retorno = usuarioTemp.getCaronasSeguras() + "";
 		}
