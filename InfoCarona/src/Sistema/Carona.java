@@ -30,6 +30,7 @@ public class Carona {
         this.idCarona = idCarona;
         this.listaDeSugestoes = new LinkedList<SugestaoDePontoDeEncontro>();
         this.listaDeSolicitacao = new LinkedList<SolicitacaoDeVaga>();
+     
 	}
 	
 	public List<SolicitacaoDeVaga> getListaDeSolicitacao() {

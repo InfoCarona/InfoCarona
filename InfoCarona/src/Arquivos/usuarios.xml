@@ -24,8 +24,8 @@
           <Sistema.SugestaoDePontoDeEncontro>
             <idSugestao>00009</idSugestao>
             <listaDeSugestaoDePontosDeEncontro class="linked-list">
-              <string>[Acude Velho</string>
-              <string>Hiper Bompreco]</string>
+              <string>Acude Velho</string>
+              <string>Hiper Bompreco</string>
             </listaDeSugestaoDePontosDeEncontro>
             <listaDeRespostasDePontosDeEncontro class="linked-list"/>
             <usuarioQueSugeriu>
@@ -88,7 +88,9 @@
             </usuarioQueSugeriu>
           </Sistema.SugestaoDePontoDeEncontro>
         </listaDeSugestoes>
-        <listaDeSolicitacao class="linked-list"/>
+        <listaDeSolicitacao class="linked-list">
+          <Sistema.SolicitacaoDeVaga reference="../../listaDeSugestoes/Sistema.SugestaoDePontoDeEncontro/usuarioQueSugeriu/listaDeSolicitacaoDeVagas/Sistema.SolicitacaoDeVaga"/>
+        </listaDeSolicitacao>
       </Sistema.Carona>
       <Sistema.Carona>
         <origem>Campina Grande</origem>

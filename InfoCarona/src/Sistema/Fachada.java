@@ -217,16 +217,27 @@ public class Fachada {
 		sistema.reiniciarSistema();
 	}
 	
-	public Carona getCaronaUsuario(String idSessao, int indexCarona) throws SessaoInvalidaException, SessaoInexistenteException{
+	public String getCaronaUsuario(String idSessao, int indexCarona) throws SessaoInvalidaException, SessaoInexistenteException{
 		return sistema.getCaronaUsuario(idSessao, indexCarona);
 	}
 	
 	public String getTodasCaronasUsuario(String idSessao) throws SessaoInvalidaException, SessaoInexistenteException{
-		return sistema.getTodasCaronasUsuario(idSessao).toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+		List<String> retorno = new LinkedList<String>(); 
+		List<Carona> todasCaronas = sistema.getTodasCaronasUsuario(idSessao);
+		for (Carona caronaTemp : todasCaronas) {
+			retorno.add(caronaTemp.getIdCarona());
+		}
+		return retorno.toString().replace("[", "{").replace("]", "}").replace(", ", ",");
 	}
 	
 	public String getSolicitacoesConfirmadas(String idSessao, String idCarona) throws SessaoInvalidaException, SessaoInexistenteException, CaronaInexistenteException, CaronaInvalidaException{
-		return sistema.getSolicitacoesConfirmadas(idCarona).toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+		List<String> retorno = new LinkedList<String>(); 
+		List<SolicitacaoDeVaga> todasSolicitacoes = sistema.getSolicitacoesConfirmadas(idCarona);
+		for (SolicitacaoDeVaga solicitacao : todasSolicitacoes) {
+			retorno.add(solicitacao.getIdSolicitacao());
+		}
+		return retorno.toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+		
 	}
 	
 	public String getSolicitacoesPendentes(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
@@ -234,6 +245,10 @@ public class Fachada {
 	}
 	
 	public String getPontosEncontro(String idSessao, String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
-		return sistema.getPontosEncontro(idCarona).toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+		return sistema.getPontosEncontro(idCarona).toString().replace(", ", ";");
+	}
+	
+	public String getPontosSugeridos(String idSessao, String idCarona) throws CaronaInexistenteException, CaronaInvalidaException{
+		return sistema.getPontosSugeridos(idCarona).toString().replace(", ", ";");
 	}
 }

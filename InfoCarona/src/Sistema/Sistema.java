@@ -429,10 +429,10 @@ public class Sistema {
 		this.criaSistema();
 	}
 
-	public Carona getCaronaUsuario(String idSessao, int indexCarona)
+	public String getCaronaUsuario(String idSessao, int indexCarona)
 			throws SessaoInvalidaException, SessaoInexistenteException {
 		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
-		return usuarioTemp.getCaronas().get(indexCarona - 1);
+		return usuarioTemp.getCaronas().get(indexCarona - 1).getIdCarona();
 	}
 
 	public List<Carona> getTodasCaronasUsuario(String idSessao)
@@ -441,11 +441,8 @@ public class Sistema {
 		return usuarioTemp.getCaronas();
 	}
 
-	public List<SolicitacaoDeVaga> getSolicitacoesConfirmadas(String idCarona)
-			throws SessaoInvalidaException, SessaoInexistenteException,
-			CaronaInexistenteException, CaronaInvalidaException {
-		return controleRepositorio.localizaCaronaPorId(idCarona)
-				.getSolicitacoesConfirmadas();
+	public List<SolicitacaoDeVaga> getSolicitacoesConfirmadas(String idCarona) throws SessaoInvalidaException, SessaoInexistenteException,CaronaInexistenteException, CaronaInvalidaException {
+		return controleRepositorio.localizaCaronaPorId(idCarona).getSolicitacoesConfirmadas();
 	}
 
 	public List<SolicitacaoDeVaga> getSolicitacoesPendentes(String idCarona)
@@ -454,10 +451,24 @@ public class Sistema {
 				.getSolicitacoesPendentes();
 	}
 
-	public List<SugestaoDePontoDeEncontro> getPontosEncontro(String idCarona)
+	public List<String> getPontosEncontro(String idCarona)
 			throws CaronaInexistenteException, CaronaInvalidaException {
-		return controleRepositorio.localizaCaronaPorId(idCarona)
-				.getListaDeSugestoes();
+		List<String> retorno = new LinkedList<String>();
+        List<SugestaoDePontoDeEncontro> sugestoes = controleRepositorio.localizaCaronaPorId(idCarona)
+                .getListaDeSugestoes();
+        
+        for (int i = 0; i < sugestoes.size(); i++) {
+            List<String> pontos = sugestoes.get(i).getListaDeSugestaoDePontosDeEncontro();
+            for (int j = 0; j < pontos.size(); j++) {
+                String ponto = pontos.get(j);
+                System.out.println(ponto);
+                if (!retorno.contains(ponto)) {
+                    retorno.add(ponto);
+                }
+            }
+        }
+        
+        return retorno;
 	}
 	
 	public boolean usuarioJahEstahNaCarona(Usuario usuario, Carona carona){
@@ -470,5 +481,17 @@ public class Sistema {
 		}
 		
 		return false;
+	}
+
+	public LinkedList<String> getPontosSugeridos(String idCarona) throws CaronaInexistenteException, CaronaInvalidaException {
+		LinkedList<String> retorno = new LinkedList<String>();
+		Carona caronaTemp = controleRepositorio.localizaCaronaPorId(idCarona);
+		List<SugestaoDePontoDeEncontro> listaSugestoes = caronaTemp.getListaDeSugestoes();
+		for(SugestaoDePontoDeEncontro sugestao : listaSugestoes){
+			for (String ponto : sugestao.getListaDeSugestaoDePontosDeEncontro()) {
+				retorno.add(ponto);
+			}
+		}
+		return retorno;
 	}
 }
