@@ -355,8 +355,7 @@ public class Sistema {
 
 		Usuario usuarioTemp = procuraUsuarioLogado(idSessao);
 		Carona caronaTemp = controleRepositorio.localizaCaronaPorId(idCarona);
-		SolicitacaoDeVaga solicitacaoTemp = controleRepositorio
-				.localizaSolicitacaoPorId(idSolicitacao);
+		SolicitacaoDeVaga solicitacaoTemp = controleRepositorio.localizaSolicitacaoPorId(idSolicitacao);
 		usuarioTemp.desistirRequisicao(solicitacaoTemp, caronaTemp);
 
 	}
@@ -412,8 +411,10 @@ public class Sistema {
 			for (Carona caronaTemp : usuarioTemp.getSolicitacaoAceitas()) {
 				lista.add(caronaTemp.getIdCarona());				
 			}
-			
-			 return lista.toString().replace("[", "{").replace("]", "}").replace(", ", ",");
+			if(lista.size() == 0){
+				return "";
+			}
+			return lista.toString().replace("[", "{").replace("]", "}").replace(", ", ",");
 			
 		}
 	

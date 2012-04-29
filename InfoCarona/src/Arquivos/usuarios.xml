@@ -2,107 +2,66 @@
   <Sistema.Usuario>
     <listaDeCaronas class="linked-list">
       <Sistema.Carona>
-        <origem>Cajazeiras</origem>
-        <destino>Patos</destino>
-        <data>20/07/2012</data>
-        <hora>14:00</hora>
-        <idCarona>00002</idCarona>
+        <origem>Campina Grande</origem>
+        <destino>João Pessoa</destino>
+        <data>02/06/2012</data>
+        <hora>12:00</hora>
+        <idCarona>00081</idCarona>
         <donoDaCarona>Mark Zuckerberg</donoDaCarona>
-        <vagas>4</vagas>
+        <vagas>2</vagas>
         <listaDeSugestoes class="linked-list"/>
-        <listaDeSolicitacao class="linked-list"/>
-      </Sistema.Carona>
-      <Sistema.Carona>
-        <origem>São Francisco</origem>
-        <destino>Palo Alto</destino>
-        <data>12/09/2012</data>
-        <hora>21:00</hora>
-        <idCarona>00003</idCarona>
-        <donoDaCarona>Mark Zuckerberg</donoDaCarona>
-        <vagas>1</vagas>
-        <listaDeSugestoes class="linked-list">
-          <Sistema.SugestaoDePontoDeEncontro>
-            <idSugestao>00009</idSugestao>
-            <listaDeSugestaoDePontosDeEncontro class="linked-list">
-              <string>Acude Velho</string>
-              <string>Hiper Bompreco</string>
-            </listaDeSugestaoDePontosDeEncontro>
-            <listaDeRespostasDePontosDeEncontro class="linked-list"/>
-            <usuarioQueSugeriu>
-              <listaDeCaronas class="linked-list">
-                <Sistema.Carona>
-                  <origem>Campina Grande</origem>
-                  <destino>João Pessoa</destino>
-                  <data>02/06/2012</data>
-                  <hora>12:00</hora>
-                  <idCarona>00005</idCarona>
-                  <donoDaCarona>Steven Paul Jobs</donoDaCarona>
-                  <vagas>3</vagas>
-                  <listaDeSugestoes class="linked-list"/>
-                  <listaDeSolicitacao class="linked-list"/>
-                </Sistema.Carona>
-                <Sistema.Carona>
-                  <origem>Campina Grande</origem>
-                  <destino>João Pessoa</destino>
-                  <data>04/06/2012</data>
-                  <hora>16:00</hora>
-                  <idCarona>00006</idCarona>
-                  <donoDaCarona>Steven Paul Jobs</donoDaCarona>
-                  <vagas>2</vagas>
-                  <listaDeSugestoes class="linked-list"/>
-                  <listaDeSolicitacao class="linked-list"/>
-                </Sistema.Carona>
-                <Sistema.Carona>
-                  <origem>Leeds</origem>
-                  <destino>Londres</destino>
-                  <data>10/02/2013</data>
-                  <hora>10:00</hora>
-                  <idCarona>00007</idCarona>
-                  <donoDaCarona>Steven Paul Jobs</donoDaCarona>
-                  <vagas>3</vagas>
-                  <listaDeSugestoes class="linked-list"/>
-                  <listaDeSolicitacao class="linked-list"/>
-                </Sistema.Carona>
-              </listaDeCaronas>
+        <listaDeSolicitacao class="linked-list">
+          <Sistema.SolicitacaoDeVaga>
+            <carona reference="../../.."/>
+            <donoSolicitacao>
+              <listaDeCaronas class="linked-list"/>
               <listaDeSolicitacaoDeVagas class="linked-list">
+                <Sistema.SolicitacaoDeVaga reference="../../.."/>
                 <Sistema.SolicitacaoDeVaga>
-                  <carona reference="../../../../../.."/>
+                  <carona>
+                    <origem>Campina Grande</origem>
+                    <destino>João Pessoa</destino>
+                    <data>04/06/2012</data>
+                    <hora>16:00</hora>
+                    <idCarona>00082</idCarona>
+                    <donoDaCarona>Mark Zuckerberg</donoDaCarona>
+                    <vagas>1</vagas>
+                    <listaDeSugestoes class="linked-list"/>
+                    <listaDeSolicitacao class="linked-list">
+                      <Sistema.SolicitacaoDeVaga reference="../../.."/>
+                    </listaDeSolicitacao>
+                  </carona>
                   <donoSolicitacao reference="../../.."/>
                   <ponto>Default</ponto>
-                  <idSolicitacao>00010</idSolicitacao>
+                  <idSolicitacao>00085</idSolicitacao>
                   <solicitacaoAceita>true</solicitacaoAceita>
                   <solicitacaoPendente>false</solicitacaoPendente>
                   <solicitacaoRejeitada>false</solicitacaoRejeitada>
                 </Sistema.SolicitacaoDeVaga>
               </listaDeSolicitacaoDeVagas>
-              <Reviews class="linked-list"/>
+              <Reviews class="linked-list">
+                <string>faltou na Carona de Campina Grande para João Pessoa, no dia 02/06/2012, as 12:00</string>
+                <string>não faltou na Carona de Campina Grande para João Pessoa, no dia 04/06/2012, as 16:00</string>
+              </Reviews>
               <caronasSeguras>0</caronasSeguras>
               <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
-              <faltasEmVagas>0</faltasEmVagas>
-              <presencaEmVagas>0</presencaEmVagas>
-              <nome>Steven Paul Jobs</nome>
-              <email>jobs@apple.com</email>
-              <endereco>Palo Alto, California</endereco>
-              <senha>5t3v3</senha>
-              <login>steve</login>
-            </usuarioQueSugeriu>
-          </Sistema.SugestaoDePontoDeEncontro>
-        </listaDeSugestoes>
-        <listaDeSolicitacao class="linked-list">
-          <Sistema.SolicitacaoDeVaga reference="../../listaDeSugestoes/Sistema.SugestaoDePontoDeEncontro/usuarioQueSugeriu/listaDeSolicitacaoDeVagas/Sistema.SolicitacaoDeVaga"/>
+              <faltasEmVagas>1</faltasEmVagas>
+              <presencaEmVagas>1</presencaEmVagas>
+              <nome>William Henry Gates III</nome>
+              <email>billzin@gmail.com</email>
+              <endereco>Medina, Washington</endereco>
+              <senha>bilz@o</senha>
+              <login>bill</login>
+            </donoSolicitacao>
+            <ponto>Default</ponto>
+            <idSolicitacao>00084</idSolicitacao>
+            <solicitacaoAceita>true</solicitacaoAceita>
+            <solicitacaoPendente>false</solicitacaoPendente>
+            <solicitacaoRejeitada>false</solicitacaoRejeitada>
+          </Sistema.SolicitacaoDeVaga>
         </listaDeSolicitacao>
       </Sistema.Carona>
-      <Sistema.Carona>
-        <origem>Campina Grande</origem>
-        <destino>João Pessoa</destino>
-        <data>01/06/2012</data>
-        <hora>12:00</hora>
-        <idCarona>00004</idCarona>
-        <donoDaCarona>Mark Zuckerberg</donoDaCarona>
-        <vagas>1</vagas>
-        <listaDeSugestoes class="linked-list"/>
-        <listaDeSolicitacao class="linked-list"/>
-      </Sistema.Carona>
+      <Sistema.Carona reference="../Sistema.Carona/listaDeSolicitacao/Sistema.SolicitacaoDeVaga/donoSolicitacao/listaDeSolicitacaoDeVagas/Sistema.SolicitacaoDeVaga[2]/carona"/>
     </listaDeCaronas>
     <listaDeSolicitacaoDeVagas class="linked-list"/>
     <Reviews class="linked-list"/>
@@ -116,5 +75,19 @@
     <senha>m@rk</senha>
     <login>mark</login>
   </Sistema.Usuario>
-  <Sistema.Usuario reference="../Sistema.Usuario/listaDeCaronas/Sistema.Carona[2]/listaDeSugestoes/Sistema.SugestaoDePontoDeEncontro/usuarioQueSugeriu"/>
+  <Sistema.Usuario reference="../Sistema.Usuario/listaDeCaronas/Sistema.Carona/listaDeSolicitacao/Sistema.SolicitacaoDeVaga/donoSolicitacao"/>
+  <Sistema.Usuario>
+    <listaDeCaronas class="linked-list"/>
+    <listaDeSolicitacaoDeVagas class="linked-list"/>
+    <Reviews class="linked-list"/>
+    <caronasSeguras>0</caronasSeguras>
+    <caronaNaoFuncionaram>0</caronaNaoFuncionaram>
+    <faltasEmVagas>0</faltasEmVagas>
+    <presencaEmVagas>0</presencaEmVagas>
+    <nome>Anakin Skywalker</nome>
+    <email>darthvader@empire.com</email>
+    <endereco>Death Star I</endereco>
+    <senha>d4rth</senha>
+    <login>vader</login>
+  </Sistema.Usuario>
 </linked-list>

@@ -111,7 +111,7 @@ expect {} getSolicitacoesPendentes idCarona=${carona2ID}
 expect "[Acude Velho;Hiper Bompreco]" getPontosSugeridos idSessao=${sessaoMark} idCarona=${carona2ID}
 
 #Recupera pontos sugeridos
-expect "[Acude Velho;Hiper Bompreco]" getPontosEncontro idSessao=${sessaoMark} idCarona=${caronaID}
+expect "[Acude Velho;Hiper Bompreco]" getPontosEncontro idSessao=${sessaoMark} idCarona=${carona2ID}
 
 #Finaliza o sistema
 encerrarSistema

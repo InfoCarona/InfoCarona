@@ -55,6 +55,7 @@ encerrarSessao login="bill"
 sessaoMark=abrirSessao login="mark" senha="m@rk"
 aceitarSolicitacaoPontoEncontro idSessao=${sessaoMark} idSolicitacao=${solicitacao1ID}
 expect 2 getAtributoCarona idCarona=${carona4ID} atributo="vagas"
+#expect "Acude Velho" getAtributoCarona idCarona=${carona4ID} atributo="Ponto de Encontro"#####mudei aki
 expect "Acude Velho" getAtributoSolicitacao idSolicitacao=${solicitacao1ID} atributo="Ponto de Encontro"
 
 #Tentar aceitar novamente a requisição
@@ -63,15 +64,15 @@ expectError "Solicitação inexistente" aceitarSolicitacaoPontoEncontro idSessao
 expect 2 getAtributoCarona idCarona=${carona4ID} atributo="vagas"
 
 #Sugerir ponto de encontro para uma carona
-sugestaoID=sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
+sugestaoID=sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona5ID} pontos="Acude Velho; Hiper Bompreco"
 
 #Resposta a requisicao
 sessaoMark=abrirSessao login="mark" senha="m@rk"
-respostaID=responderSugestaoPontoEncontro idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID} pontos="Acude Velho;Parque da Crianca"
+respostaID=responderSugestaoPontoEncontro idSessao=${sessaoMark} idCarona=${carona5ID} idSugestao=${sugestaoID} pontos="Acude Velho;Parque da Crianca"
 
 #Requisitar vaga na carona.
-desistirRequisicao idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID}
-
+desistirRequisicao idSessao=${sessaoBill} idCarona=${carona4ID} idSolicitacao=${solicitacao1ID}
+#desistirRequisicao idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID}#######tirei esse
 
 expectError "Ponto Inválido" sugestaoID=sugerirPontoEncontro idSessao=${sessaoBill} idCarona=${carona4ID} pontos="Acude Velho; Hiper Bompreco"
 expectError "Ponto Inválido" responderSugestaoPontoEncontro idSessao=${sessaoMark} idCarona=${carona4ID} idSugestao=${sugestaoID} pontos=""
