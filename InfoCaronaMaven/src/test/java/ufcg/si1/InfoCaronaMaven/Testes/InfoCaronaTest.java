@@ -1,12 +1,9 @@
-package Sistema;
+package ufcg.si1.InfoCaronaMaven.Testes;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
+import ufcg.si1.InfoCaronaMaven.Sistema.Fachada;
 import easyaccept.EasyAcceptFacade;
 
 public class InfoCaronaTest {
