@@ -34,7 +34,7 @@ public class TesteMaven extends TestCase {
 		files.add("scripts/US06.txt");
 		files.add("scripts/US07.txt");
 		files.add("scripts/US08.txt");
-
+		//modificando pra ver se vai commit
 		// Instantiate the Monopoly Game fa�ade
 		Fachada fachadaBigu = new Fachada();
 
